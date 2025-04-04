@@ -12,7 +12,11 @@ We met each other and discussed ideas for the project, before reaching the concl
 
 Inital Tasks:
 User Accounts: Elizabeth
+
 Puzzle Browser Page: Elizabeth
+
 Puzzle Solving Website: Ethan (I will make a single puzzle that is there every time for now)
+
 Friends Tab: Jeffrey
+
 Home Page: Ryan
