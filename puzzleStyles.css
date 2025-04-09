@@ -1,3 +1,32 @@
 * {
     font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+}
+
+.header {
+    height: 10vh;
+    width: 99.9%;
+    border: 1px solid red;
+}
+
+.puzzle {
+    height: 79vh;
+    width: 50vw;
+    border: 1px solid blue;
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 3fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.footer {
+    height: 10vh;
+    border: 1px solid green;
+}
+
+.column, .row {
+    width: 7vw;
+    border: 3px solid brown;
+}
+.cell {
+    border: 6px solid chartreuse;
 }
