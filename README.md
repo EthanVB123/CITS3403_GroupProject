@@ -9,3 +9,14 @@ We will have solving tools to give hints, including an auto-solving program serv
 # Meetings
 ## Initial Meeting 4 Apr
 We met each other and discussed ideas for the project, before reaching the conclusion of a nonogram solver.
+
+Inital Tasks:
+User Accounts: Elizabeth
+
+Puzzle Browser Page: Elizabeth
+
+Puzzle Solving Website: Ethan (I will make a single puzzle that is there every time for now)
+
+Friends Tab: Jeffrey
+
+Home Page: Ryan
