@@ -47,6 +47,24 @@ function findClueForLine(line) {
     return clues;
 }
 
+// checks to see if two arrays have the same elements
+function ArraysEqual(arrayA, arrayB) {
+    if (arrayA.length != arrayB.length) {
+        return false;
+    }
+    return arrayA.every((element, index) => element == arrayB[index]);
+}
 function verifySolution(rowClues, colClues, shadedCells) {
-    ;
+    // check rows
+    const rowCorrectness = rowClues.every((clue, index) => ArraysEqual(clue, findClueForLine(shadedCells[index])));
+
+    // chatgpt boilerplate code
+    shadedCellsTranspose = shadedCells[0].map((_, colIndex) =>
+        shadedCells.map(row => row[colIndex])
+    );
+
+    // check cols
+    const colCorrectness = colClues.every((clue, index) => ArraysEqual(clue, findClueForLine(shadedCellsTranspose[index])));
+      
+    return rowCorrectness && colCorrectness;
 }
