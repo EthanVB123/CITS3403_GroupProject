@@ -26,3 +26,27 @@ document.addEventListener("DOMContentLoaded", () => {
         itemClicked.classList.toggle("shaded");
     });
 })
+
+function findClueForLine(line) {
+    let clues = [];
+    let currentClue = 0;
+    for (let cell of line) {
+        if (cell) {
+            currentClue++;
+        } else if (currentClue) {
+            clues.push(currentClue);
+            currentClue = 0;
+        }
+    }
+    if (currentClue) {
+        clues.push(currentClue);
+    }
+    if (clues.length == 0) {
+        return [0]; // instead of empty array, there is a single zero clue
+    }
+    return clues;
+}
+
+function verifySolution(rowClues, colClues, shadedCells) {
+    ;
+}
