@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Puzzles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 18px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            text-align: center;
+            margin-top: 20px;
+        }
+        main nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Adds space between difficulty links */
+        }
+        main nav a {
+            text-decoration: underline; /* Underlines each difficulty link */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Wild Puzzles!</h1>
+        <nav>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Signup</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Choose a Difficulty</h2>
+        <nav>
+            <a href="easy.html">Easy</a>
+            <a href="medium.html">Medium</a>
+            <a href="hard.html">Hard</a>
+        </nav>
+    </main>
+</body>
+</html>
