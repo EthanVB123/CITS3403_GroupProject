@@ -49,10 +49,13 @@ function generatePuzzle(size, newRowClues, newColClues) {
     // add the vertical clues
     for (let colnum = 0; colnum < size[1]; colnum++) {
         colElement = document.createElement('div');
-        colElement.classList.add("column");
+        colElement.classList.add("column", "border", "border-zinc-400");
         for (let clue of newColClues[colnum]) {
             clueElement = document.createElement('div');
             clueElement.classList.add("vclue");
+            clueElement.classList.add("bg-rose-200");
+            clueElement.classList.add("m-0.5", "rounded-lg", "text-4xl");
+            clueElement.classList.add("flex", "items-center", "justify-center");
             clueElement.innerHTML = clue;
             colElement.appendChild(clueElement);
         }
@@ -62,10 +65,13 @@ function generatePuzzle(size, newRowClues, newColClues) {
     for (let rownum = 0; rownum < size[0]; rownum++) {
         // add row clue
         rowElement = document.createElement('div');
-        rowElement.classList.add("row");
+        rowElement.classList.add("row", "border", "border-zinc-400");
         for (let clue of newRowClues[rownum]) {
             clueElement = document.createElement('div');
             clueElement.classList.add("hclue");
+            clueElement.classList.add("bg-rose-200");
+            clueElement.classList.add("m-0.5", "rounded-lg", "text-4xl");
+            clueElement.classList.add("flex", "items-center", "justify-center");
             clueElement.innerHTML = clue;
             rowElement.appendChild(clueElement);
         }
