@@ -1,9 +1,10 @@
 let puzzleSize = [5, 5]; // [rows, cols]
 let rowClues = [[5],[1],[5],[1],[5]];
 let colClues = [[3,1],[1,1,1],[1,1,1],[1,1,1],[1,3]];
-
+let startTime = Date.now();
 let shadedCells = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
-
+let timerInterval; // defined when puzzle made, but needs to be global
+let progressElement; // defined when dom loaded, this element displays updates like % puzzle completion, and if puzzle complete, whether or not there are mistakes
 // set up event listeners after DOM has loaded
 document.addEventListener("DOMContentLoaded", () => {
     const puzzle = document.getElementById("puzzle");
@@ -30,12 +31,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         itemClicked.classList.toggle("shaded");
         itemClicked.classList.toggle("hover:bg-zinc-600");
-        itemClicked.classList.toggle("bg-zinc-900")
+        itemClicked.classList.toggle("bg-zinc-900");
         if (verifySolution(rowClues, colClues, shadedCells)) {
-            console.log("Woo hoo! Puzzle completed!")
+            console.log("Woo hoo! Puzzle completed!");
+            clearInterval(timerInterval);
         }
     });
+
+    const timerElement = document.getElementById("timer");
+    timerInterval = setInterval(displayTime, 200, timerElement);
 })
+
+// The following code manages the timer
+
+// This sets the innerHTML of the timer element to be "mm:ss" since generatePuzzle last called
+// if over 60 mins, stops timer at 60:00
+// maybe later implement hours with dynamic font size
+function displayTime(timerElement) {
+    const timeElapsedMs = Date.now() - startTime; // time in milliseconds since generatePuzzle last called
+    const secondsTotal = Math.trunc((timeElapsedMs - (timeElapsedMs % 1000)) / 1000); // as above, rounded *down* to nearest second (00:00.9 rounds to 00:00)
+    const secondsDisplayed = secondsTotal % 60;
+    const minutesTotal = Math.trunc((secondsTotal-secondsDisplayed)/60);
+    const minutesDisplayed = minutesTotal % 60;
+    const hours = Math.trunc((minutesTotal - minutesDisplayed)/60);
+    if (hours > 0) {
+        //timerElement.innerHTML = `${hours}:${String(minutesDisplayed).padStart(2, '0')}:${String(secondsDisplayed).padStart(2, '0')}`; // h:mm:ss with h being as many digits as needed
+        timerElement.innerHTML = "60:00"; // temporary remedy until dynamic font sizing fixed.
+    } else {
+        timerElement.innerHTML = `${String(minutesDisplayed).padStart(2, '0')}:${String(secondsDisplayed).padStart(2, '0')}`; // mm:ss
+    }
+}
+
 
 // The following code generates the puzzle in the DOM
 function generatePuzzle(size, newRowClues, newColClues) {
@@ -99,6 +125,8 @@ function generatePuzzle(size, newRowClues, newColClues) {
     rowClues = newRowClues;
     colClues = newColClues;
     shadedCells = Array.from({ length: size[0]}, () => Array(size[1]).fill(0));
+    // Resets timer
+    startTime = Date.now();
 }
 
 

@@ -17,15 +17,25 @@
         </span>
     </div>
     <div class="main grid grid-cols-[1fr_2fr_1fr] w-full h-full">
-        <div id="leftsidebar" class="w-full h-full flex items-center justify-center p-10">
-
+        <div id="sidebar" class="w-full h-full flex items-center justify-center p-10">
+            <div id="stats" class="bg-sky-200 w-full h-full border-black-900 p-10 rounded-3xl grid grid-rows-[1fr_1fr]">
+                <div class="h-full w-full">
+                    <div class="w-full text-center text-sm">Puzzle #1</div>
+                    <div class="w-full text-center text-2xl">The Snake</div>
+                    <div class="w-full text-center text-xl">Created by: Ethan VB</div>
+                    <div class="w-full text-center text-xl">5x5 Easy</div>
+                    <div class="w-full text-center text-xl">0 solved</div>
+                </div>
+                <div class="h-full w-full">
+                    <div id="timer" class="w-full text-center text-6xl">00:00</div>
+                    <div class="w-full text-center">A-Rank Time: 01:15</div>
+                    <div class="w-full text-center">Accuracy Score: 100%</div>
+                    <div id="progress" class="w-full text-center text-sky-800 font-bold">Progress 0/25 (0%)</div> <!-- text-rose-500 error, emerald-500 success, sky-800 incomplete -->
+                </div>
             </div>
         </div>
         <div class="puzzle p-4 w-full" id="puzzle">
             <!-- will be filled dynamically by solvePuzzle.js on load -->
-        </div>
-        <div id="rightsidebar" class="w-full">
-
         </div>
     </div>
     <div class="footer bg-cyan-300 w-full h-full">
