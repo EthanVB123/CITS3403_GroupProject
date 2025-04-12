@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 // The following code generates the puzzle in the DOM
-function generatePuzzle(size, rowClues, colClues) {
+function generatePuzzle(size, newRowClues, newColClues) {
     puzzleElement = document.getElementById("puzzle");
     // empty out the existing puzzle
     puzzleElement.innerHTML = "";
@@ -48,7 +48,7 @@ function generatePuzzle(size, rowClues, colClues) {
     for (let colnum = 0; colnum < size[1]; colnum++) {
         colElement = document.createElement('div');
         colElement.classList.add("column");
-        for (let clue of colClues[colnum]) {
+        for (let clue of newColClues[colnum]) {
             clueElement = document.createElement('div');
             clueElement.classList.add("vclue");
             clueElement.innerHTML = clue;
@@ -61,7 +61,7 @@ function generatePuzzle(size, rowClues, colClues) {
         // add row clue
         rowElement = document.createElement('div');
         rowElement.classList.add("row");
-        for (let clue of rowClues[rownum]) {
+        for (let clue of newRowClues[rownum]) {
             clueElement = document.createElement('div');
             clueElement.classList.add("hclue");
             clueElement.innerHTML = clue;
@@ -83,6 +83,11 @@ function generatePuzzle(size, rowClues, colClues) {
         cell.id = `cell${cellIndex}`;
         cellIndex++;
     };
+
+    // update global row and col clues and shaded cells to reset the verifier
+    rowClues = newRowClues;
+    colClues = newColClues;
+    shadedCells = Array.from({ length: size[0]}, () => Array(size[1]).fill(0));
 }
 
 
