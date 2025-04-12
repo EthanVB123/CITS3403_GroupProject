@@ -4,24 +4,10 @@
     box-sizing: border-box;
 }
 
-.header {
-    height: 10vh;
-    width: 99.9%;
-    border: 1px solid red;
-}
-
 .puzzle {
-    height: 79vh;
-    width: 50vw;
-    border: 1px solid blue;
     display: grid;
     grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 3fr 1fr 1fr 1fr 1fr 1fr;
-}
-
-.footer {
-    height: 10vh;
-    border: 1px solid green;
 }
 
 .column, .row {
@@ -42,20 +28,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
 }
-
-.cell {
-    border: 6px solid chartreuse;
-}
-
 .hclue, .vclue {
     border: 3px dotted hotpink;
     text-align: center;
-}
-
-.cell:hover {
-    background-color: #aaa;
-}
-
-.shaded {
-    background-color: #333;
 }

@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
             shadedCells[row][col] = 1
         }
         itemClicked.classList.toggle("shaded");
+        itemClicked.classList.toggle("hover:bg-zinc-600");
+        itemClicked.classList.toggle("bg-zinc-900")
         if (verifySolution(rowClues, colClues, shadedCells)) {
             console.log("Woo hoo! Puzzle completed!")
         }
@@ -72,6 +74,9 @@ function generatePuzzle(size, newRowClues, newColClues) {
         for (let i = 0; i < size[1]; i++) {
             cell = document.createElement("div");
             cell.classList.add("cell");
+            cell.classList.add("border-zinc-400");
+            cell.classList.add("border");
+            cell.classList.add("hover:bg-zinc-200");
             puzzle.appendChild(cell);
         }
     }
