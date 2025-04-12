@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.id = `cell${cellIndex}`;
         cellIndex++;
     };
+
+    generatePuzzle(puzzleSize, rowClues, colClues);
     // to prevent bloat from having an event listener per cell, just have an event listener for the puzzle 
     // and then detect which item was actually clicked using event.target
     puzzle.addEventListener("click", event => {
@@ -32,6 +34,59 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 })
+
+// The following code generates the puzzle in the DOM
+function generatePuzzle(size, rowClues, colClues) {
+    puzzleElement = document.getElementById("puzzle");
+    // empty out the existing puzzle
+    puzzleElement.innerHTML = "";
+    // add the corner element
+    cornerElement = document.createElement("div");
+    cornerElement.classList.add("topleftbox");
+    puzzleElement.appendChild(cornerElement);
+    // add the vertical clues
+    for (let colnum = 0; colnum < size[1]; colnum++) {
+        colElement = document.createElement('div');
+        colElement.classList.add("column");
+        for (let clue of colClues[colnum]) {
+            clueElement = document.createElement('div');
+            clueElement.classList.add("vclue");
+            clueElement.innerHTML = clue;
+            colElement.appendChild(clueElement);
+        }
+        puzzle.appendChild(colElement);
+    }
+    // add each row
+    for (let rownum = 0; rownum < size[0]; rownum++) {
+        // add row clue
+        rowElement = document.createElement('div');
+        rowElement.classList.add("row");
+        for (let clue of rowClues[rownum]) {
+            clueElement = document.createElement('div');
+            clueElement.classList.add("hclue");
+            clueElement.innerHTML = clue;
+            rowElement.appendChild(clueElement);
+        }
+        puzzle.appendChild(rowElement);
+        // add cells
+        for (let i = 0; i < size[1]; i++) {
+            cell = document.createElement("div");
+            cell.classList.add("cell");
+            puzzle.appendChild(cell);
+        }
+    }
+
+    // assign IDs to cells
+    let cellIndex = 0;
+    const cells = document.getElementsByClassName("cell");
+    for(let cell of cells) {
+        cell.id = `cell${cellIndex}`;
+        cellIndex++;
+    };
+}
+
+
+// The following code is the solution verifier
 
 // Takes input 1d array containing 1s for shaded and 0s for unshaded cells and returns the clue required to generate that pattern
 // E.g. Input = [1,1,0,1,0,0,1,1,1,1] has Output = [2, 1, 4]
