@@ -8,6 +8,8 @@ let progressElement; // defined when dom loaded, this element displays updates l
 // set up event listeners after DOM has loaded
 document.addEventListener("DOMContentLoaded", () => {
     const puzzle = document.getElementById("puzzle");
+    const timerElement = document.getElementById("timer");
+    progressElement = document.getElementById("progress");
     let cellIndex = 0;
     const cells = document.getElementsByClassName("cell");
     for(let cell of cells) {
@@ -32,17 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
         itemClicked.classList.toggle("shaded");
         itemClicked.classList.toggle("hover:bg-zinc-600");
         itemClicked.classList.toggle("bg-zinc-900");
+        displayProgress(progressElement);
         if (verifySolution(rowClues, colClues, shadedCells)) {
             console.log("Woo hoo! Puzzle completed!");
             clearInterval(timerInterval);
         }
     });
 
-    const timerElement = document.getElementById("timer");
+
     timerInterval = setInterval(displayTime, 200, timerElement);
 })
 
-// The following code manages the timer
+// The following code manages the dynamic elements on the sidebar
 
 // This sets the innerHTML of the timer element to be "mm:ss" since generatePuzzle last called
 // if over 60 mins, stops timer at 60:00
@@ -62,6 +65,26 @@ function displayTime(timerElement) {
     }
 }
 
+// This manages the text and colour of the progress text on the sidebar
+function displayProgress(progressElement) {
+    const cells = document.getElementsByClassName("cell");
+    const totalCells = puzzleSize[0]*puzzleSize[1];
+    let filledCells = 0; // this will increase as the cells are iterated through
+
+    for (let cell of cells) {
+        if (cell.classList.contains("shaded")) {
+            filledCells++;
+        }
+    }    
+
+    if (verifySolution(rowClues, colClues, shadedCells)) {
+        progressElement.innerHTML = "Puzzle solved!"
+    } else if (filledCells < totalCells) {
+        progressElement.innerHTML = `Progress ${filledCells}/${totalCells} (${Math.trunc(filledCells*100/totalCells)}%)`
+    } else {
+        progressElement.innerHTML = "Mistakes Found"
+    }
+}
 
 // The following code generates the puzzle in the DOM
 function generatePuzzle(size, newRowClues, newColClues) {
