@@ -45,6 +45,29 @@ document.addEventListener("DOMContentLoaded", () => {
     timerInterval = setInterval(displayTime, 200, timerElement);
 })
 
+// This function makes the text inside a HTML element the largest size it can be (capping at font-6xl) without overflow
+// Required as overflow (which could happen as the box size shrinks as puzzle size grows) could cause the puzzle size to exceed the 80% of screen height it is permitted
+// note this function is adapted from chatgpt code
+function maximiseFontSize(element) {
+    const tailwindSizes = ["text-xs","text-sm","text-base","text-lg","text-xl","text-2xl","text-3xl","text-4xl","text-5xl","text-6xl"];
+    const maxWidth = element.clientWidth; // if actual width exceeds this, we get overflow
+    const maxHeight = element.clientHeight; // if actual height exceeds this, we get overflow
+
+    let bestFontSize = tailwindSizes[0];
+    for (let size of tailwindSizes) {
+        element.classList.remove(...tailwindSizes); // easier to just remove every size in case of off by 1 error
+        element.classList.add(size); // try the next largest size
+        // accept the next largest size if it can fit and keeps iterating, otherwise ends process with current size
+        if (element.scrollWidth > maxWidth || element.scrollHeight > maxHeight) { // scrollWidth and scrollHeight are actual width and height used
+            break;
+        } else {
+            bestFontSize = size;
+        }
+    }
+    // makes sure we have the right size equipped
+    element.classList.remove(...tailwindSizes);
+    element.classList.add(bestFontSize);
+}
 // The following code manages the dynamic elements on the sidebar
 
 // This sets the innerHTML of the timer element to be "mm:ss" since generatePuzzle last called
@@ -106,7 +129,7 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
             clueElement = document.createElement('div');
             clueElement.classList.add("vclue");
             clueElement.classList.add("bg-rose-200");
-            clueElement.classList.add("m-0.5", "rounded-lg", "text-4xl");
+            clueElement.classList.add("m-0.5", "rounded-lg");
             clueElement.classList.add("flex", "items-center", "justify-center");
             clueElement.innerHTML = clue;
             colElement.appendChild(clueElement);
@@ -122,7 +145,7 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
             clueElement = document.createElement('div');
             clueElement.classList.add("hclue");
             clueElement.classList.add("bg-rose-200");
-            clueElement.classList.add("m-0.5", "rounded-lg", "text-4xl");
+            clueElement.classList.add("m-0.5", "rounded-lg");
             clueElement.classList.add("flex", "items-center", "justify-center");
             clueElement.innerHTML = clue;
             rowElement.appendChild(clueElement);
@@ -147,6 +170,15 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
         cellIndex++;
     };
 
+    // fix font size to prevent overflow
+    const horizontalClues = document.getElementsByClassName("hclue");
+    const verticalClues = document.getElementsByClassName("vclue");
+    for (clue of horizontalClues) {
+        maximiseFontSize(clue);
+    }
+    for (clue of verticalClues) {
+        maximiseFontSize(clue);
+    }
     // update global row and col clues and shaded cells to reset the verifier
     rowClues = newRowClues;
     colClues = newColClues;
