@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const itemClicked = event.target;
         //console.log(`Puzzle element ${itemClicked.id} clicked`);
         const itemnum = parseInt(itemClicked.id.substr(4));
-        const row = Math.trunc(itemnum/5);
-        const col = itemnum % 5;
+        const row = Math.trunc(itemnum/puzzleSize[1]);
+        const col = itemnum % puzzleSize[1];
         if (shadedCells[row][col]) {
             shadedCells[row][col] = 0
         } else {
@@ -87,16 +87,19 @@ function displayProgress(progressElement) {
 }
 
 // The following code generates the puzzle in the DOM
-function generatePuzzle(size, newRowClues, newColClues) {
+function generatePuzzle(newSize, newRowClues, newColClues) {
     puzzleElement = document.getElementById("puzzle");
-    // empty out the existing puzzle
+    // empty out the existing puzzle, change the size of the grid to the new size
     puzzleElement.innerHTML = "";
+    // note that grid-template-rows is converted to camelCase in JS in next 2 lines as JS can't have attributes with hyphens
+    puzzleElement.style.gridTemplateRows = gridTemplate(newSize[0]);
+    puzzleElement.style.gridTemplateColumns = gridTemplate(newSize[1]);
     // add the corner element
     cornerElement = document.createElement("div");
     cornerElement.classList.add("topleftbox");
     puzzleElement.appendChild(cornerElement);
     // add the vertical clues
-    for (let colnum = 0; colnum < size[1]; colnum++) {
+    for (let colnum = 0; colnum < newSize[1]; colnum++) {
         colElement = document.createElement('div');
         colElement.classList.add("column", "border", "border-zinc-400");
         for (let clue of newColClues[colnum]) {
@@ -111,7 +114,7 @@ function generatePuzzle(size, newRowClues, newColClues) {
         puzzle.appendChild(colElement);
     }
     // add each row
-    for (let rownum = 0; rownum < size[0]; rownum++) {
+    for (let rownum = 0; rownum < newSize[0]; rownum++) {
         // add row clue
         rowElement = document.createElement('div');
         rowElement.classList.add("row", "border", "border-zinc-400");
@@ -126,7 +129,7 @@ function generatePuzzle(size, newRowClues, newColClues) {
         }
         puzzle.appendChild(rowElement);
         // add cells
-        for (let i = 0; i < size[1]; i++) {
+        for (let i = 0; i < newSize[1]; i++) {
             cell = document.createElement("div");
             cell.classList.add("cell");
             cell.classList.add("border-zinc-400");
@@ -147,11 +150,18 @@ function generatePuzzle(size, newRowClues, newColClues) {
     // update global row and col clues and shaded cells to reset the verifier
     rowClues = newRowClues;
     colClues = newColClues;
-    shadedCells = Array.from({ length: size[0]}, () => Array(size[1]).fill(0));
+    puzzleSize = newSize;
+    shadedCells = Array.from({ length: puzzleSize[0]}, () => Array(puzzleSize[1]).fill(0));
     // Resets timer
     startTime = Date.now();
 }
 
+// Generates a string to be grid-template-rows or grid-template-columns based on dimension
+// e.g. input 5 gives output "3fr 1fr 1fr 1fr 1fr 1fr", where the 3fr is for the clues and the 1fr is for each cell
+function gridTemplate(size) {
+    const maxPossibleCluesPerCol = Math.ceil(size / 2);
+    return `${maxPossibleCluesPerCol}fr${" 1fr".repeat(size)}`;
+}
 
 // The following code is the solution verifier
 
