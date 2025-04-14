@@ -20,3 +20,7 @@ Puzzle Solving Website: Ethan (I will make a single puzzle that is there every t
 Friends Tab: Jeffrey
 
 Home Page: Ryan
+
+## Second Meeting 11 Apr
+We came up with a list of tasks we each need to do, which are visible on the picture of the whiteboard uploaded to the main folder of this repository.
+We agreed to complete these tasks by our next meeting, scheduled for 17 Apr (since 18 Apr is a public holiday).
