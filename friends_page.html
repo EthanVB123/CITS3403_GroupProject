@@ -7,18 +7,22 @@
     <body>
         <h2>Add a Friend</h2>
         <button id="add-friend-button">Add Friend</button>
-        <div id="friend_info">
-            <table>
-                <tr>
-                    <th>Followers</th>
-                    <th>Following</th>
-                </tr>
-                <tr>
-                    <td>0</td>
-                    <td>0</td> 
-                </tr>
-            </table>
+        <div id="user_info">
+            <h3>Jeffrey Peng</h3>
+            <p style="font-weight: bold; margin: 0;">Followers</p>
+            <div class="person" onclick="toggleFriends('jeffrey')">3</div>
+            <div id="jeffrey" class="friends-list">
+                <div class="friend">Username: ryankoo | Name: Ryan | Friends: 2</div>
+                <div class="friend">Username: elizabethshibu | Name: Elizabeth | Friends: 7</div>
+                <div class="friend">Username: ethanvanbruchem | Name: Ethan | Friends: 6</div>
+            </div>
         </div>
+        <script>
+            function toggleFriends(id) {
+                const friendsList = document.getElementById(id);
+                friendsList.style.display = (friendsList.style.display === "none") ? "block" : "none";
+            }
+        </script>
     </body>
 </html>
 
