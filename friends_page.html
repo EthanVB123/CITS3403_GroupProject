@@ -5,22 +5,26 @@
         <link rel="stylesheet" href="friend_page.css">
     </head>
     <body>
-        <h2>Add a Friend</h2>
-        <button id="add-friend-button">Add Friend</button>
-        <div id="user_info">
-            <h3>Jeffrey Peng</h3>
-            <p style="font-weight: bold; margin: 0;">Followers</p>
-            <div class="person" onclick="toggleFriends('jeffrey')">3</div>
-            <div id="jeffrey" class="friends-list">
-                <div class="friend">Username: ryankoo | Name: Ryan | Friends: 2</div>
-                <div class="friend">Username: elizabethshibu | Name: Elizabeth | Friends: 7</div>
-                <div class="friend">Username: ethanvanbruchem | Name: Ethan | Friends: 6</div>
+        <h1>Jeffrey Peng</h1>
+        <div id="main-container">
+            <div id="add-friend-section">
+                <h3 style="margin: 0;">Add a Friend</h3>
+                <button id="add-friend-button">Add Friend</button>
+            </div>
+            <div id="friends-section">
+                <h3 style="margin: 0;">Friends</h3>
+                <div class="person" onclick="toggleFriends('jeffrey')">3</div>
+                <div id="jeffrey" class="friends-list">
+                    <div class="friend">Username: ryankoo | Name: Ryan | Friends: 2</div>
+                    <div class="friend">Username: elizabethshibu | Name: Elizabeth | Friends: 7</div>
+                    <div class="friend">Username: ethanvanbruchem | Name: Ethan | Friends: 6</div>
+                </div>
             </div>
         </div>
         <script>
             function toggleFriends(id) {
                 const friendsList = document.getElementById(id);
-                friendsList.style.display = (friendsList.style.display === "none") ? "block" : "none";
+                friendsList.style.display = (friendsList.style.display === "block") ? "none" : "block";
             }
         </script>
     </body>
