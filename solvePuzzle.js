@@ -5,6 +5,7 @@ let startTime = Date.now();
 let shadedCells = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
 let timerInterval; // defined when puzzle made, but needs to be global
 let progressElement; // defined when dom loaded, this element displays updates like % puzzle completion, and if puzzle complete, whether or not there are mistakes
+let userStatus = "editor"; // "solver" if trying to solve the puzzle, "editor" if trying to make their own
 // set up event listeners after DOM has loaded
 document.addEventListener("DOMContentLoaded", () => {
     const puzzle = document.getElementById("puzzle");
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const itemClicked = event.target;
         //console.log(`Puzzle element ${itemClicked.id} clicked`);
         const itemnum = parseInt(itemClicked.id.substr(4));
+
         const row = Math.trunc(itemnum/puzzleSize[1]);
         const col = itemnum % puzzleSize[1];
         if (shadedCells[row][col]) {
@@ -34,15 +36,20 @@ document.addEventListener("DOMContentLoaded", () => {
         itemClicked.classList.toggle("shaded");
         itemClicked.classList.toggle("hover:bg-zinc-600");
         itemClicked.classList.toggle("bg-zinc-900");
-        displayProgress(progressElement);
-        if (verifySolution(rowClues, colClues, shadedCells)) {
-            console.log("Woo hoo! Puzzle completed!");
-            clearInterval(timerInterval);
+        if (userStatus == "solver") {
+            displayProgress(progressElement);
+            if (verifySolution(rowClues, colClues, shadedCells)) {
+                console.log("Woo hoo! Puzzle completed!");
+                clearInterval(timerInterval);
+            }
+        } else if (userStatus == "editor") {
+            console.log(itemnum)
+            updatePuzzleClues(itemnum);
         }
     });
 
 
-    timerInterval = setInterval(displayTime, 200, timerElement);
+    let timerInterval = setInterval(displayTime, 200, timerElement);
 })
 
 // This function makes the text inside a HTML element the largest size it can be (capping at font-6xl) without overflow
@@ -67,6 +74,17 @@ function maximiseFontSize(element) {
     // makes sure we have the right size equipped
     element.classList.remove(...tailwindSizes);
     element.classList.add(bestFontSize);
+}
+// calls maximiseFontSize on every clue element
+function maximiseAllFontSizes() {
+    const horizontalClues = document.getElementsByClassName("hclue");
+    const verticalClues = document.getElementsByClassName("vclue");
+    for (clue of horizontalClues) {
+        maximiseFontSize(clue);
+    }
+    for (clue of verticalClues) {
+        maximiseFontSize(clue);
+    }
 }
 // The following code manages the dynamic elements on the sidebar
 
@@ -171,14 +189,7 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
     };
 
     // fix font size to prevent overflow
-    const horizontalClues = document.getElementsByClassName("hclue");
-    const verticalClues = document.getElementsByClassName("vclue");
-    for (clue of horizontalClues) {
-        maximiseFontSize(clue);
-    }
-    for (clue of verticalClues) {
-        maximiseFontSize(clue);
-    }
+    maximiseAllFontSizes();
     // update global row and col clues and shaded cells to reset the verifier
     rowClues = newRowClues;
     colClues = newColClues;
@@ -279,4 +290,15 @@ function updateClue(index, isColumn) {
         clueElement.innerHTML = clue;
         targetElement.appendChild(clueElement); // this is a repeat of generatePuzzle, make it its own function?
     }
+
+    maximiseAllFontSizes(); // TODO optimise this, it is the bottleneck on speed here
+}
+
+// updates clues in puzzle after user changes the puzzle
+function updatePuzzleClues(cellClicked) { // cell clicked is the integer in the cell id, so if we clicked cell "cell24", cellClicked is 24
+    const row = Math.trunc(cellClicked/puzzleSize[1]);
+    const col = cellClicked % puzzleSize[1];
+
+    updateClue(row, false);
+    updateClue(col, true);
 }
