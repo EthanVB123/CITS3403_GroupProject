@@ -4,7 +4,7 @@ body {
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    background-color: #967969;
+    background-color: #fafafa;
 }
 
 #main-container {
@@ -42,3 +42,36 @@ body {
     font-size: 1em;
     color: #555;
 }
+
+.add-friend {
+    margin-top: 20px;
+}
+
+#friend-input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    width: 70%;
+    margin-right: 5px;
+    box-sizing: border-box;
+}
+
+#add-friend-btn {
+    padding: 8px 12px;
+    margin-top: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  #add-friend-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .message {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #d00;
+  }
