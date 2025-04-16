@@ -21,11 +21,15 @@ function removeFriend(button) {
     if (index !== -1) {
         currentFriends.splice(index, 1);
     }
+    message.style.color = '#d00';
+    message.style.fontWeight = 'normal';
     message.textContent = `${friendUsername} has been removed.`;
 }
 
 addFriendBtn.addEventListener('click', function() {
     const friendUsername = friendInput.value.trim();
+    message.style.color = '#d00';
+    message.style.fontWeight = 'normal';
     message.textContent = '';
     if (friendUsername === '') {
         message.textContent = 'Please enter a username.';
@@ -34,7 +38,7 @@ addFriendBtn.addEventListener('click', function() {
         message.textContent = 'User not found.';
     }
     else if (currentFriends.includes(friendUsername)) {
-        message.textContent = 'Already friends.';
+        message.textContent = 'This user is already your friend.';
     }
     else {
         currentFriends.push(friendUsername);
@@ -49,6 +53,8 @@ addFriendBtn.addEventListener('click', function() {
         `;
         document.getElementById('friends-section').appendChild(newFriendCard);
         message.textContent = 'Friend added successfully!';
+        message.style.color = 'green';
+        message.style.fontWeight = 'bold';
     }
     friendInput.value = '';
 });
