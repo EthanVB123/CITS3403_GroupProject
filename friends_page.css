@@ -1,69 +1,54 @@
 body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    background-color: #fafafa;
-}
-
-#main-container {
-    display: flex;
-    gap: 20px;
-}
-
-.friends-list {
-    display: none;
-}
-
-.friend-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    width: 250px;
-    background-color: #fafafa;
-    border-radius: 5px;
-}
-
-.friend-name {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f6fa;
     margin: 0;
-    font-size: 1.5em;
+    padding: 0;
     color: #333;
 }
 
-.friend-username {
-    margin: 5px 0;
-    font-size: 1.1em;
-    color: #444;
-}
+header {
+    background-color: #4CAF50;
+    color: #fff;
+    width: 100%;
+    padding: 10px 20px;
+  }
+  
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-.puzzles-built,
-.friend-count {
-    margin: 5px 0;
-    font-size: 1em;
-    color: #555;
-}
+  .container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+  }
 
-.add-friend {
-    margin-top: 20px;
-}
-
-#friend-input {
-    padding: 8px;
+  .add-friend {
+    margin-bottom: 20px;
+  }
+  
+  #friend-input {
+    width: calc(100% - 120px);
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 3px;
-    width: 70%;
-    margin-right: 5px;
     box-sizing: border-box;
-}
-
-#add-friend-btn {
-    padding: 8px 12px;
-    margin-top: 5px;
+  }
+  
+  #add-friend-btn {
+    padding: 10px 15px;
+    margin-left: 10px;
     border: none;
     background-color: #4CAF50;
     color: #fff;
     border-radius: 3px;
     cursor: pointer;
+    transition: background-color 0.2s;
   }
   
   #add-friend-btn:hover {
@@ -75,17 +60,73 @@ body {
     font-size: 0.9em;
     color: #d00;
   }
-
+  
+  .friends-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .friend-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    transition: box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .friend-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .friend-info {
+    margin-bottom: 10px;
+  }
+  
+  .friend-name {
+    margin: 0;
+    font-size: 1.4em;
+  }
+  
+  .friend-username {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #666;
+  }
+  
   .remove-friend-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
     padding: 5px 10px;
-    margin-top: 5px;
     border: none;
     background-color: #d9534f;
     color: #fff;
     border-radius: 3px;
     cursor: pointer;
-}
-
-.remove-friend-btn:hover {
+    font-size: 0.8em;
+    transition: background-color 0.2s;
+  }
+  
+  .remove-friend-btn:hover {
     background-color: #c9302c;
-}
+  }
+  
+  .friend-details {
+    display: none;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 0.9em;
+    color: #555;
+  }
+  
+  .content {
+    flex: 2;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }

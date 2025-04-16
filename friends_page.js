@@ -1,6 +1,8 @@
-function toggleFriends(id) {
-    const friendsList = document.getElementById(id);
-    friendsList.style.display = (friendsList.style.display === "block") ? "none" : "block";
+function toggleFriendDetails(card) {
+    const friendDetails = card.querySelector('.friend-details');
+    if (details) {
+        details.style.display = (details.style.display === "block") ? "none" : "block";
+    }
 }
 
 // dummy data
@@ -45,7 +47,7 @@ addFriendBtn.addEventListener('click', function() {
             <p class="friend-count">Friends: 0</p>
             <button class="remove-friend-btn" onclick="removeFriend(this)">Remove Friend</button>
         `;
-        document.getElementById('jeffrey').appendChild(newFriendCard);
+        document.getElementById('friends-section').appendChild(newFriendCard);
         message.textContent = 'Friend added successfully!';
     }
     friendInput.value = '';
