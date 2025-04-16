@@ -4,62 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wild Puzzles</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f8f9fa;
-        }
-        header h1 {
-            margin: 0;
-        }
-        nav {
-            display: flex;
-            gap: 15px;
-        }
-        nav a {
-            text-decoration: none;
-            color: #007BFF;
-            font-size: 18px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        main {
-            text-align: center;
-            margin-top: 20px;
-        }
-        main nav {
-            display: flex;
-            flex-direction: column;
-            gap: 10px; /* Adds space between difficulty links */
-        }
-        main nav a {
-            text-decoration: underline; /* Underlines each difficulty link */
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="loginStatus.js"></script>
 </head>
-<body>
-    <header>
-        <h1>Welcome to Wild Puzzles!</h1>
-        <nav>
-            <a href="login.html">Login</a>
-            <a href="signup.html">Signup</a>
+<body class="bg-cyan-50 font-mono">
+    <header class="bg-cyan-300 w-full flex justify-between items-center p-4">
+        <span class="logo">WP logo</span>
+        <span class="navbar">
+            <a href="login.html" class="text-blue-500 hover:underline">Login</a>
+            <a href="signup.html" class="text-blue-500 hover:underline">Signup</a>
         </nav>
     </header>
-    <main>
-        <h2>Choose a Difficulty</h2>
-        <nav>
-            <a href="easy.html">Easy</a>
-            <a href="medium.html">Medium</a>
-            <a href="hard.html">Hard</a>
+
+    <main class="text-center mt-8">
+        <h2 class="text-2xl font-semibold mb-4">Welcome to Wild Puzzles!</h2>
+            <p class="mb-4">Solve puzzles and earn experience!</p>
+            <p class="mb-4">You can also create your own puzzles, and share them with your friends!</p>
+            <p class="mb-4">Please select a difficulty level to start playing.</p>
+            <br>
+        <h2 class="text-2xl font-bold mb-4">Choose a Difficulty</h2>
+        <nav class="flex flex-col gap-4">
+            <a href="easy.html" class="text-blue-500 underline">Easy</a>
+            <a href="medium.html" class="text-blue-500 underline">Medium</a>
+            <a href="hard.html" class="text-blue-500 underline">Hard</a>
         </nav>
     </main>
 </body>
