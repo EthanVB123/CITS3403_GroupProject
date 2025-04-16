@@ -5,7 +5,7 @@ let startTime = Date.now();
 let shadedCells = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
 let timerInterval; // defined when puzzle made, but needs to be global
 let progressElement; // defined when dom loaded, this element displays updates like % puzzle completion, and if puzzle complete, whether or not there are mistakes
-let userStatus = "editor"; // "solver" if trying to solve the puzzle, "editor" if trying to make their own
+let userStatus = "solver"; // "solver" if trying to solve the puzzle, "editor" if trying to make their own
 // set up event listeners after DOM has loaded
 document.addEventListener("DOMContentLoaded", () => {
     const puzzle = document.getElementById("puzzle");
@@ -301,4 +301,15 @@ function updatePuzzleClues(cellClicked) { // cell clicked is the integer in the 
 
     updateClue(row, false);
     updateClue(col, true);
+}
+
+// Exports puzzle as a list, which could be made into JSON later for the server
+function exportPuzzle() {
+    const shadedCellsTranspose = shadedCells[0].map((_, colIndex) =>
+        shadedCells.map(row => row[colIndex])
+    );
+    const exportRowClues = shadedCells.map(findClueForLine);
+    const exportColClues = shadedCellsTranspose.map(findClueForLine);
+
+    return [puzzleSize, exportRowClues, exportColClues];
 }
