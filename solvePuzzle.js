@@ -186,6 +186,8 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
     shadedCells = Array.from({ length: puzzleSize[0]}, () => Array(puzzleSize[1]).fill(0));
     // Resets timer
     startTime = Date.now();
+    // Resets progress bar indicator
+    displayProgress(progressElement);
 }
 
 // Generates a string to be grid-template-rows or grid-template-columns based on dimension
@@ -235,7 +237,7 @@ function verifySolution(rowClues, colClues, shadedCells) {
     const rowCorrectness = rowClues.every((clue, index) => ArraysEqual(clue, findClueForLine(shadedCells[index])));
 
     // chatgpt boilerplate code
-    shadedCellsTranspose = shadedCells[0].map((_, colIndex) =>
+    const shadedCellsTranspose = shadedCells[0].map((_, colIndex) =>
         shadedCells.map(row => row[colIndex])
     );
 
@@ -243,4 +245,38 @@ function verifySolution(rowClues, colClues, shadedCells) {
     const colCorrectness = colClues.every((clue, index) => ArraysEqual(clue, findClueForLine(shadedCellsTranspose[index])));
       
     return rowCorrectness && colCorrectness;
+}
+
+// The following code refers to the puzzle editor
+
+// this function updates a single row/column with the correct clues to match what is *currently* in shadedCells
+// it changes graphics only
+// isColumn is a bool indicating column or row, index is col # or row #
+// for example, to update the clue for row 4
+function updateClue(index, isColumn) {
+    const shadedCellsTranspose = shadedCells[0].map((_, colIndex) =>
+        shadedCells.map(row => row[colIndex])
+    ); // could be possible to store shadedCellsTranspose in memory as well as shadedCells so this doesn't have to be called every time
+
+    let targetLine;
+    let targetElement;
+    if (isColumn) {
+        targetLine = shadedCellsTranspose[index]; // this stores an array of 0s and 1s, where 1 is shaded and 0 isn't
+        targetElement = document.getElementsByClassName("column")[index];
+    } else {
+        targetLine = shadedCells[index];
+        targetElement = document.getElementsByClassName("row")[index];
+    }
+
+    const newClues = findClueForLine(targetLine);
+    targetElement.innerHTML = "";
+    for (clue of newClues) {
+        clueElement = document.createElement('div');
+        clueElement.classList.add("hclue");
+        clueElement.classList.add("bg-rose-200");
+        clueElement.classList.add("m-0.5", "rounded-lg");
+        clueElement.classList.add("flex", "items-center", "justify-center");
+        clueElement.innerHTML = clue;
+        targetElement.appendChild(clueElement); // this is a repeat of generatePuzzle, make it its own function?
+    }
 }
