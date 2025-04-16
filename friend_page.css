@@ -15,3 +15,30 @@ body {
 .friends-list {
     display: none;
 }
+
+.friend-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 250px;
+    background-color: #fafafa;
+    border-radius: 5px;
+}
+
+.friend-name {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.friend-username {
+    margin: 5px 0;
+    font-size: 1.1em;
+    color: #444;
+}
+
+.puzzles-built,
+.friend-count {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #555;
+}
