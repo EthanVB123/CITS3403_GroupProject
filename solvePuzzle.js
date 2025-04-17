@@ -97,7 +97,9 @@ function displayTime(timerElement) {
     const minutesTotal = Math.trunc((secondsTotal-secondsDisplayed)/60);
     const minutesDisplayed = minutesTotal % 60;
     const hours = Math.trunc((minutesTotal - minutesDisplayed)/60);
-    if (hours > 0) {
+    if (userStatus == "editor") {
+        timerElement.innerHTML = "xx:xx"; // timer not required when editing puzzle
+    } else if (hours > 0) {
         //timerElement.innerHTML = `${hours}:${String(minutesDisplayed).padStart(2, '0')}:${String(secondsDisplayed).padStart(2, '0')}`; // h:mm:ss with h being as many digits as needed
         timerElement.innerHTML = "60:00"; // temporary remedy until dynamic font sizing fixed.
     } else {
