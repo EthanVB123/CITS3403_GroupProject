@@ -133,8 +133,9 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
     // empty out the existing puzzle, change the size of the grid to the new size
     puzzleElement.innerHTML = "";
     // note that grid-template-rows is converted to camelCase in JS in next 2 lines as JS can't have attributes with hyphens
-    puzzleElement.style.gridTemplateRows = gridTemplate(newSize[0]);
-    puzzleElement.style.gridTemplateColumns = gridTemplate(newSize[1]);
+    puzzleElement.style.display = "grid";
+    puzzleElement.style.gridTemplateRows = gridTemplate(newSize[0], "puzzle");
+    puzzleElement.style.gridTemplateColumns = gridTemplate(newSize[1], "puzzle");
     // add the corner element
     cornerElement = document.createElement("div");
     cornerElement.classList.add("topleftbox");
@@ -143,6 +144,9 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
     for (let colnum = 0; colnum < newSize[1]; colnum++) {
         colElement = document.createElement('div');
         colElement.classList.add("column", "border", "border-zinc-400");
+        colElement.style.display = "grid";
+        colElement.style.gridTemplateRows = gridTemplate(newSize[0], "col"); // note that newsize[0] is used here as the max number of clues in a *column* is ceil(*numRows*/2)
+        colElement.style.gridTemplateColumns = '1fr';
         for (let clue of newColClues[colnum]) {
             clueElement = document.createElement('div');
             clueElement.classList.add("vclue");
@@ -159,6 +163,9 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
         // add row clue
         rowElement = document.createElement('div');
         rowElement.classList.add("row", "border", "border-zinc-400");
+        rowElement.style.display = "grid";
+        rowElement.style.gridTemplateColumns = gridTemplate(newSize[1], "row"); // note that newsize[1] is used here as the max number of clues in a *row* is ceil(*numCols*/2)
+        rowElement.style.gridTemplateRows = '1fr';
         for (let clue of newRowClues[rownum]) {
             clueElement = document.createElement('div');
             clueElement.classList.add("hclue");
@@ -203,9 +210,20 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
 
 // Generates a string to be grid-template-rows or grid-template-columns based on dimension
 // e.g. input 5 gives output "3fr 1fr 1fr 1fr 1fr 1fr", where the 3fr is for the clues and the 1fr is for each cell
-function gridTemplate(size) {
+function gridTemplate(size, category) {
     const maxPossibleCluesPerCol = Math.ceil(size / 2);
-    return `${maxPossibleCluesPerCol}fr${" 1fr".repeat(size)}`;
+    switch (category) {
+        case "puzzle":
+            return `${maxPossibleCluesPerCol}fr${" 1fr".repeat(size)}`;
+            break;
+        case "row":
+        case "col":
+            return `${"1fr ".repeat(maxPossibleCluesPerCol)}`.trim();
+            break;
+        default:
+            console.error(`Unexpected category given to gridTemplate: ${category}`)
+            break; // this default should never be called, this is a just in case
+    }
 }
 
 // The following code is the solution verifier
