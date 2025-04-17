@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 clearInterval(timerInterval);
             }
         } else if (userStatus == "editor") {
-            console.log(itemnum)
             updatePuzzleClues(itemnum);
         }
     });
@@ -321,6 +320,6 @@ function initialiseEditorMode(newPuzzleSize) {
     let newRows = new Array(newPuzzleSize[0]).fill(0);
     newRows = Array.from(newRows, () => [0])
     let newCols = new Array(newPuzzleSize[1]).fill(0);
-    newCols = Array.from(newRows, () => [0])
+    newCols = Array.from(newCols, () => [0])
     generatePuzzle(newPuzzleSize, newRows, newCols);
 }
