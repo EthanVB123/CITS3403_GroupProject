@@ -117,8 +117,9 @@ function displayProgress(progressElement) {
             filledCells++;
         }
     }    
-
-    if (verifySolution(rowClues, colClues, shadedCells)) {
+    if (userStatus == "editor") {
+        progressElement.innerHTML = "Currently in editor mode."
+    } else if (verifySolution(rowClues, colClues, shadedCells)) {
         progressElement.innerHTML = "Puzzle solved!"
     } else if (filledCells < totalCells) {
         progressElement.innerHTML = `Progress ${filledCells}/${totalCells} (${Math.trunc(filledCells*100/totalCells)}%)`
@@ -312,4 +313,14 @@ function exportPuzzle() {
     const exportColClues = shadedCellsTranspose.map(findClueForLine);
 
     return [puzzleSize, exportRowClues, exportColClues];
+}
+
+// Initialises puzzle editor mode, initialising a blank puzzle of given size [rows, cols]
+function initialiseEditorMode(newPuzzleSize) {
+    userStatus = "editor";
+    let newRows = new Array(newPuzzleSize[0]).fill(0);
+    newRows = Array.from(newRows, () => [0])
+    let newCols = new Array(newPuzzleSize[1]).fill(0);
+    newCols = Array.from(newRows, () => [0])
+    generatePuzzle(newPuzzleSize, newRows, newCols);
 }
