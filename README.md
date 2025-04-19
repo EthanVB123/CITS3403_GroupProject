@@ -24,3 +24,8 @@ Home Page: Ryan
 ## Second Meeting 11 Apr
 We came up with a list of tasks we each need to do, which are visible on the picture of the whiteboard uploaded to the main folder of this repository.
 We agreed to complete these tasks by our next meeting, scheduled for 17 Apr (since 18 Apr is a public holiday).
+
+## Third Meeting 17 Apr
+We agreed on which pages would be created in the website (and basic routing for the backend).
+We assigned tasks to various group members, to ideally be able to meet the first deliverable by our next meeting, which will be a Teams meeting on 24 Apr.
+These are available in the screenshot in the Written Discussions from Team Meetings folder.
