@@ -14,11 +14,30 @@
                 <span>Sign In!</span>
             </span>
         </div>
-        <div class="main w-full h-full">
-
+        <div class="main w-full h-full flex flex-col items-center">
+            <div class="text-5xl mb-4">
+                Create Puzzle
+            </div>
+            <div class="form-container">
+                <form class="flex flex-col space-y-4">
+                    <div class="flex items-center gap-2">
+                        <label for="name">Puzzle name:</label>
+                        <input type="text" id="name" name="name">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="rows" name="rows">
+                        <label for="rows">rows</label><br>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="columns" name="columns">
+                        <label for="columns">columns</label><br>
+                    </div>
+                    <input type="submit" value="Create Puzzle!">
+                </form>
+            </div>
         </div>
         <div class="footer bg-cyan-300 w-full h-full">
-            
+
         </div>
     </div>
 </body>
