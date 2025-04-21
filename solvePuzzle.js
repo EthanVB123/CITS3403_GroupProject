@@ -142,14 +142,14 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
     cornerElement = document.createElement("div");
     cornerElement.classList.add("topleftbox");
     puzzleElement.appendChild(cornerElement);
-    // add the vertical clues
+    // add the vertical clues (the elements in each column containing the clues (list of numbers) for that column)
     for (let colnum = 0; colnum < newSize[1]; colnum++) {
         colElement = document.createElement('div');
         colElement.classList.add("column", "border", "border-zinc-400");
         colElement.style.display = "grid";
         colElement.style.gridTemplateRows = gridTemplate(newSize[0], "col"); // note that newsize[0] is used here as the max number of clues in a *column* is ceil(*numRows*/2)
         colElement.style.gridTemplateColumns = '1fr';
-        for (let clue of newColClues[colnum]) {
+        for (let clue of newColClues[colnum]) { // Add each individual clue number into the 'column' element
             clueElement = document.createElement('div');
             clueElement.classList.add("vclue");
             clueElement.classList.add("bg-rose-200");
@@ -160,15 +160,15 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
         }
         puzzle.appendChild(colElement);
     }
-    // add each row
+    // add each row 
     for (let rownum = 0; rownum < newSize[0]; rownum++) {
-        // add row clue
+        // add row clue (the element in the row containing the clue (list of numbers) for that row)
         rowElement = document.createElement('div');
         rowElement.classList.add("row", "border", "border-zinc-400");
         rowElement.style.display = "grid";
         rowElement.style.gridTemplateColumns = gridTemplate(newSize[1], "row"); // note that newsize[1] is used here as the max number of clues in a *row* is ceil(*numCols*/2)
         rowElement.style.gridTemplateRows = '1fr';
-        for (let clue of newRowClues[rownum]) {
+        for (let clue of newRowClues[rownum]) { // Add each individual clue number into the 'row' element
             clueElement = document.createElement('div');
             clueElement.classList.add("hclue");
             clueElement.classList.add("bg-rose-200");
@@ -280,10 +280,9 @@ function verifySolution(rowClues, colClues, shadedCells) {
 
 // The following code refers to the puzzle editor
 
-// this function updates a single row/column with the correct clues to match what is *currently* in shadedCells
-// it changes graphics only
-// isColumn is a bool indicating column or row, index is col # or row #
-// for example, to update the clue for row 4
+// this function updates the clue numbers for a single row/column with the correct clues to match what is *currently* in shadedCells
+// it changes graphics only, not rowClues or colClues
+// isColumn is a bool indicating column (if true) or row (if false), index is col # or row #
 function updateClue(index, isColumn) {
     const shadedCellsTranspose = shadedCells[0].map((_, colIndex) =>
         shadedCells.map(row => row[colIndex])
@@ -311,7 +310,7 @@ function updateClue(index, isColumn) {
         targetElement.appendChild(clueElement); // this is a repeat of generatePuzzle, make it its own function?
     }
 
-    maximiseAllFontSizes(); // TODO optimise this, it is the bottleneck on speed here
+    maximiseAllFontSizes(); // TODO optimise this, it is the bottleneck on speed here (in 5x5 puzzle takes ~100ms, fast but noticeable)
 }
 
 // updates clues in puzzle after user changes the puzzle
@@ -323,7 +322,9 @@ function updatePuzzleClues(cellClicked) { // cell clicked is the integer in the 
     updateClue(col, true);
 }
 
-// Exports puzzle as a list, which could be made into JSON later for the server
+// Exports puzzle as a list with elements [puzzleSize, rowClues, colClues], which could be made into JSON later for the server
+// puzzleSize is Array(2) [#rows, #cols]
+// rowClues and colClues are arrays with one element for each row/col, and each of those elements are variable-sized arrays of integers for the individual clue numbers
 function exportPuzzle() {
     const shadedCellsTranspose = shadedCells[0].map((_, colIndex) =>
         shadedCells.map(row => row[colIndex])
