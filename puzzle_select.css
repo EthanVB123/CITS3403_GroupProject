@@ -15,7 +15,6 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
-    display: flex;
     align-items: center;
   }
   .puzzle-card {
@@ -37,6 +36,14 @@ body {
         linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
     background-size: calc(100%/8) calc(100%/8);
     cursor: pointer;
+    width: 100%;
+  }
+  .puzzle-card > strong {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .puzzle-card:hover {
     transform: translateY(-4px);
