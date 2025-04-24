@@ -35,7 +35,7 @@ def puzzleSelectFromDifficulty(difficulty):
 
 @app.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
-    return render_template('test.html', argument=f"This should solve puzzle with ID {puzzleid}.")
+    return render_template('solvePuzzle.html') # haven't yet used the puzzleid
 
 @app.route('/puzzle/new')
 def puzzleEditor():
