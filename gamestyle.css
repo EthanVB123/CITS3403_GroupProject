@@ -68,7 +68,7 @@ body{
     background-color: #00bcd4;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
@@ -80,6 +80,12 @@ body{
 
   }
 
+  .register:hover{
+    color: darkorchid;
+  }
+
+ 
+
   .error-message{
     color:darkred;
     text-align: center;
@@ -88,3 +94,91 @@ body{
     font-size: 13px;
     
   }
+
+  .register{
+    width: 100%;
+    padding: 12px;
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+
+  }
+
+  .rinput-group, 
+  .rpassword-box,
+  .email-box{
+    margin-bottom: 25px;
+  }
+
+  .rinput-group label{
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .rinput-group input{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid rgb(0, 4, 255);
+    border-radius: 8px;
+    background-color: #111;
+    color: #fff;
+
+  }
+
+ .rpassword-box label{
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  margin-bottom: 15px;
+ }
+
+ .rpassword-box input{
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgb(0, 4, 255);
+  border-radius: 8px;
+  background-color: #111;
+  color: #fff;
+ }
+
+ .email-box label{
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+
+ }
+
+ .email-box input{
+ 
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgb(0, 4, 255);
+  border-radius: 8px;
+  background-color: #111;
+  color: #fff;
+  
+ }
+
+ .register-button{
+  width: 100%;
+  padding: 20px;
+  background-color: #00bcd4;
+  color: white;
+  border: none;
+  border-radius:30px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+ }
+
+ .register-button:hover{
+  color: darkorchid;
+ }
