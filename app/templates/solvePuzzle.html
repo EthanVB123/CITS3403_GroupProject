@@ -10,11 +10,7 @@
     <!-- gets the puzzle to be solved from the server -->
     <script>
         // this variable will be referenced in solvePuzzle.js to generate the puzzle
-        const requestedPuzzle = [
-            [5,5], // puzzle size
-            [[1,1],[1],[1],[1],[1]], // clues for each row
-            [[5],[0],[1],[0],[0]] // clues for each column
-        ];
+        const requestedPuzzle = JSON.parse({{puzzleJSON | tojson }});
     </script>
     <!-- runs the actual client-side code -->
     <script src="{{ url_for('static', filename='solvePuzzle.js') }}"></script>

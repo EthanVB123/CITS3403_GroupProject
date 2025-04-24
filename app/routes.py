@@ -1,6 +1,6 @@
 from flask import render_template
 from . import app
-
+from .puzzlesdb import getPuzzleAsJSON
 @app.route("/")
 def homePage():
     return render_template('test.html', argument="This should be the home page.")
@@ -35,7 +35,8 @@ def puzzleSelectFromDifficulty(difficulty):
 
 @app.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
-    return render_template('solvePuzzle.html') # haven't yet used the puzzleid
+    puzzleJSON = getPuzzleAsJSON(puzzleid)
+    return render_template('solvePuzzle.html', puzzleJSON=puzzleJSON)
 
 @app.route('/puzzle/new')
 def puzzleEditor():
