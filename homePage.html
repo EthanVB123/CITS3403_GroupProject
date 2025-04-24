@@ -6,29 +6,29 @@
     <title>Wild Puzzles</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="loginStatus.js"></script>
+    <style>
+        :root {
+            --backgroundColour: #e8efff;
+            --barColour: #5275c8;
+            --barText: #f6f8ff;
+        }
+    </style>
 </head>
-<body class="bg-cyan-50 font-mono">
-    <header class="bg-cyan-300 w-full flex justify-between items-center p-4">
+<body style="background-color: var(--backgroundColour);" class="font-mono">
+    <header style="background-color: var(--barColour);" class="w-full flex justify-between items-center p-4">
         <span class="logo">WP logo</span>
         <span id="navbar" class="navbar">
-            <a href="login.html" class="text-blue-500 hover:underline">Login</a>
-            <a href="signup.html" class="text-blue-500 hover:underline">Signup</a>
-        </nav>
+            <a href="login.html" class="hover:underline">Login</a>
+            <a href="register.html" class="hover:underline border px-2 py-2 rounded" style="border-color: #8ca9ff; background-color: #8ca9ff; color: white;">Register</a>
+        </span>
     </header>
 
     <main class="text-center mt-8">
         <h2 class="text-2xl font-semibold mb-4">Welcome to Wild Puzzles!</h2>
             <p class="mb-4">Wild Puzzles is a website for playing and sharing Nonogram puzzles.</p>
-            <p class="mb-4">Login to earn experience.</p>
+            <p class="mb-4">Login or sign up to start doing puzzles!</p>
             <p class="mb-4">You can also create your own puzzles, and share them with your friends!</p>
             <p class="mb-4">Please select a difficulty level to start playing.</p>
-            <br>
-        <h2 class="text-2xl font-bold mb-4">Choose a Difficulty</h2>
-        <nav class="flex flex-col gap-4">
-            <a href="easy.html" class="text-blue-500 underline">Easy</a>
-            <a href="medium.html" class="text-blue-500 underline">Medium</a>
-            <a href="hard.html" class="text-blue-500 underline">Hard</a>
-        </nav>
     </main>
 </body>
 </html>
