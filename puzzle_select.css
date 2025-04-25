@@ -59,10 +59,15 @@ body {
     color: #555;
   }
   .see-more {
+    background: none;
+    border: none;
+    padding: 0;
     display: inline-block;
+    font: inherit;
     text-decoration: none;
     color: #007bff;
     font-weight: bold;
+    cursor: pointer;
   }
   .see-more:hover {
     text-decoration: underline;
