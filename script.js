@@ -1,4 +1,3 @@
-// LOGIN FORM VALIDATION
 document.getElementById("loginForm").addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -33,10 +32,23 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
     errorMsg.textContent =
       "Username must be at least 8 characters and include a letter, number, and special character.";
   } else {
-    errorMsg.style.display = "none";
-    alert("Login successful!");
+    let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    let correctUser = users.find(user =>
+      user.username.toLowerCase() === username.toLowerCase() &&
+      user.password === password
+    );
+
+    if (correctUser) {
+      errorMsg.style.display = "none";
+      localStorage.setItem("currentUser", JSON.stringify(correctUser));
+      window.location.href = "homepage.html"; 
+    } else {
+      errorMsg.style.display = "block";
+      errorMsg.textContent = "We don’t seem to have your login account. Please try again.";
+    }
   }
-});
+}); 
+
 
 // REGISTER FORM VALIDATION
 document.getElementById("Registerdata").addEventListener("submit", function (event) {
@@ -55,17 +67,17 @@ document.getElementById("Registerdata").addEventListener("submit", function (eve
   var existingEmail = users.some(user => user.email.toLowerCase() === email.toLowerCase());
   var existingUsername = users.some(user => user.username.toLowerCase() === username.toLowerCase());
 
-  // Username validation
+  // what needs to be included in our username to be valid-establish it as variables to be used in condition statements 
   var hLetter = /[a-zA-Z]/.test(username);
   var includeNumber = /\d/.test(username);
   var includeSpecialc = /[!@#$%^&*(),.?":{}|<>]/.test(username);
 
-  // Password validation
+  // what needs to be included in our password to be valid-establish it as variables to be used in condition statements 
   var pLetter = /[a-zA-Z]/.test(password);
   var pincludeNumber = /\d/.test(password);
   var pincludeSpecialc = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-  // Step 1: email validation
+  // check if email is there
   if (!emailCheck) {
     errorMsg.style.display = "block";
     errorMsg.textContent = "Please enter a valid email address!";
@@ -74,7 +86,7 @@ document.getElementById("Registerdata").addEventListener("submit", function (eve
     errorMsg.textContent = "This email is already registered/taken! Please enter a new one!";
   }
 
-  // Step 2: username validation
+  //check if our username meets the requirements 
   else if (
     username.length < 8 ||
     !hLetter ||
@@ -87,7 +99,7 @@ document.getElementById("Registerdata").addEventListener("submit", function (eve
       "Username cannot be created — must be at least 8 characters and include a letter, a number, and a special character (and must be unique).";
   }
 
-  // Step 3: password validation
+  // check if password meets the requirements 
   else if (
     password.length < 8 ||
     !pLetter ||
@@ -99,14 +111,18 @@ document.getElementById("Registerdata").addEventListener("submit", function (eve
       "Password cannot be created — must be at least 8 characters and include a letter, number, and special character.";
   }
 
-  // ✅ Final success
+  //  if everything is good display a message that shows registeration has been processed
   else {
     errorMsg.style.display = "none";
     alert("Registration successful!");
 
-    // Save new user
+    // Save our new user
     users.push({ email: email.toLowerCase(), username: username.toLowerCase(), password });
     localStorage.setItem("registeredUsers", JSON.stringify(users));
+    window.location.href = "login.html"; 
+    
   }
+
 });
+
 
