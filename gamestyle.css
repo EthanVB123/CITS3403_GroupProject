@@ -1,7 +1,7 @@
 body{
 
   height:100vh;
-  background: linear-gradient(135deg, #0a0f2c, #000000); /* Full background gradient */
+  background: linear-gradient(135deg, #0a0f2c, #000000); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -182,3 +182,10 @@ body{
  .register-button:hover{
   color: darkorchid;
  }
+
+ #errorRgst {
+  display: none;
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+}
