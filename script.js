@@ -119,7 +119,7 @@ document.getElementById("Registerdata").addEventListener("submit", function (eve
     // Save our new user
     users.push({ email: email.toLowerCase(), username: username.toLowerCase(), password });
     localStorage.setItem("registeredUsers", JSON.stringify(users));
-    window.location.href = "login.html"; 
+    window.location.href = "login.html"; //send them to the login page if succesfully completes registeration
     
   }
 
