@@ -39,6 +39,6 @@ def solvePuzzle(puzzleid):
     puzzleJSON = getPuzzleAsJSON(puzzleid)
     return render_template('solvePuzzle.html', puzzleJSON=puzzleJSON)
 
-@app.route('/puzzle/new')
-def puzzleEditor():
-    return render_template('solvePuzzle.html', puzzleJSON=json.dumps({"role": "editor", "numRows": 5, "numCols": 5}))
+@app.route('/puzzle/new/<int:numRows>/<int:numCols>')
+def puzzleEditor(numRows, numCols):
+    return render_template('solvePuzzle.html', puzzleJSON=json.dumps({"role": "editor", "numRows": numRows, "numCols": numCols}))
