@@ -40,4 +40,4 @@ def solvePuzzle(puzzleid):
 
 @app.route('/puzzle/new')
 def puzzleEditor():
-    return render_template('test.html', argument="This should allow the user to make their own puzzle.")
+    return render_template('createPuzzle.html')
