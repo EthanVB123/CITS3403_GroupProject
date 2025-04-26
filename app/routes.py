@@ -24,11 +24,11 @@ def displayFriendsPage(username):
 
 @app.route('/puzzleselect')
 def puzzleSelect():
-    return render_template('test.html', argument="This should be the landing page for Puzzle Select.")
+    return render_template('puzzle_select.html')
 
 @app.route('/puzzleselect/<username>')
 def puzzleSelectFromUser(username):
-    return render_template('test.html', argument=f"This should display puzzles from user {username}.")
+    return render_template('your_puzzles.html') # adapt to make dynamic on username
 
 @app.route('/puzzleselect/difficulty/<difficulty>')
 def puzzleSelectFromDifficulty(difficulty):
