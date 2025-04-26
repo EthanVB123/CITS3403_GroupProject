@@ -20,7 +20,7 @@ def puzzleCreationLandingPage():
 
 @app.route('/friends/<username>')
 def displayFriendsPage(username):
-    return render_template('test.html', argument=f"This should display the friends list of user {username}.")
+    return render_template("friends_page.html")
 
 @app.route('/puzzleselect')
 def puzzleSelect():
