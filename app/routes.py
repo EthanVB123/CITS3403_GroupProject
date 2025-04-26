@@ -1,6 +1,7 @@
 from flask import render_template
 from . import app
 from .puzzlesdb import getPuzzleAsJSON
+import json
 @app.route("/")
 def homePage():
     return render_template('test.html', argument="This should be the home page.")
@@ -15,7 +16,7 @@ def userProfile(username):
 
 @app.route('/newpuzzle')
 def puzzleCreationLandingPage():
-    return render_template('test.html', argument="This should display the createPuzzle screen.")
+    return render_template('createPuzzle.html')
 
 @app.route('/friends/<username>')
 def displayFriendsPage(username):
@@ -40,4 +41,4 @@ def solvePuzzle(puzzleid):
 
 @app.route('/puzzle/new')
 def puzzleEditor():
-    return render_template('createPuzzle.html')
+    return render_template('solvePuzzle.html', puzzleJSON=json.dumps({"role": "editor", "numRows": 5, "numCols": 5}))

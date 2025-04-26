@@ -11,7 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const puzzle = document.getElementById("puzzle");
     const timerElement = document.getElementById("timer");
     progressElement = document.getElementById("progress");
-    generatePuzzle(requestedPuzzle.puzzleSize, requestedPuzzle.rowClues, requestedPuzzle.columnClues); // defined inline in solvePuzzle.html
+
+    if (requestedPuzzle.role == "solver") {
+        generatePuzzle(requestedPuzzle.puzzleSize, requestedPuzzle.rowClues, requestedPuzzle.columnClues); // defined inline in solvePuzzle.html
+    } else if (requestedPuzzle.role == "editor") {
+        initialiseEditorMode([requestedPuzzle.numRows, requestedPuzzle.numCols]);
+    }
     // to prevent bloat from having an event listener per cell, just have an event listener for the puzzle 
     // and then detect which item was actually clicked using event.target
     puzzle.addEventListener("click", event => {

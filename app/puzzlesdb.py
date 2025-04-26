@@ -5,5 +5,6 @@ def getPuzzleAsJSON(id: int):
     jsonAttributeNames = ["puzzleSize", "rowClues", "columnClues"]
     samplePuzzlesDicts = [dict(zip(jsonAttributeNames, puzzle)) for puzzle in samplePuzzles]
     targetPuzzle = samplePuzzlesDicts[id]
+    targetPuzzle["role"] = "solver"
     print(json.dumps(targetPuzzle))
     return json.dumps(targetPuzzle)
