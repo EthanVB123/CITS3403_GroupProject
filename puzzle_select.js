@@ -4,7 +4,7 @@ document.querySelectorAll('.puzzle-card').forEach(card => {
     });
   });
 
-document.querySelectorAll('.see-more').forEach(btn => {
+document.querySelectorAll('.see-more, .back-button').forEach(btn => {
     btn.addEventListener('click', () => {
       window.location.href = btn.dataset.target;
     });
