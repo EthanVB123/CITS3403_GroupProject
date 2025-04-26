@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Puzzles</title>
+    <script src="https:cdn.tailwindcss.com"></script>
+    <script src="createPuzzle.js"></script>
+</head>
+<body class="bg-cyan-50 h-screen font-mono">
+    <div id="page" class="grid grid-rows-[1fr_8fr_1fr] h-full">
+        <div class="header bg-cyan-300 w-full flex items-center">
+            <span class="navbar ml-auto">
+                <span>Sign In!</span>
+            </span>
+        </div>
+        <div class="main w-full h-full flex flex-col items-center">
+            <div class="text-5xl mb-4 mt-4">
+                Create Puzzle
+            </div>
+            <div class="form-container">
+                <form id="form" class="flex flex-col space-y-4">
+                    <div class="flex items-center gap-2">
+                        <label for="name">Puzzle name:</label>
+                        <input type="text" id="name" name="name" class="bg-sky-200 rounded">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="rows" name="rows" class="bg-sky-200 rounded">
+                        <label for="rows">rows</label><br>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="columns" name="columns" class="bg-sky-200 rounded">
+                        <label for="columns">columns</label><br>
+                    </div>
+                    <input type="submit" value="Create Puzzle!" class="border-2 pt-1 pb-1 rounded-xl bg-sky-200 border-sky-700 hover:bg-sky-500 transition duration-150">
+                </form>
+            </div>
+        </div>
+        <div class="footer bg-cyan-300 w-full h-full">
+
+        </div>
+    </div>
+</body>
+</html>
