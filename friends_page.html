@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Friends Page</title>
+        <link rel="stylesheet" href="friends_page.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-container">
+                <h1>Friends</h1>
+            </div>
+        </header>
+        <div id="container">
+            <div class="add-friend">
+                <input type="text" id="friend-input" placeholder="Enter friend's username">
+                <button id="add-friend-btn">Add Friend</button>
+                <p id="message" class="message"></p>
+            </div>
+            <h3>Your Friends</h3>
+            <div id="friends-section">
+                <div class="friend-card" onclick="toggleFriendDetails(this)">
+                    <h3 class="friend-name">Ryan</h3>
+                    <p class="friend-username">@ryankoo</p>
+                    <p class="puzzles-built">Puzzles Built: 0</p>
+                    <p class="friend-count">Friends: 0</p>
+                    <button class="remove-friend-btn" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
+                </div>
+                <div class="friend-card" onclick="toggleFriendDetails(this)">
+                    <h3 class="friend-name">Elizabeth</h3>
+                    <p class="friend-username">@elizabethshibu</p>
+                    <p class="puzzles-built">Puzzles Built: 0</p>
+                    <p class="friend-count">Friends: 0</p>
+                    <button class="remove-friend-btn" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
+                </div>
+                <div class="friend-card" onclick="toggleFriendDetails(this)">
+                    <h3 class="friend-name">Ethan</h3>
+                    <p class="friend-username">@ethanvanbruchem</p>
+                    <p class="puzzles-built">Puzzles Built: 0</p>
+                    <p class="friend-count">Friends: 0</p>
+                    <button class="remove-friend-btn" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
+                </div>
+            </div>
+        </div>
+        <script src="friends_page.js"></script>
+    </body>
+</html>
