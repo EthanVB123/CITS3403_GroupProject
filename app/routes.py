@@ -4,7 +4,7 @@ from .puzzlesdb import getPuzzleAsJSON
 import json
 @app.route("/")
 def homePage():
-    return render_template('test.html', argument="This should be the home page.")
+    return render_template('homePage.html')
 
 @app.route("/login")
 def loginPage():
@@ -32,7 +32,7 @@ def puzzleSelectFromUser(username):
 
 @app.route('/puzzleselect/difficulty/<difficulty>')
 def puzzleSelectFromDifficulty(difficulty):
-    return render_template('test.html', argument=f"This should display puzzles with difficulty {difficulty}.")
+    return render_template('top_puzzles.html') # adapt to make dynamic on difficulty
 
 @app.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
