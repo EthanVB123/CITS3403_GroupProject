@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Puzzles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="loginStatus.js"></script>
+    <style>
+        :root {
+            --backgroundColour: #e8efff;
+            --barColour: #002f77; /*#004591 or #5275c8 other possible colours*/
+            --boxText: #f6f8ff;
+        }
+    </style>
+</head>
+<body style="background-color: var(--backgroundColour);" class="font-sans h-screen">
+    <header style="background-color: var(--barColour);" class="w-full flex justify-between items-center p-4">
+        <span class="text-white logo">WP logo</span>
+        <span id="navbar" class="navbar">
+            <button onclick="location.href='login.html'" class="font-semibold border px-2 py-2 rounded" style="border-color: #858fbb; background-color: #858fbb; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#858fbb'">Login</button>
+            <button onclick="location.href='register.html'" class="font-semibold border px-2 py-2 rounded" style="border-color: #8ca9ff; background-color: #8ca9ff; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#8ca9ff'">Register</button>
+        </span>
+    </header>
+
+    <main class="text-center mt-8">
+        <h2 class="text-2xl font-semibold mb-4">Welcome to Wild Puzzles!</h2>
+            <p class="mb-4">Wild Puzzles is a website for playing and sharing Nonogram puzzles.</p>
+            <p class="mb-4">Login or register to start doing puzzles!</p>
+            <p class="mb-4">You can also create your own puzzles, and share them with your friends!</p>
+            <br>
+            <p class="mb-4">Here is an example of a solved puzzle:</p>
+            <img src="example-puzzle.png" alt="Example of a solved puzzle" class="mx-auto mb-4 w-1/2 rounded shadow-lg">
+    </main>
+</body>
+</html>
