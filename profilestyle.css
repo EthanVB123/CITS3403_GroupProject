@@ -1,0 +1,70 @@
+body{
+
+    height:100vh;
+    background: linear-gradient(135deg, #0a0f2c, #000000); /* Full background gradient */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    color: white;
+  }
+
+  .friends, .create, .select{
+    width: 100%;
+    padding: 12px;
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+  }
+
+  .friends:hover, .create:hover, .select:hover{
+    color: darkorchid;
+  }
+
+  h2{
+    color: white;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 30px;
+  }
+
+  h3{
+    color: white;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+
+span {
+    font-weight: bold;
+    color: #00bcd4;
+  }
+
+.profile-box{
+    background-color: rgba(255, 255, 25, 0.1);
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+#data {
+    margin-top: 20px;
+    background-color: #111;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px solid rgb(0, 4, 255);
+  }
+
+  .data-item{
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+  }

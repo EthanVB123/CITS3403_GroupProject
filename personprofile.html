@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login page</title>
+  <link rel="stylesheet" href="profilestyle.css" />
+</head>
+<body>
+    <title>My Profile</title>
+    <div class="profile-box">
+    <h2> Hello! <span id="playerUsername">Player</span>!</h2>
+    <h3>What are we looking towards today?</h3>
+    <nav>
+        <button type="button" class="create" onclick="window.location.href='puzzlecreate.html'">Puzzle create</button>
+        <button type="button" class="friends" onclick="window.location.href='friends.html'">Friends</button>
+        <button type="button" class="select" onclick="window.location.href='puzzleselect.html'">Select a puzzle</button>
+    </nav>
+
+    <div id="data" class="data">
+        <h2>Your current progress:</h2>
+        <div class="data-item">Total Puzzles Solved: <span id="solvedCount">0</span></div>
+        <div class="data-item">Friend Ranking: <span id="ranking">Unranked</span></div>
+    </div>
+</div>
+<script src="personalprofile.js"></script>
+</body>
+</html>
+
