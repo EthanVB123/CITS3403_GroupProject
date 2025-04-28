@@ -8,11 +8,15 @@ def homePage():
 
 @app.route("/login")
 def loginPage():
-    return render_template('test.html', argument="This should be the login page.")
+    return render_template('login.html')
+
+@app.route("/register")
+def registerPage():
+    return render_template('register.html')
 
 @app.route("/profile/<username>") # <username> is a dynamic element.
 def userProfile(username):
-    return render_template('test.html', argument=f"This should display the profile of user {username}.")
+    return render_template('personprofile.html') # adapt to make dynamic on username
 
 @app.route('/newpuzzle')
 def puzzleCreationLandingPage():
