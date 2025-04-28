@@ -1,0 +1,13 @@
+We set up the finished server containing what we believe to be the final number of 11 pages.
+
+We pull requested, and got everyone to code review inside the meeting so that the pull request could be merged quickly.
+
+We agreed to have a 48-hour time limit on pull requests for the sake of time: if only 2/3 approvals there by 48 hours after pull request, just do it.
+
+Tasks to do for next meeting:
+Ryan) Make database using python and SQLite3 for Users and Friends
+Ethan) Make Puzzles database
+Elizabeth) Fix styling of all pages such that they look consistent
+Jeffrey) Fix intra-site links to point to the correct server route
+
+Next meeting Friday 11am, right after the lecture.
