@@ -11,14 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const puzzle = document.getElementById("puzzle");
     const timerElement = document.getElementById("timer");
     progressElement = document.getElementById("progress");
-    let cellIndex = 0;
-    const cells = document.getElementsByClassName("cell");
-    for(let cell of cells) {
-        cell.id = `cell${cellIndex}`;
-        cellIndex++;
-    };
 
-    generatePuzzle(puzzleSize, rowClues, colClues);
+    if (requestedPuzzle.role == "solver") {
+        generatePuzzle(requestedPuzzle.puzzleSize, requestedPuzzle.rowClues, requestedPuzzle.columnClues); // defined inline in solvePuzzle.html
+    } else if (requestedPuzzle.role == "editor") {
+        initialiseEditorMode([requestedPuzzle.numRows, requestedPuzzle.numCols]);
+    }
     // to prevent bloat from having an event listener per cell, just have an event listener for the puzzle 
     // and then detect which item was actually clicked using event.target
     puzzle.addEventListener("click", event => {
@@ -35,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         itemClicked.classList.toggle("shaded");
         itemClicked.classList.toggle("hover:bg-zinc-600");
-        itemClicked.classList.toggle("bg-zinc-900");
+        itemClicked.classList.toggle("bg-zinc-200");
         if (userStatus == "solver") {
             displayProgress(progressElement);
             if (verifySolution(rowClues, colClues, shadedCells)) {
@@ -145,14 +143,15 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
     // add the vertical clues (the elements in each column containing the clues (list of numbers) for that column)
     for (let colnum = 0; colnum < newSize[1]; colnum++) {
         colElement = document.createElement('div');
-        colElement.classList.add("column", "border", "border-zinc-400");
+        colElement.classList.add("column", "border", "border-white");
         colElement.style.display = "grid";
         colElement.style.gridTemplateRows = gridTemplate(newSize[0], "col"); // note that newsize[0] is used here as the max number of clues in a *column* is ceil(*numRows*/2)
         colElement.style.gridTemplateColumns = '1fr';
         for (let clue of newColClues[colnum]) { // Add each individual clue number into the 'column' element
             clueElement = document.createElement('div');
             clueElement.classList.add("vclue");
-            clueElement.classList.add("bg-rose-200");
+            clueElement.classList.add("bg-zinc-200");
+            clueElement.classList.add("text-black");
             clueElement.classList.add("m-0.5", "rounded-lg");
             clueElement.classList.add("flex", "items-center", "justify-center");
             clueElement.innerHTML = clue;
@@ -164,14 +163,15 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
     for (let rownum = 0; rownum < newSize[0]; rownum++) {
         // add row clue (the element in the row containing the clue (list of numbers) for that row)
         rowElement = document.createElement('div');
-        rowElement.classList.add("row", "border", "border-zinc-400");
+        rowElement.classList.add("row", "border", "border-white");
         rowElement.style.display = "grid";
         rowElement.style.gridTemplateColumns = gridTemplate(newSize[1], "row"); // note that newsize[1] is used here as the max number of clues in a *row* is ceil(*numCols*/2)
         rowElement.style.gridTemplateRows = '1fr';
         for (let clue of newRowClues[rownum]) { // Add each individual clue number into the 'row' element
             clueElement = document.createElement('div');
             clueElement.classList.add("hclue");
-            clueElement.classList.add("bg-rose-200");
+            clueElement.classList.add("bg-zinc-200");
+            clueElement.classList.add("text-black");
             clueElement.classList.add("m-0.5", "rounded-lg");
             clueElement.classList.add("flex", "items-center", "justify-center");
             clueElement.innerHTML = clue;
@@ -182,9 +182,9 @@ function generatePuzzle(newSize, newRowClues, newColClues) {
         for (let i = 0; i < newSize[1]; i++) {
             cell = document.createElement("div");
             cell.classList.add("cell");
-            cell.classList.add("border-zinc-400");
+            cell.classList.add("border-white");
             cell.classList.add("border");
-            cell.classList.add("hover:bg-zinc-200");
+            cell.classList.add("hover:bg-zinc-600");
             puzzle.appendChild(cell);
         }
     }

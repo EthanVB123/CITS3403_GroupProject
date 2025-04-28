@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Friends Page</title>
-        <link rel="stylesheet" href="friends_page.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='friends_page.css') }}">
     </head>
     <body>
         <header>
@@ -43,6 +43,6 @@
                 </div>
             </div>
         </div>
-        <script src="friends_page.js"></script>
+        <script src="{{ url_for('static', filename='friends_page.js') }}.js"></script>
     </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login page</title>
-  <link rel="stylesheet" href="profilestyle.css" />
+  <link rel="stylesheet" href="{{url_for('static', filename='profilestyle.css')}}" />
 </head>
 <body>
     <title>My Profile</title>
@@ -23,7 +23,7 @@
         <div class="data-item">Friend Ranking: <span id="ranking">Unranked</span></div>
     </div>
 </div>
-<script src="personalprofile.js"></script>
+<script src="{{url_for('static', filename='personalprofile.js')}}"></script>
 </body>
 </html>
 
