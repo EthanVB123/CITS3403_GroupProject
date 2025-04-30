@@ -8,6 +8,7 @@ class Puzzle(db.Model):
     column_clues = db.Column(db.PickleType, nullable=False)
     number_players_solved = db.Column(db.Integer, nullable=False)
     # to implement later:
+    # puzzle name!
     # parTimeSeconds INTEGER,
     # creatorID INTEGER REFERENCES users(userID),
     # difficulty REAL NOT NULL

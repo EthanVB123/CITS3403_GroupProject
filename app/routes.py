@@ -2,6 +2,9 @@ from flask import render_template
 from . import app
 from .puzzlesdb import getPuzzleAsJSON
 import json
+from . import db
+from .models import Puzzle
+
 @app.route("/")
 def homePage():
     return render_template('homePage.html')
@@ -40,9 +43,21 @@ def puzzleSelectFromDifficulty(difficulty):
 
 @app.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
+    puzzles = Puzzle.query.get(puzzleid)
+    print(puzzles)
     puzzleJSON = getPuzzleAsJSON(puzzleid)
     return render_template('solvePuzzle.html', puzzleJSON=puzzleJSON)
 
 @app.route('/puzzle/new/<int:numRows>/<int:numCols>')
 def puzzleEditor(numRows, numCols):
+    startingRowClues = [[0] for i in range(numRows)]
+    startingColClues = [[0] for i in range(numCols)]
+    puzzle = Puzzle(puzzle_id = int(str(numRows)+str(numCols)),
+                    num_rows = numRows,
+                    num_columns = numCols,
+                    row_clues = startingRowClues,
+                    column_clues = startingColClues,
+                    number_players_solved = 0)
+    db.session.add(puzzle)
+    db.session.commit()
     return render_template('solvePuzzle.html', puzzleJSON=json.dumps({"role": "editor", "numRows": numRows, "numCols": numCols}))
