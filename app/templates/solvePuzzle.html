@@ -10,7 +10,8 @@
     <!-- gets the puzzle to be solved from the server -->
     <script>
         // this variable will be referenced in solvePuzzle.js to generate the puzzle
-        const requestedPuzzle = JSON.parse({{puzzleJSON | tojson }});
+        const requestedPuzzle = {role: "{{role}}",puzzleSize: {{puzzleSize}},rowClues: {{rowClues}},columnClues: {{colClues}}}
+        console.log(requestedPuzzle)
     </script>
     <!-- runs the actual client-side code -->
     <script src="{{ url_for('static', filename='solvePuzzle.js') }}"></script>

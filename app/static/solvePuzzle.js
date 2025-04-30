@@ -8,6 +8,7 @@ let progressElement; // defined when dom loaded, this element displays updates l
 let userStatus = "solver"; // "solver" if trying to solve the puzzle, "editor" if trying to make their own
 // set up event listeners after DOM has loaded
 document.addEventListener("DOMContentLoaded", () => {
+    console.log(requestedPuzzle)
     const puzzle = document.getElementById("puzzle");
     const timerElement = document.getElementById("timer");
     progressElement = document.getElementById("progress");
@@ -15,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (requestedPuzzle.role == "solver") {
         generatePuzzle(requestedPuzzle.puzzleSize, requestedPuzzle.rowClues, requestedPuzzle.columnClues); // defined inline in solvePuzzle.html
     } else if (requestedPuzzle.role == "editor") {
-        initialiseEditorMode([requestedPuzzle.numRows, requestedPuzzle.numCols]);
+        initialiseEditorMode(requestedPuzzle.puzzleSize);
     }
     // to prevent bloat from having an event listener per cell, just have an event listener for the puzzle 
     // and then detect which item was actually clicked using event.target
@@ -332,7 +333,22 @@ function exportPuzzle() {
     const exportRowClues = shadedCells.map(findClueForLine);
     const exportColClues = shadedCellsTranspose.map(findClueForLine);
 
-    return [puzzleSize, exportRowClues, exportColClues];
+    // return [puzzleSize, exportRowClues, exportColClues];
+
+    fetch('/submit-puzzle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({puzzleSize: puzzleSize,
+            colClues: exportColClues,
+            rowClues: exportRowClues
+        })
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;  // Manually follow the redirect
+        }
+    })
 }
 
 // Initialises puzzle editor mode, initialising a blank puzzle of given size [rows, cols]

@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request, redirect, url_for
 from . import app
 from .puzzlesdb import getPuzzleAsJSON
 import json
@@ -43,21 +43,47 @@ def puzzleSelectFromDifficulty(difficulty):
 
 @app.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
-    puzzles = Puzzle.query.get(puzzleid)
-    print(puzzles)
-    puzzleJSON = getPuzzleAsJSON(puzzleid)
-    return render_template('solvePuzzle.html', puzzleJSON=puzzleJSON)
+    puzzle = Puzzle.query.get(puzzleid)
+    print(puzzle)
+    #puzzleJSON = getPuzzleAsJSON(puzzleid)
+    puzzleSize = [puzzle.num_rows, puzzle.num_columns]
+    return render_template('solvePuzzle.html',
+                           role="solver", 
+                           puzzleSize = puzzleSize, 
+                           rowClues = puzzle.row_clues, 
+                           colClues = puzzle.column_clues)
 
 @app.route('/puzzle/new/<int:numRows>/<int:numCols>')
 def puzzleEditor(numRows, numCols):
     startingRowClues = [[0] for i in range(numRows)]
     startingColClues = [[0] for i in range(numCols)]
-    puzzle = Puzzle(puzzle_id = int(str(numRows)+str(numCols)),
-                    num_rows = numRows,
-                    num_columns = numCols,
-                    row_clues = startingRowClues,
-                    column_clues = startingColClues,
+
+    return render_template('solvePuzzle.html',
+                           role="editor", 
+                           puzzleSize = [numRows, numCols], 
+                           rowClues = 0, 
+                           colClues = 0)
+
+@app.route('/submit-puzzle', methods=['POST'])
+def submitPuzzle():
+    data = request.get_json()
+    puzzleSize = data.get('puzzleSize')
+    rowClues = data.get('rowClues')
+    colClues = data.get('colClues')
+    # make a unique id
+    puzzleId = 0
+    for i in rowClues:
+        for j in i:
+            puzzleId += j
+    puzzleIdStr = str(puzzleId)+str(puzzleSize[0])+str(puzzleSize[1])
+    puzzle = Puzzle(puzzle_id = int(puzzleIdStr),
+                    num_rows = puzzleSize[0],
+                    num_columns = puzzleSize[1],
+                    row_clues = rowClues,
+                    column_clues = colClues,
                     number_players_solved = 0)
+    print(puzzle)
     db.session.add(puzzle)
     db.session.commit()
-    return render_template('solvePuzzle.html', puzzleJSON=json.dumps({"role": "editor", "numRows": numRows, "numCols": numCols}))
+    print("Redirecting to: "+url_for('solvePuzzle', puzzleid = int(puzzleIdStr)))
+    return redirect(url_for('solvePuzzle', puzzleid = int(puzzleIdStr)), code=303)
