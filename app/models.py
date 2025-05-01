@@ -7,6 +7,9 @@ class Puzzle(db.Model):
     row_clues = db.Column(db.PickleType, nullable=False)
     column_clues = db.Column(db.PickleType, nullable=False)
     number_players_solved = db.Column(db.Integer, nullable=False)
+    puzzle_name = db.Column(db.String(100))
+    par_time_seconds = db.Column(db.Integer)
+    difficulty = db.Column(db.Integer)
     # to implement later:
     # puzzle name!
     # parTimeSeconds INTEGER,
