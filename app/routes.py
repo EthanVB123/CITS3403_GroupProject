@@ -71,12 +71,12 @@ def submitPuzzle():
     rowClues = data.get('rowClues')
     colClues = data.get('colClues')
     # make a unique id
-    puzzleId = 0
-    for i in rowClues:
-        for j in i:
-            puzzleId += j
-    puzzleIdStr = str(puzzleId)+str(puzzleSize[0])+str(puzzleSize[1])
-    puzzle = Puzzle(puzzle_id = int(puzzleIdStr),
+    #puzzleId = 0
+    #for i in rowClues:
+    #    for j in i:
+    #        puzzleId += j
+    #puzzleIdStr = str(puzzleId)+str(puzzleSize[0])+str(puzzleSize[1])
+    puzzle = Puzzle(# id auto increments
                     num_rows = puzzleSize[0],
                     num_columns = puzzleSize[1],
                     row_clues = rowClues,
@@ -85,5 +85,4 @@ def submitPuzzle():
     print(puzzle)
     db.session.add(puzzle)
     db.session.commit()
-    print("Redirecting to: "+url_for('solvePuzzle', puzzleid = int(puzzleIdStr)))
-    return redirect(url_for('solvePuzzle', puzzleid = int(puzzleIdStr)), code=303)
+    return redirect(url_for('solvePuzzle', puzzleid = puzzle.puzzle_id), code=303)
