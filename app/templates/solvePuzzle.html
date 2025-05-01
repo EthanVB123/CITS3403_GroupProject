@@ -10,7 +10,9 @@
     <!-- gets the puzzle to be solved from the server -->
     <script>
         // this variable will be referenced in solvePuzzle.js to generate the puzzle
-        const requestedPuzzle = {role: "{{role}}",puzzleSize: {{puzzleSize}},rowClues: {{rowClues}},columnClues: {{colClues}}}
+        const requestedPuzzle = {role: "{{role}}",puzzleSize: {{puzzleSize}},rowClues: {{rowClues}},
+        columnClues: {{colClues}},puzzleName: "{{puzzleName}}", parTime: {{puzzleParTime}},
+        difficulty: {{puzzleDifficulty}}, puzzleid: {{puzzleid}}, numSolved: {{numSolved}}}
         console.log(requestedPuzzle)
     </script>
     <!-- runs the actual client-side code -->
@@ -27,15 +29,15 @@
             <div id="sidebar" class="w-full h-full flex items-center justify-center p-10">
                 <div id="stats" class="w-full h-full border-black-900 p-10 rounded-3xl grid grid-rows-[1fr_1fr]" style="background-color: rgba(255, 255, 25, 0.1);">
                     <div class="h-full w-full">
-                        <div class="w-full text-center text-sm">Puzzle #1</div>
-                        <div class="w-full text-center text-2xl">The Dog</div>
+                        <div class="w-full text-center text-sm">Puzzle #{{puzzleid}}</div>
+                        <div class="w-full text-center text-2xl">{{ puzzleName }}</div>
                         <div class="w-full text-center text-xl">Created by: Ethan VB</div>
-                        <div class="w-full text-center text-xl">5x5 Easy</div>
-                        <div class="w-full text-center text-xl">0 solved</div>
+                        <div class="w-full text-center text-xl">{{ puzzleSize[0] }}x{{ puzzleSize[1] }} {% if puzzleDifficulty <= 3 %} Easy {% elif puzzleDifficulty <= 7 %} Medium {% else %} Hard {% endif %} ({{puzzleDifficulty}})</div>
+                        <div class="w-full text-center text-xl">{{numSolved}} solved</div>
                     </div>
                     <div class="h-full w-full">
                         <div id="timer" class="w-full text-center text-6xl">00:00</div>
-                        <div class="w-full text-center">A-Rank Time: 01:15</div>
+                        <div class="w-full text-center">Par Time: {{puzzleParTime}}</div>
                         <div class="w-full text-center">Accuracy Score: 100%</div>
                         <div id="progress" class="w-full text-center text-sky-800 font-bold">Progress 0/25 (0%)</div> <!-- text-rose-500 error, emerald-500 success, sky-800 incomplete -->
                         {% if role == "editor" %}

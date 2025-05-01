@@ -50,7 +50,12 @@ def solvePuzzle(puzzleid):
                            role="solver", 
                            puzzleSize = puzzleSize, 
                            rowClues = puzzle.row_clues, 
-                           colClues = puzzle.column_clues)
+                           colClues = puzzle.column_clues,
+                           puzzleName = puzzle.puzzle_name,
+                           puzzleParTime = puzzle.par_time_seconds,
+                           puzzleDifficulty = puzzle.difficulty,
+                           puzzleid = puzzleid,
+                           numSolved = puzzle.number_players_solved)
 
 @app.route('/puzzle/new/<int:numRows>/<int:numCols>')
 def puzzleEditor(numRows, numCols):
@@ -61,7 +66,10 @@ def puzzleEditor(numRows, numCols):
                            role="editor", 
                            puzzleSize = [numRows, numCols], 
                            rowClues = 0, 
-                           colClues = 0)
+                           colClues = 0,
+                           puzzleName = '',
+                           puzzleParTime = 0,
+                           puzzleDifficulty = 0)
 
 @app.route('/submit-puzzle', methods=['POST'])
 def submitPuzzle():
