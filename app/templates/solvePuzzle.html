@@ -38,6 +38,9 @@
                         <div class="w-full text-center">A-Rank Time: 01:15</div>
                         <div class="w-full text-center">Accuracy Score: 100%</div>
                         <div id="progress" class="w-full text-center text-sky-800 font-bold">Progress 0/25 (0%)</div> <!-- text-rose-500 error, emerald-500 success, sky-800 incomplete -->
+                        {% if role == "editor" %}
+                        <button id="export" onclick="exportPuzzle()" class="bg-sky-400 font-bold text-center w-full rounded pt-2 pb-2">Export Puzzle</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
