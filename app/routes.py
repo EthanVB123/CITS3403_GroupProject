@@ -1,6 +1,5 @@
 from flask import render_template, request, redirect, url_for
 from . import app
-from .puzzlesdb import getPuzzleAsJSON
 import json
 from . import db
 from .models import Puzzle
