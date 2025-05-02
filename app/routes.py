@@ -34,6 +34,15 @@ def puzzleSelect():
 def puzzleSelectFromUser(username):
     return render_template('your_puzzles.html') # adapt to make dynamic on username
 
+@app.route('/puzzleselect/friends/<username>')
+def puzzleSelectFromFriends(username):
+    return render_template('friends_puzzles.html')
+
+@app.route('/puzzleselect/toppuzzles')
+def puzzleSelectFromTopPuzzles():
+    return render_template('top_puzzles.html')
+
+# Will not be the top_puzzles.html file, can make new files for each difficulty
 @app.route('/puzzleselect/difficulty/<difficulty>')
 def puzzleSelectFromDifficulty(difficulty):
     return render_template('top_puzzles.html') # adapt to make dynamic on difficulty
