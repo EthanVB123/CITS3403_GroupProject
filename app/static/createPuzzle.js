@@ -11,5 +11,5 @@ function submitForm(event) {
     const rows = document.getElementById("rows").value;
     const columns = document.getElementById("columns").value;
     //console.log(`Puzzle name: ${puzzleName}, Num Rows: ${rows}, Num Columns: ${columns}`);
-    window.location.href = `/puzzle/new/${rows}/${columns}`;
+    window.location.href = `/puzzle/new/${rows}/${columns}/${puzzleName}`;
 }
