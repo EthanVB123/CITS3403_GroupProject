@@ -23,8 +23,6 @@ class Puzzle(db.Model):
     puzzle_name = db.Column(db.String(100))
     par_time_seconds = db.Column(db.Integer)
     difficulty = db.Column(db.Integer)
-    # to implement later:
-    # puzzle name!
-    # parTimeSeconds INTEGER,
-    # creatorID INTEGER REFERENCES users(userID),
-    # difficulty REAL NOT NULL
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    creator = db.relationship('Users', backref=db.backref('puzzles'))
