@@ -57,8 +57,8 @@ def solvePuzzle(puzzleid):
                            puzzleid = puzzleid,
                            numSolved = puzzle.number_players_solved)
 
-@app.route('/puzzle/new/<int:numRows>/<int:numCols>')
-def puzzleEditor(numRows, numCols):
+@app.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
+def puzzleEditor(numRows, numCols, puzzleName):
     startingRowClues = [[0] for i in range(numRows)]
     startingColClues = [[0] for i in range(numCols)]
 
@@ -67,9 +67,11 @@ def puzzleEditor(numRows, numCols):
                            puzzleSize = [numRows, numCols], 
                            rowClues = 0, 
                            colClues = 0,
-                           puzzleName = '',
+                           puzzleName = puzzleName,
                            puzzleParTime = 0,
-                           puzzleDifficulty = 0)
+                           puzzleDifficulty = 0,
+                           puzzleid = 0,
+                           numSolved = 0)
 
 @app.route('/submit-puzzle', methods=['POST'])
 def submitPuzzle():
@@ -88,7 +90,10 @@ def submitPuzzle():
                     num_columns = puzzleSize[1],
                     row_clues = rowClues,
                     column_clues = colClues,
-                    number_players_solved = 0)
+                    number_players_solved = 0,
+                    puzzle_name = data.get('puzzleName'),
+                    par_time_seconds = 60,
+                    difficulty = 1)
     print(puzzle)
     db.session.add(puzzle)
     db.session.commit()

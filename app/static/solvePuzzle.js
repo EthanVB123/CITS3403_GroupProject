@@ -342,7 +342,8 @@ function exportPuzzle() {
         },
         body: JSON.stringify({puzzleSize: puzzleSize,
             colClues: exportColClues,
-            rowClues: exportRowClues
+            rowClues: exportRowClues,
+            puzzleName: requestedPuzzle.puzzleName
         })
     }).then(response => {
         if (response.redirected) {
