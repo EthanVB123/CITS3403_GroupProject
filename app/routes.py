@@ -119,14 +119,14 @@ def registerSolvedPuzzle():
     puzzleObj = Puzzle.query.get(puzzleId)
     userObj = Users.query.get(userId)
     rowClues = puzzleObj.row_clues
-    colClues = puzzleObj.col_clues
+    colClues = puzzleObj.column_clues
     if (puzzleObj is not None and userObj is not None and verifySolution(rowClues, colClues, shadedCells)):
         print('Solution accepted!')
         # note that score is  accuracy (out of 100) * difficulty (a small integer)
         previousBestAttempt = SolvedPuzzle.query.get((userId, puzzleId))
         if (previousBestAttempt is not None): # if user already solved this one
             if (new_accuracy > previousBestAttempt.accuracy): # if user did better than last time
-                userObj.score += (new_accuracy - previousBestAttempt.accuracy) * puzzleObj.difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
+                userObj.userScore += (new_accuracy - previousBestAttempt.accuracy) * puzzleObj.difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
                 previousBestAttempt.accuracy = new_accuracy
                 db.session.commit()
             # if user didn't do as well, nothing is updated.
@@ -137,8 +137,10 @@ def registerSolvedPuzzle():
                 accuracy = new_accuracy
             )
             db.session.add(savedAttempt)
-            userObj.score += puzzleObj.difficulty * new_accuracy
+            userObj.userScore += puzzleObj.difficulty * new_accuracy
             db.session.commit()
+        
+        print(url_for('userProfile', userid = userId))
         return jsonify({"redirect_url": url_for('userProfile', userid = userId)}), 200
     else:
         return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed

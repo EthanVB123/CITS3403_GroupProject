@@ -367,11 +367,14 @@ function submitPuzzle() {
                 accuracy: Math.floor(Math.random() * 100) + 1,
                 shadedCells: shadedCells
             })
-        }).then(response => {
+        }).then(async response => {
             if (response.ok) {
-                window.location.href = response.redirect_url;  // Manually follow the redirect
+                const data = await response.json();
+                window.location.href = data.redirect_url;  // Manually follow the redirect
             }
         })
+    } else {
+        alert("Mistakes found - your solution isn't quite right yet. Keep trying!")
     }
 }
 
