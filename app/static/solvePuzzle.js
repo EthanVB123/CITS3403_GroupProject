@@ -352,6 +352,30 @@ function exportPuzzle() {
     })
 }
 
+// Submits a solved puzzle to give the user their points.
+function submitPuzzle() {
+    // client-side validation done here (there is also server-side validation)
+    if (verifySolution(rowClues, colClues, shadedCells)) {
+        fetch('/register-solved-puzzle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({puzzleSize: puzzleSize,
+                puzzleId: requestedPuzzle.puzzleid,
+                userId: 1,
+                accuracy: Math.floor(Math.random() * 100) + 1,
+                shadedCells: shadedCells
+            })
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = response.redirect_url;  // Manually follow the redirect
+            }
+        })
+    }
+}
+
+
 // Initialises puzzle editor mode, initialising a blank puzzle of given size [rows, cols]
 function initialiseEditorMode(newPuzzleSize) {
     userStatus = "editor";
