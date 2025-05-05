@@ -67,11 +67,11 @@ def solvePuzzle(puzzleid):
                            puzzleid = puzzleid,
                            numSolved = puzzle.number_players_solved)
 
+@app.route('/puzzle/new/<int:numRows>/<int:numCols>/')
 @app.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
-def puzzleEditor(numRows, numCols, puzzleName):
+def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
     startingRowClues = [[0] for i in range(numRows)]
     startingColClues = [[0] for i in range(numCols)]
-
     return render_template('solvePuzzle.html',
                            role="editor", 
                            puzzleSize = [numRows, numCols], 
