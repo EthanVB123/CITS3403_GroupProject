@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for
 from . import app
 import json
 from . import db
-from .models import Puzzle
+from .models import Puzzle, Users, SolvedPuzzle
 
 @app.route("/")
 def homePage():
@@ -107,3 +107,15 @@ def submitPuzzle():
     db.session.add(puzzle)
     db.session.commit()
     return redirect(url_for('solvePuzzle', puzzleid = puzzle.puzzle_id), code=303)
+
+@app.route('/register-solved-puzzle', methods=['POST'])
+def registerSolvedPuzzle():
+    data = request.get_json()
+    puzzleId = data.get('puzzleId')
+    userId = data.get('userId')
+    accuracy = data.get('accuracy')
+    shadedCells = data.get('shadedCells')
+    puzzleObj = Puzzle.query.get(puzzleId)
+    userObj = Users.query.get(userId)
+    rowClues = puzzleObj.row_clues
+    colClues = puzzleObj.col_clues
