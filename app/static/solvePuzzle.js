@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // to prevent bloat from having an event listener per cell, just have an event listener for the puzzle 
     // and then detect which item was actually clicked using event.target
-    puzzle.addEventListener("click", event => {
+    function handleClick(event) {
         const itemClicked = event.target;
         //console.log(`Puzzle element ${itemClicked.id} clicked`);
         const itemnum = parseInt(itemClicked.id.substr(4));
@@ -40,11 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (verifySolution(rowClues, colClues, shadedCells)) {
                 console.log("Woo hoo! Puzzle completed!");
                 clearInterval(timerInterval);
+                puzzle.removeEventListener("click", handleClick);
             }
         } else if (userStatus == "editor") {
             updatePuzzleClues(itemnum);
         }
-    });
+    }
+    puzzle.addEventListener("click", handleClick);
 
 
     let timerInterval = setInterval(displayTime, 200, timerElement);
