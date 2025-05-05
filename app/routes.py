@@ -1,8 +1,9 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from . import app
 import json
 from . import db
 from .models import Puzzle, Users, SolvedPuzzle
+from .verifySolution import verifySolution
 
 @app.route("/")
 def homePage():
@@ -16,8 +17,8 @@ def loginPage():
 def registerPage():
     return render_template('register.html')
 
-@app.route("/profile/<username>") # <username> is a dynamic element.
-def userProfile(username):
+@app.route("/profile/<int:userid>") # <username> is a dynamic element.
+def userProfile(userid):
     return render_template('personprofile.html') # adapt to make dynamic on username
 
 @app.route('/newpuzzle')
@@ -113,9 +114,31 @@ def registerSolvedPuzzle():
     data = request.get_json()
     puzzleId = data.get('puzzleId')
     userId = data.get('userId')
-    accuracy = data.get('accuracy')
+    new_accuracy = data.get('accuracy')
     shadedCells = data.get('shadedCells')
     puzzleObj = Puzzle.query.get(puzzleId)
     userObj = Users.query.get(userId)
     rowClues = puzzleObj.row_clues
     colClues = puzzleObj.col_clues
+    if (puzzleObj is not None and userObj is not None and verifySolution(rowClues, colClues, shadedCells)):
+        print('Solution accepted!')
+        # note that score is  accuracy (out of 100) * difficulty (a small integer)
+        previousBestAttempt = SolvedPuzzle.query.get((userId, puzzleId))
+        if (previousBestAttempt is not None): # if user already solved this one
+            if (new_accuracy > previousBestAttempt.accuracy): # if user did better than last time
+                userObj.score += (new_accuracy - previousBestAttempt.accuracy) * puzzleObj.difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
+                previousBestAttempt.accuracy = new_accuracy
+                db.session.commit()
+            # if user didn't do as well, nothing is updated.
+        else: # if this is the user's first solve
+            savedAttempt = SolvedPuzzle(
+                user_id = userId,
+                puzzle_id = puzzleId,
+                accuracy = new_accuracy
+            )
+            db.session.add(savedAttempt)
+            userObj.score += puzzleObj.difficulty * new_accuracy
+            db.session.commit()
+        return jsonify({"redirect_url": url_for('userProfile', userid = userId)}), 200
+    else:
+        return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed
