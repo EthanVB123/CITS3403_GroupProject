@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from . import app
 import json
 from . import db
@@ -19,7 +19,10 @@ def loginPage():
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('homePage'))
-        return render_template('login.html', error="Invalid username or password")
+        # if invalid credentials
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            # 401 since this is an authentication error
+            return jsonify({ 'error': 'Invalid username or password' }), 401
     
     return render_template('login.html')
 
@@ -38,7 +41,10 @@ def registerPage():
         # check if username already exists
         existing_user = Users.query.filter_by(username=username).first()
         if existing_user:
-            return render_template('register.html', error="Username already exists")
+            # if username already exists
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                # 400 since this is a client error
+                return jsonify({ 'error': 'Username already exists' }), 400
         
         user = Users(username=username)
         user.set_password(password)
