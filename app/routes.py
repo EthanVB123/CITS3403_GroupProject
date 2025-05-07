@@ -2,18 +2,50 @@ from flask import render_template, request, redirect, url_for
 from . import app
 import json
 from . import db
-from .models import Puzzle
+from .models import Puzzle, Users
+from flask_login import login_user, login_required, logout_user, current_user
 
 @app.route("/")
 def homePage():
     return render_template('homePage.html')
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def loginPage():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = Users.query.filter_by(username=username).first()
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('homePage'))
+        return render_template('login.html', error="Invalid username or password")
+    
     return render_template('login.html')
 
-@app.route("/register")
+@app.route("/logout")
+@login_required
+def logoutPage():
+    logout_user()
+    return redirect(url_for('loginPage'))
+
+@app.route("/register", methods=['GET', 'POST'])
 def registerPage():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # check if username already exists
+        existing_user = Users.query.filter_by(username=username).first()
+        if existing_user:
+            return render_template('register.html', error="Username already exists")
+        
+        user = Users(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('loginPage'))
+    
     return render_template('register.html')
 
 @app.route("/profile/<username>") # <username> is a dynamic element.
