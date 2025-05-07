@@ -22,7 +22,12 @@
     <div id="page" class="grid grid-rows-[1fr_8fr_1fr] h-full">
         <div class="header w-full flex items-center bg-zinc-400">
             <span class="navbar ml-auto">
-                <button onclick="location.href='/login'">Sign In!</button>
+                {% if current_user.is_authenticated %}
+                    Hello, {{ current_user.username }} |
+                    <button onclick="location.href='/logout'">Logout</button>
+                {% else %}
+                    <button onclick="location.href='/login'">Sign In!</button>
+                {% endif %}
             </span>
         </div>
         <div class="main grid grid-cols-[1fr_2fr_1fr] w-full h-full">
