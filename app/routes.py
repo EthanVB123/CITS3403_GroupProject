@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, abort
 from . import app
 import json
 from . import db
@@ -60,9 +60,19 @@ def registerPage():
     
     return render_template('register.html')
 
-@app.route("/profile/<int:userid>") # <username> is a dynamic element.
+@app.route("/profile/<int:userid>")
+@login_required
 def userProfile(userid):
-    return render_template('personprofile.html') # adapt to make dynamic on username
+    # only allow people to view their own profile (or drop this check to let
+    # users view each other’s pages)
+    if userid != current_user.id:
+        return abort(403)
+
+    user = Users.query.get_or_404(userid)
+    solved_count = SolvedPuzzle.query.filter_by(user_id=userid).count()
+    return render_template('personprofile.html',
+        user=user,
+        solved_count=solved_count)
 
 @app.route('/newpuzzle')
 def puzzleCreationLandingPage():
