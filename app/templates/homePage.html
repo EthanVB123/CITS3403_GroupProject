@@ -16,12 +16,6 @@
 <body style="background-color: var(--backgroundColour);" class="font-sans h-screen">
     <header style="background-color: var(--barColour);" class="w-full flex justify-between items-center p-4">
         <span class="text-white logo">WP logo</span>
-        <!--
-        <span id="navbar" class="navbar">
-            <button onclick="location.href='/login'" class="font-semibold border px-2 py-2 rounded" style="border-color: #858fbb; background-color: #858fbb; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#858fbb'">Login</button>
-            <button onclick="location.href='/register'" class="font-semibold border px-2 py-2 rounded" style="border-color: #8ca9ff; background-color: #8ca9ff; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#8ca9ff'">Register</button>
-        </span>
-        -->
         <span id="navbar" class="navbar">
             {% if current_user.is_authenticated %}
                 <p class="text-white">Hello, {{ current_user.username }}</p>

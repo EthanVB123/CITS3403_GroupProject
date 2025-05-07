@@ -13,7 +13,7 @@
     <form method="post" action="{{ url_for('registerPage') }}" id="Registerdata">
       <div class="rinput-group">
         <label for="username">Create a Username</label>
-        <input name="username" type="text" id="username" required>
+        <input name="username" type="text" id="username" required />
       </div>
 
       <div class="rpassword-box">
@@ -29,6 +29,7 @@
       <div id="errorRgst" class="error-Rgst" style="display:none;"></div>
 
       <button type="submit" class="register-button">Register</button>
+      <!-- used as a fallback -->
       {% if error %}
         <p class="error">{{ error }}</p>
       {% endif %}

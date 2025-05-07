@@ -13,16 +13,17 @@
     <form method="POST" action="{{ url_for('loginPage') }}" id="loginForm">
       <div class="input-group">
         <label for="username">Username</label>
-        <input type="text" name="username" id="username" required>
+        <input type="text" name="username" id="username" required />
       </div>
 
       <div class="password-box">
         <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
+        <input type="password" name="password" id="password" required />
       </div>
 
       <button type="submit" class="login-button">Login</button>
       <div id="errorMsg" class="error-message" style="display:none;"></div>
+      <!-- used as a fallback -->
       {% if error %}
         <p class="error">{{ error }}</p>
       {% endif %}
