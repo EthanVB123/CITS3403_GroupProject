@@ -23,6 +23,8 @@ def loginPage():
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             # 401 since this is an authentication error
             return jsonify({ 'error': 'Invalid username or password' }), 401
+        # used as a fallback
+        return render_template('login.html', error='Invalid username or password')
     
     return render_template('login.html')
 
@@ -45,6 +47,8 @@ def registerPage():
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 # 400 since this is a client error
                 return jsonify({ 'error': 'Username already exists' }), 400
+            # used as a fallback
+            return render_template('register.html', error='Username already exists')
         
         user = Users(username=username)
         user.set_password(password)
