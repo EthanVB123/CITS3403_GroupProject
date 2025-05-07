@@ -1,10 +1,20 @@
 from app import db
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
-class Users(db.Model):
+class Users(UserMixin, db.Model):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False)
     passwordHash = db.Column(db.String(256), nullable=False)
     userScore = db.Column(db.Integer, nullable=False, default=0)
+
+    def set_password(self, password):
+        self.passwordHash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.passwordHash, password)
 
 
 class Friends(db.Model):
