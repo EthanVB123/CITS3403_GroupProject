@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // Save our new user
         users.push({ email: email.toLowerCase(), username: username.toLowerCase(), password });
         localStorage.setItem("registeredUsers", JSON.stringify(users));
-        window.location.href = "login.html"; //send them to the login page if succesfully completes registeration
+        location.href = "/login"; //send them to the login page if succesfully completes registeration
         
       }
 
