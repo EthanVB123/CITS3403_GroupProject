@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // to prevent bloat from having an event listener per cell, just have an event listener for the puzzle 
     // and then detect which item was actually clicked using event.target
-    puzzle.addEventListener("click", event => {
+    function handleClick(event) {
         const itemClicked = event.target;
         //console.log(`Puzzle element ${itemClicked.id} clicked`);
         const itemnum = parseInt(itemClicked.id.substr(4));
@@ -40,11 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (verifySolution(rowClues, colClues, shadedCells)) {
                 console.log("Woo hoo! Puzzle completed!");
                 clearInterval(timerInterval);
+                puzzle.removeEventListener("click", handleClick);
             }
         } else if (userStatus == "editor") {
             updatePuzzleClues(itemnum);
         }
-    });
+    }
+    puzzle.addEventListener("click", handleClick);
 
 
     let timerInterval = setInterval(displayTime, 200, timerElement);
@@ -351,6 +353,33 @@ function exportPuzzle() {
         }
     })
 }
+
+// Submits a solved puzzle to give the user their points.
+function submitPuzzle() {
+    // client-side validation done here (there is also server-side validation)
+    if (verifySolution(rowClues, colClues, shadedCells)) {
+        fetch('/register-solved-puzzle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({puzzleSize: puzzleSize,
+                puzzleId: requestedPuzzle.puzzleid,
+                userId: 1,
+                accuracy: Math.floor(Math.random() * 100) + 1,
+                shadedCells: shadedCells
+            })
+        }).then(async response => {
+            if (response.ok) {
+                const data = await response.json();
+                window.location.href = data.redirect_url;  // Manually follow the redirect
+            }
+        })
+    } else {
+        alert("Mistakes found - your solution isn't quite right yet. Keep trying!")
+    }
+}
+
 
 // Initialises puzzle editor mode, initialising a blank puzzle of given size [rows, cols]
 function initialiseEditorMode(newPuzzleSize) {
