@@ -10,21 +10,6 @@
 
   <div class="login-box">
     <h2>Player Login</h2>
-    <!--
-    <form id="loginForm">
-      <div class="input-group">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" required />
-      </div>
-
-      <div class="password-box">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required />
-      </div>
-
-      <button type="submit" class="login-button">Login</button>
-      <div id="errorMsg" class="error-message">Invalid username!</div>
-    -->
     <form method="POST" action="{{ url_for('loginPage') }}" id="loginForm">
       <div class="input-group">
         <label for="username">Username</label>
@@ -37,14 +22,14 @@
       </div>
 
       <button type="submit" class="login-button">Login</button>
+      <div id="errorMsg" class="error-message" style="display:none;"></div>
       {% if error %}
         <p class="error">{{ error }}</p>
       {% endif %}
-
       <button type="button" class="register" onclick="location.href='/register'">Register</button>
     </form>
   </div>
 
-  <!--<script src="{{url_for('static', filename='script.js')}}"></script>-->
+  <script src="{{url_for('static', filename='script.js')}}"></script>
 </body>
 </html>
