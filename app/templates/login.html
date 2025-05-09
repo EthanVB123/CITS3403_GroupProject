@@ -10,7 +10,7 @@
 
   <div class="login-box">
     <h2>Player Login</h2>
-    <form id="loginForm">
+    <form method="POST" action="{{ url_for('loginPage') }}" id="loginForm">
       <div class="input-group">
         <label for="username">Username</label>
         <input type="text" name="username" id="username" required />
@@ -22,8 +22,11 @@
       </div>
 
       <button type="submit" class="login-button">Login</button>
-      <div id="errorMsg" class="error-message">Invalid username!</div>
-
+      <div id="errorMsg" class="error-message" style="display:none;"></div>
+      <!-- used as a fallback -->
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
       <button type="button" class="register" onclick="location.href='/register'">Register</button>
     </form>
   </div>

@@ -10,8 +10,7 @@
 <body>
   <div class="register-page">
     <h2>Register to create an account</h2>
-    
-    <form id="Registerdata">
+    <form method="post" action="{{ url_for('registerPage') }}" id="Registerdata">
       <div class="rinput-group">
         <label for="username">Create a Username</label>
         <input type="text" name="username" id="username" required />
@@ -27,10 +26,16 @@
         <input type="email" name="email" id="email" required />
       </div>
 
-      <div id="errorRgst" class="error-Rgst">Invalid!!</div>
+      <div id="errorRgst" class="error-Rgst" style="display:none;"></div>
 
       <button type="submit" class="register-button">Register</button>
+      <!-- used as a fallback -->
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+
     </form>
+
   </div>
 </body>
 </html>

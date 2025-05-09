@@ -1,7 +1,9 @@
-from flask import render_template, request, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, abort
 from . import app
 import json
 from . import db
+from .models import Puzzle, Users
+from flask_login import login_user, login_required, logout_user, current_user
 from .models import Puzzle, Users, SolvedPuzzle
 from .verifySolution import verifySolution
 
@@ -9,17 +11,68 @@ from .verifySolution import verifySolution
 def homePage():
     return render_template('homePage.html')
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def loginPage():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = Users.query.filter_by(username=username).first()
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('homePage'))
+        # if invalid credentials
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            # 401 since this is an authentication error
+            return jsonify({ 'error': 'Invalid username or password' }), 401
+        # used as a fallback
+        return render_template('login.html', error='Invalid username or password')
+    
     return render_template('login.html')
 
-@app.route("/register")
+@app.route("/logout")
+@login_required
+def logoutPage():
+    logout_user()
+    return redirect(url_for('loginPage'))
+
+@app.route("/register", methods=['GET', 'POST'])
 def registerPage():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # check if username already exists
+        existing_user = Users.query.filter_by(username=username).first()
+        if existing_user:
+            # if username already exists
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                # 400 since this is a client error
+                return jsonify({ 'error': 'Username already exists' }), 400
+            # used as a fallback
+            return render_template('register.html', error='Username already exists')
+        
+        user = Users(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('loginPage'))
+    
     return render_template('register.html')
 
-@app.route("/profile/<int:userid>") # <username> is a dynamic element.
+@app.route("/profile/<int:userid>")
+@login_required
 def userProfile(userid):
-    return render_template('personprofile.html') # adapt to make dynamic on username
+    # only allow people to view their own profile (or drop this check to let
+    # users view each other’s pages)
+    if userid != current_user.id:
+        return abort(403)
+
+    user = Users.query.get_or_404(userid)
+    solved_count = SolvedPuzzle.query.filter_by(user_id=userid).count()
+    return render_template('personprofile.html',
+        user=user,
+        solved_count=solved_count)
 
 @app.route('/newpuzzle')
 def puzzleCreationLandingPage():
