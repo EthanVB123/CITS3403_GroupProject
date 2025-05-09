@@ -18,9 +18,12 @@
     </nav>
 
     <div id="data" class="data">
-        <h2>Your current progress:</h2>
-        <div class="data-item">Total Puzzles Solved: <span id="solvedCount">0</span></div>
-        <div class="data-item">Friend Ranking: <span id="ranking">Unranked</span></div>
+        <div class="data-item">Your Current Score: <strong>{{ user.userScore }}</strong></div>
+        <div class="data-item">Friend Ranking:
+            <strong>
+                {{ friend_ranking }}
+            </strong>
+        </div>
     </div>
 </div>
 <script src="{{url_for('static', filename='profile.js')}}"></script>
