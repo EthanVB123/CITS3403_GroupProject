@@ -90,9 +90,18 @@ def userProfile(userid):
 
     user = Users.query.get_or_404(userid)
     solved_count = SolvedPuzzle.query.filter_by(user_id=userid).count()
+    friends = user.friends.all()
+    total_friends = len(friends)
+    if total_friends > 0:
+        higher = sum(1 for f in friends if f.userScore > user.userScore)
+        rank = higher + 1
+        friend_ranking = f"#{rank} out of {total_friends + 1}"
+    else:
+        friend_ranking = "No friends yet"
     return render_template('personprofile.html',
         user=user,
-        solved_count=solved_count)
+        solved_count=solved_count,
+        friend_ranking=friend_ranking)
 
 @app.route('/newpuzzle')
 def puzzleCreationLandingPage():
