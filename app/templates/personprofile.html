@@ -7,26 +7,42 @@
   <link rel="stylesheet" href="{{url_for('static', filename='profilestyle.css')}}" />
 </head>
 <body>
+    {% set is_self = (current_user.id == user.id) %}
     <title>My Profile</title>
+    {% if is_self %}
     <div class="profile-box">
-    <h2> Hello, <span id="playerUsername">{{ user.username }}</span>!</h2>
-    <h3>What are we looking towards today?</h3>
-    <nav>
-        <button type="button" class="create" onclick="location.href='/newpuzzle'">Puzzle create</button>
-        <button type="button" class="friends" onclick="location.href='/friends/0'">Friends</button>
-        <button type="button" class="select" onclick="location.href='/puzzleselect'">Select a puzzle</button>
-    </nav>
+        <h2> Hello, <span id="playerUsername">{{ user.username }}</span>!</h2>
+        <h3>What are we looking towards today?</h3>
+        <nav>
+            <button type="button" class="create" onclick="location.href='/newpuzzle'">Puzzle create</button>
+            <button type="button" class="friends" onclick="location.href='/friends/0'">Friends</button>
+            <button type="button" class="select" onclick="location.href='/puzzleselect'">Select a puzzle</button>
+        </nav>
 
-    <div id="data" class="data">
-        <div class="data-item">Your Current Score: <strong>{{ user.userScore }}</strong></div>
-        <div class="data-item">Friend Ranking:
-            <strong>
-                {{ friend_ranking }}
-            </strong>
+        <div id="data" class="data">
+            <div class="data-item">Your Current Score: <strong>{{ user.userScore }}</strong></div>
+            <div class="data-item">Friend Ranking:
+                <strong>
+                    {{ friend_ranking }}
+                </strong>
+            </div>
         </div>
     </div>
-</div>
-<script src="{{url_for('static', filename='profile.js')}}"></script>
+    {% else %}
+    <div class="profile-box">
+        <h2>Welcome to <span id="playerUsername">{{ user.username }}</span>'s Profile</h2>
+        <div id="data" class="data">
+            <div class="data-item">{{ user.username }}'s Current Score: <strong>{{ user.userScore }}</strong></div>
+            <div class="data-item">{{ user.username }}'s Friend Ranking:
+                <strong>
+                    {{ friend_ranking }}
+                </strong>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+    <script src="{{url_for('static', filename='profile.js')}}"></script>
 </body>
 </html>
 
