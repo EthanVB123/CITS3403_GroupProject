@@ -1,8 +1,8 @@
-from flask import render_template, request, redirect, url_for, jsonify, abort
+from flask import render_template, request, redirect, url_for, jsonify, abort, render_template_string
 from . import app
 import json
 from . import db
-from .models import Puzzle, Users
+from .models import Puzzle, Users, Friends
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import Puzzle, Users, SolvedPuzzle
 from .verifySolution import verifySolution
@@ -66,7 +66,27 @@ def userProfile(userid):
     # only allow people to view their own profile (or drop this check to let
     # users view each other’s pages)
     if userid != current_user.id:
-        return abort(403)
+        if not current_user.friends.filter_by(id=userid).first():
+            return render_template_string("""
+            <!doctype html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <title>Redirecting…</title>
+            </head>
+            <body onload="
+                alert('You do not have access to that profile. Redirecting to your own profile.');
+                window.location.href='{{ url }}';
+            ">
+                <!-- If JS is disabled, show a link instead -->
+                <noscript>
+                    <p>You do not have access to that profile.
+                    <a href="{{ url }}">Click here</a> to go to your own profile.
+                    </p>
+                </noscript>
+            </body>
+            </html>
+        """, url=url_for('userProfile', userid=current_user.id))
 
     user = Users.query.get_or_404(userid)
     solved_count = SolvedPuzzle.query.filter_by(user_id=userid).count()
