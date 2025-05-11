@@ -10,5 +10,5 @@ class DeploymentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or default_db_location
 
 class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     TESTING = True
