@@ -154,7 +154,7 @@ header {
   .remove-friend-btn {
     width: 100%;
     padding: 12px;
-    background-color: #00bcd4; /* Same turquoise */
+    background-color: #00bcd4; 
     color: white;
     border: none;
     border-radius: 10px;
