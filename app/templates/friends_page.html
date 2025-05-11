@@ -17,10 +17,10 @@
         <div class="bg-gray-700 p-10 text-white rounded-xl w-[90%] max-w-2xl shadow-xl backdrop-blur-sm bg-opacity-50" id="container">
             <div class="add-friend">
                 <input type="text" id="friend-input" placeholder="Enter friend's username">
-                <button id="add-friend-btn">Add Friend</button>
+                <button class="add-friend" id="add-friend-btn">Add Friend</button>
                 <p id="message" class="message"></p>
             </div>
-            <h3 class= "text-2xl font-bold text-white mb-6"> Your Friends</h3>
+            <h3 class= "text-2xl font-bold text-white mb-6 mt-4"> Your Friends</h3>
             <div class="text-white text-lg mb-4" id="friends-section">
                 <div class="friend-card" onclick="toggleFriendDetails(this)">
                     <h3 class="text-lg text-white font-bold">Ryan</h3>
@@ -37,7 +37,7 @@
                     <button class="remove-friend-btn" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
                 </div>
                 <div class="friend-card" onclick="toggleFriendDetails(this)">
-                    <h3 class="friend-name">Ethan</h3>
+                    <h3 class="text-lg text-white font-bold">Ethan</h3>
                     <p class="text-sm text-white font-bold">@ethanvanbruchem</p>
                     <p class="text-sm text-white font-bold">Puzzles Built: 0</p>
                     <p class="text-sm text-white font-bold">Friends: 0</p>
