@@ -37,6 +37,7 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertFalse(user1.check_password('password'))
         self.assertFalse(user1.check_password(''))
 
+    # Following 2 tests check the backend puzzle solution verifier found in app/verifySolution.py
     # Checks verifySolution.py gets the correct clues from a row/col of shadedCells (to then correctly verify the solution with)
     def test_generate_clues(self):
         self.assertListEqual([0],verifySolution.generateClues([0]))
@@ -45,7 +46,17 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertListEqual([3,1,2],verifySolution.generateClues([0,0,1,1,1,0,0,0,1,0,0,1,1,0]))
         self.assertListEqual([1],verifySolution.generateClues([1]))
         self.assertListEqual([6], verifySolution.generateClues([1,1,1,1,1,1]))
-
+    # Checks the overall verifySolution function
+    def test_verify_solution(self):
+        self.assertTrue(verifySolution.verifySolution([[0]],[[0]],[[0]]))
+        self.assertTrue(verifySolution.verifySolution([[1]],[[1]],[[1]]))
+        self.assertFalse(verifySolution.verifySolution([[0]],[[0]],[[1]]))
+        self.assertFalse(verifySolution.verifySolution([[1]],[[1]],[[0]]))
+        self.assertTrue(verifySolution.verifySolution([[1,1]],[[1],[0],[1]],[[1,0,1]]))
+        self.assertFalse(verifySolution.verifySolution([[1,1]],[[1],[0],[1]],[[0,0,1]]))        
+        self.assertTrue(verifySolution.verifySolution([[2],[1]],[[1],[2]],[[1,1],[0,1]]))
+        self.assertTrue(verifySolution.verifySolution([[4],[1,1],[2,1],[0]],[[3],[1,1],[1],[3]],[[1,1,1,1],[1,0,0,1],[1,1,0,1],[0,0,0,0]]))
+        self.assertFalse(verifySolution.verifySolution([[4],[1,1],[2,1],[0]],[[3],[1,1],[1],[3]],[[1,1,1,1],[1,0,0,1],[1,1,0,1],[0,0,1,0]]))
 
 if __name__ == '__main__':
     unittest.main()
