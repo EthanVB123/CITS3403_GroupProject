@@ -40,20 +40,26 @@ class FlaskAppTestCase(unittest.TestCase):
     # Following 2 tests check the backend puzzle solution verifier found in app/verifySolution.py
     # Checks verifySolution.py gets the correct clues from a row/col of shadedCells (to then correctly verify the solution with)
     def test_generate_clues(self):
+        # Check behaviour with empty lines
         self.assertListEqual([0],verifySolution.generateClues([0]))
         self.assertListEqual([0],verifySolution.generateClues([0,0,0,0,0]))
+        # Check behaviour with typical lines in a puzzle
         self.assertListEqual([1,1], verifySolution.generateClues([1,0,0,1,0]))
         self.assertListEqual([3,1,2],verifySolution.generateClues([0,0,1,1,1,0,0,0,1,0,0,1,1,0]))
+        # Check behaviour with lines of all 1's
         self.assertListEqual([1],verifySolution.generateClues([1]))
         self.assertListEqual([6], verifySolution.generateClues([1,1,1,1,1,1]))
     # Checks the overall verifySolution function
     def test_verify_solution(self):
+        # Check all possible 1x1 puzzles
         self.assertTrue(verifySolution.verifySolution([[0]],[[0]],[[0]]))
         self.assertTrue(verifySolution.verifySolution([[1]],[[1]],[[1]]))
         self.assertFalse(verifySolution.verifySolution([[0]],[[0]],[[1]]))
         self.assertFalse(verifySolution.verifySolution([[1]],[[1]],[[0]]))
+        # Check non-square (1x3 in this case) puzzles with more than 1 clue in some rows/cols
         self.assertTrue(verifySolution.verifySolution([[1,1]],[[1],[0],[1]],[[1,0,1]]))
-        self.assertFalse(verifySolution.verifySolution([[1,1]],[[1],[0],[1]],[[0,0,1]]))        
+        self.assertFalse(verifySolution.verifySolution([[1,1]],[[1],[0],[1]],[[0,0,1]])) 
+        # Check larger puzzles       
         self.assertTrue(verifySolution.verifySolution([[2],[1]],[[1],[2]],[[1,1],[0,1]]))
         self.assertTrue(verifySolution.verifySolution([[4],[1,1],[2,1],[0]],[[3],[1,1],[1],[3]],[[1,1,1,1],[1,0,0,1],[1,1,0,1],[0,0,0,0]]))
         self.assertFalse(verifySolution.verifySolution([[4],[1,1],[2,1],[0]],[[3],[1,1],[1],[3]],[[1,1,1,1],[1,0,0,1],[1,1,0,1],[0,0,1,0]]))
