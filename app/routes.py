@@ -1,5 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify, abort
-from . import app
+from flask import render_template, request, redirect, url_for, jsonify, abort, Blueprint
 import json
 from . import db
 from .models import Puzzle, Users
@@ -7,11 +6,13 @@ from flask_login import login_user, login_required, logout_user, current_user
 from .models import Puzzle, Users, SolvedPuzzle
 from .verifySolution import verifySolution
 
-@app.route("/")
+main = Blueprint('main', __name__)
+
+@main.route("/")
 def homePage():
     return render_template('homePage.html')
 
-@app.route("/login", methods=['GET', 'POST'])
+@main.route("/login", methods=['GET', 'POST'])
 def loginPage():
     if request.method == 'POST':
         username = request.form['username']
@@ -20,7 +21,7 @@ def loginPage():
         user = Users.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('homePage'))
+            return redirect(url_for('main.homePage'))
         # if invalid credentials
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             # 401 since this is an authentication error
@@ -30,13 +31,13 @@ def loginPage():
     
     return render_template('login.html')
 
-@app.route("/logout")
+@main.route("/logout")
 @login_required
 def logoutPage():
     logout_user()
-    return redirect(url_for('loginPage'))
+    return redirect(url_for('main.loginPage'))
 
-@app.route("/register", methods=['GET', 'POST'])
+@main.route("/register", methods=['GET', 'POST'])
 def registerPage():
     if request.method == 'POST':
         username = request.form['username']
@@ -56,11 +57,11 @@ def registerPage():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('loginPage'))
+        return redirect(url_for('main.loginPage'))
     
     return render_template('register.html')
 
-@app.route("/profile/<int:userid>")
+@main.route("/profile/<int:userid>")
 @login_required
 def userProfile(userid):
     # only allow people to view their own profile (or drop this check to let
@@ -74,36 +75,36 @@ def userProfile(userid):
         user=user,
         solved_count=solved_count)
 
-@app.route('/newpuzzle')
+@main.route('/newpuzzle')
 def puzzleCreationLandingPage():
     return render_template('createPuzzle.html')
 
-@app.route('/friends/<username>')
+@main.route('/friends/<username>')
 def displayFriendsPage(username):
     return render_template("friends_page.html")
 
-@app.route('/puzzleselect')
+@main.route('/puzzleselect')
 def puzzleSelect():
     return render_template('puzzle_select.html')
 
-@app.route('/puzzleselect/<username>')
+@main.route('/puzzleselect/<username>')
 def puzzleSelectFromUser(username):
     return render_template('your_puzzles.html') # adapt to make dynamic on username
 
-@app.route('/puzzleselect/friends/<username>')
+@main.route('/puzzleselect/friends/<username>')
 def puzzleSelectFromFriends(username):
     return render_template('friends_puzzles.html')
 
-@app.route('/puzzleselect/toppuzzles')
+@main.route('/puzzleselect/toppuzzles')
 def puzzleSelectFromTopPuzzles():
     return render_template('top_puzzles.html')
 
 # Will not be the top_puzzles.html file, can make new files for each difficulty
-@app.route('/puzzleselect/difficulty/<difficulty>')
+@main.route('/puzzleselect/difficulty/<difficulty>')
 def puzzleSelectFromDifficulty(difficulty):
     return render_template('top_puzzles.html') # adapt to make dynamic on difficulty
 
-@app.route('/puzzle/<int:puzzleid>')
+@main.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
     puzzle = Puzzle.query.get(puzzleid)
     print(puzzle)
@@ -120,8 +121,8 @@ def solvePuzzle(puzzleid):
                            puzzleid = puzzleid,
                            numSolved = puzzle.number_players_solved)
 
-@app.route('/puzzle/new/<int:numRows>/<int:numCols>/')
-@app.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
+@main.route('/puzzle/new/<int:numRows>/<int:numCols>/')
+@main.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
 def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
     startingRowClues = [[0] for i in range(numRows)]
     startingColClues = [[0] for i in range(numCols)]
@@ -136,7 +137,7 @@ def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
                            puzzleid = 0,
                            numSolved = 0)
 
-@app.route('/submit-puzzle', methods=['POST'])
+@main.route('/submit-puzzle', methods=['POST'])
 def submitPuzzle():
     data = request.get_json()
     puzzleSize = data.get('puzzleSize')
@@ -160,9 +161,9 @@ def submitPuzzle():
     print(puzzle)
     db.session.add(puzzle)
     db.session.commit()
-    return redirect(url_for('solvePuzzle', puzzleid = puzzle.puzzle_id), code=303)
+    return redirect(url_for('main.solvePuzzle', puzzleid = puzzle.puzzle_id), code=303)
 
-@app.route('/register-solved-puzzle', methods=['POST'])
+@main.route('/register-solved-puzzle', methods=['POST'])
 def registerSolvedPuzzle():
     data = request.get_json()
     puzzleId = data.get('puzzleId')
@@ -193,7 +194,7 @@ def registerSolvedPuzzle():
             userObj.userScore += puzzleObj.difficulty * new_accuracy
             db.session.commit()
         
-        print(url_for('userProfile', userid = userId))
-        return jsonify({"redirect_url": url_for('userProfile', userid = userId)}), 200
+        print(url_for('main.userProfile', userid = userId))
+        return jsonify({"redirect_url": url_for('main.userProfile', userid = userId)}), 200
     else:
         return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed
