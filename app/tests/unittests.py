@@ -2,7 +2,7 @@
 import unittest
 from app import create_app, db
 from app.models import Users  # Assuming you have a User model
-
+from app import verifySolution
 class FlaskAppTestCase(unittest.TestCase):
     
     # Set up the app for testing
@@ -36,6 +36,15 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertFalse(user2.check_password('1234'))
         self.assertFalse(user1.check_password('password'))
         self.assertFalse(user1.check_password(''))
+
+    # Checks verifySolution.py gets the correct clues from a row/col of shadedCells (to then correctly verify the solution with)
+    def test_generate_clues(self):
+        self.assertListEqual([0],verifySolution.generateClues([0]))
+        self.assertListEqual([0],verifySolution.generateClues([0,0,0,0,0]))
+        self.assertListEqual([1,1], verifySolution.generateClues([1,0,0,1,0]))
+        self.assertListEqual([3,1,2],verifySolution.generateClues([0,0,1,1,1,0,0,0,1,0,0,1,1,0]))
+        self.assertListEqual([1],verifySolution.generateClues([1]))
+        self.assertListEqual([6], verifySolution.generateClues([1,1,1,1,1,1]))
 
 
 if __name__ == '__main__':
