@@ -1,71 +1,47 @@
-<body class="min-h-screen bg-white text-black font-sans flex justify-center items-center"
-      style="background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
-  
-  <div class="bg-white p-10 rounded-2xl w-[90%] max-w-2xl shadow-xl">
-    <div class="flex gap-2 mb-6">
-      <input 
-        type="text" 
-        id="friend-input" 
-        placeholder="Enter friend's username"
-        class="flex-grow px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-      <button 
-        id="add-friend-btn" 
-        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm"
-      >
-        Add Friend
-      </button>
-    </div>
-
-    <h3 class="text-2xl font-bold mb-6">Your Friends</h3>
-    <div id="friends-section" class="space-y-6">
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Friends Page</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='friends_page.css') }}">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="min-h-screen bg-white text-black font-sans flex justify-center items-center">
+        
+      <header class="absolute top-6 left-6">
+        <h1 class="text-3xl font-bold text-gray-800">Friends</h1>
+      </header>
       
-      <!-- Friend Card -->
-      <div class="border border-gray-200 rounded-xl p-4">
-        <h3 class="text-lg font-bold">Ryan</h3>
-        <p class="text-sm text-gray-600">@ryankoo</p>
-        <p class="text-sm text-gray-700">Puzzles Built: 0</p>
-        <p class="text-sm text-gray-700">Friends: 0</p>
-        <button 
-          class="text-blue-600 font-medium hover:underline mt-2"
-          onclick="removeFriend(this); event.stopPropagation();"
-        >
-          Remove Friend
-        </button>
-      </div>
-
-      <!-- Repeat Friend Card -->
-      <div class="border border-gray-200 rounded-xl p-4">
-        <h3 class="text-lg font-bold">Elizabeth</h3>
-        <p class="text-sm text-gray-600">@elizabethshibu</p>
-        <p class="text-sm text-gray-700">Puzzles Built: 0</p>
-        <p class="text-sm text-gray-700">Friends: 0</p>
-        <button 
-          class="text-blue-600 font-medium hover:underline mt-2"
-          onclick="removeFriend(this); event.stopPropagation();"
-        >
-          Remove Friend
-        </button>
-      </div>
-
-      <div class="border border-gray-200 rounded-xl p-4">
-        <h3 class="text-lg font-bold">Ethan</h3>
-        <p class="text-sm text-gray-600">@ethanvanbruchem</p>
-        <p class="text-sm text-gray-700">Puzzles Built: 0</p>
-        <p class="text-sm text-gray-700">Friends: 0</p>
-        <button 
-          class="text-blue-600 font-medium hover:underline mt-2"
-          onclick="removeFriend(this); event.stopPropagation();"
-        >
-          Remove Friend
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <script src="{{ url_for('static', filename='friends_page.js') }}"></script>
-</body>
-
-    </body>
-</html>
+        <div class="bg-white p-10 text-white rounded-xl w-[90%] max-w-2xl shadow-xl" id="container">
+            <div class="flex gap-2 mb-6 mt-4">
+                <input type="text" id="friend-input" placeholder="Enter friend's username">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm" id="add-friend-btn">Add Friend</button>
+                <p id="message" class="message"></p>
+            </div>
+            <h3 class= "text-2xl font-bold text-white mb-6 mt-4"> Your Friends</h3>
+            <div class="text-white text-lg mb-4" id="friends-section">
+                <div class="border border-gray-200 rounded-xl p-4" onclick="toggleFriendDetails(this)">
+                    <h3 class="text-lg text-black font-bold">Ryan</h3>
+                    <p class="text-sm text-black font-bold">@ryankoo</p>
+                    <p class="text-sm text-black font-bold">Puzzles Built: 0</p>
+                    <p class="text-sm text-black font-bold">Friends: 0</p>
+                    <button class="text-blue-600 font-medium hover:underline mt-2" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
+                </div>
+                <div class="border border-gray-200 rounded-xl p-4" onclick="toggleFriendDetails(this)">
+                    <h3 class="text-lg text-black font-bold">Elizabeth</h3>
+                    <p class="text-sm text-black font-bold">@elizabethshibu</p>
+                    <p class="text-sm text-black font-bold">Puzzles Built: 0</p>
+                    <p class="text-sm text-black font-bold">Friends: 0</p>
+                    <button class="text-blue-600 font-medium hover:underline mt-2" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
+                </div>
+                <div class="border border-gray-200 rounded-xl p-4" onclick="toggleFriendDetails(this)">
+                    <h3 class="text-lg text-black font-bold">Ethan</h3>
+                    <p class="text-sm text-black font-bold">@ethanvanbruchem</p>
+                    <p class="text-sm text-black font-bold">Puzzles Built: 0</p>
+                    <p class="text-sm text-black font-bold">Friends: 0</p>
+                    <button class="text-blue-600 font-medium hover:underline mt-2" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='friends_page.js') }}"></script>
