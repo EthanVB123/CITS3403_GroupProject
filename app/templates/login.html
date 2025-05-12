@@ -21,13 +21,13 @@
         <input type="password" name="password" id="password" required />
       </div>
 
-      <button type="submit" class="login-button">Login</button>
+      <button id="loginBtn" type="submit" class="login-button">Login</button>
       <div id="errorMsg" class="error-message" style="display:none;"></div>
       <!-- used as a fallback -->
       {% if error %}
-        <p class="error">{{ error }}</p>
+        <p id="error" class="error">{{ error }}</p>
       {% endif %}
-      <button type="button" class="register" onclick="location.href='/register'">Register</button>
+      <button id="registerBtn" type="button" class="register" onclick="location.href='/register'">Register</button>
     </form>
   </div>
 
