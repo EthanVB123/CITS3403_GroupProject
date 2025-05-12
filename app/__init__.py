@@ -9,7 +9,7 @@ from .config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
-login_manager.login_view = 'loginPage'
+login_manager.login_view = 'main.loginPage'
 
 def create_app(config_class=Config):
     app = Flask(__name__)

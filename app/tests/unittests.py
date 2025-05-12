@@ -167,8 +167,22 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(275, Users.query.get(1).userScore)
 
-    #Tests that users can create puzzles correctly
 
+    #Tests that the login-required condition activates
+    def test_login_required(self):
+        # add two users
+        user1 = Users(username="First")
+        user2 = Users(username="2nd")
+        user1.set_password("1234")
+        user2.set_password("password")
+        db.session.add_all([user1, user2])
+        db.session.commit()
+        response = self.client.get("/profile/1")
+        self.assertNotEqual(200, response.status_code)
+        self.login_as_user_1()
+        response = self.client.get("/profile/1")
+        self.assertEqual(200, response.status_code)
+    #Tests that users can create puzzles correctly (with validation)
     def test_submit_puzzle(self):
         # add two users
         user1 = Users(username="First")
