@@ -22,7 +22,7 @@
                         <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
                             <strong>{{ puzzle.puzzle_name }}</strong>
                             <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
-                            <span>Plays: {{ puzzle.number_players_solved }}</span>
+                            <span>Players Solved: {{ puzzle.number_players_solved }}</span>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -41,7 +41,7 @@
                         <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
                             <strong>{{ puzzle.puzzle_name }}</strong>
                             <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
-                            <span>Plays: {{ puzzle.number_players_solved }}</span>
+                            <span>Players Solved: {{ puzzle.number_players_solved }}</span>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -51,28 +51,21 @@
             </div>
         </section>
 
-        <!-- Top Puzzles of the Week -->
+        <!-- Top Puzzles -->
         <section class="puzzle-section">
-            <h2>Top Puzzles of the Week</h2>
+            <h2>Top Puzzles</h2>
             <div class="puzzle-grid">
-                <div class="puzzle-card" data-puzzle-id="7">
-                    <strong>Most Goated Puzzle Ever Made</strong>
-                    <span>5x5 Grid</span>
-                    <span>Plays: 12</span>
-                    <span>Created: Apr 20, 2025</span>
-                </div>
-                <div class="puzzle-card" data-puzzle-id="8">
-                    <strong>Best Puzzle</strong>
-                    <span>8x8 Grid</span>
-                    <span>Plays: 45</span>
-                    <span>Created: Apr 18, 2025</span>
-                </div>
-                <div class="puzzle-card" data-puzzle-id="9">
-                    <strong>My Favourite Puzzle I've Made</strong>
-                    <span>10x10 Grid</span>
-                    <span>Plays: 8</span>
-                    <span>Created: Apr 15, 2025</span>
-                </div>
+                {% if top_puzzles %}
+                    {% for puzzle in top_puzzles %}
+                        <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
+                            <strong>{{ puzzle.puzzle_name }}</strong>
+                            <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
+                            <span>Players Solved: {{ puzzle.number_players_solved }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <strong>No puzzles created yet.</strong>
+                {% endif %}
                 <button class="see-more" onclick="location.href='/puzzleselect/toppuzzles'">See More</button>
             </div>
         </section>
