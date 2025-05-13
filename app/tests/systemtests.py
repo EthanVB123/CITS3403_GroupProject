@@ -55,11 +55,71 @@ class SystemTests(unittest.TestCase):
         self.assertIn("Invalid username or password", self.driver.page_source)
     
     def testAuthorisedToUseProfile(self):
-        pass
+        # go to login page
+        self.driver.get("http://localhost:5000")
+        homePageLoginButton = self.driver.find_element(By.ID, "loginBtn")
+        homePageLoginButton.click()
+        time.sleep(1) # just in case, to allow the next page to load
 
-    def testViewFriends(self):
-        pass
+        # sign in with username=1, password=1
+        usernameInput = self.driver.find_element(By.NAME, "username")        
+        passwordInput = self.driver.find_element(By.NAME, "password")
+        usernameInput.send_keys("1")
+        passwordInput.send_keys("1")
+        loginButton = self.driver.find_element(By.ID, "loginBtn")
+        loginButton.click()
+        time.sleep(1) # just in case, to allow the next page to load
+        self.assertIn("Hello, 1", self.driver.page_source)
 
+        self.driver.find_element(By.ID, "profileBtn").click()
+        time.sleep(1)
+        self.assertTrue(self.driver.current_url.startswith("http://localhost:5000/profile/"))
+
+    def testUnauthorisedToUseProfile(self):
+        # go to login page
+        self.driver.get("http://localhost:5000")
+        homePageLoginButton = self.driver.find_element(By.ID, "loginBtn")
+        homePageLoginButton.click()
+        time.sleep(1) # just in case, to allow the next page to load
+
+        # sign in with username=1, password=1
+        usernameInput = self.driver.find_element(By.NAME, "username")        
+        passwordInput = self.driver.find_element(By.NAME, "password")
+        usernameInput.send_keys("1")
+        passwordInput.send_keys("1")
+        loginButton = self.driver.find_element(By.ID, "loginBtn")
+        loginButton.click()
+        time.sleep(1) # just in case, to allow the next page to load
+        self.assertIn("Hello, 1", self.driver.page_source)
+
+        self.driver.find_element(By.ID, "profileBtn").click()
+        time.sleep(1)
+        self.assertTrue(self.driver.current_url.startswith("http://localhost:5000/profile/"))
+        profile = self.driver.current_url
+        # redirect to an obvious nonexistent profile (or a profile that user isn't friends of)
+        self.driver.get(self.driver.current_url + "000000000000") # we won't have trillions of users, if we did we probably shouldn't use flask anyway
+        time.sleep(1)
+        # this should alert and redirect us
+        try:
+            alert = self.driver.switch_to.alert
+            alert_text = alert.text
+            print("Alert appeared:", alert_text)
+
+            # Assert that an alert appeared
+            self.assertTrue(True)
+
+            # Dismiss (or use alert.accept() if needed)
+            alert.dismiss()
+        except NoAlertPresentException:
+            self.assertTrue(False, "No alert was present when expected.")
+        
+        time.sleep(1)
+        # confirm redirect
+        self.assertEqual(self.driver.current_url, profile)
+
+    def testViewFriendsProfile(self):
+        # can add after pr #43 merged
+        pass
 
     def testCreatePuzzleAndSolveIt(self):
         # go to login page
@@ -116,6 +176,7 @@ class SystemTests(unittest.TestCase):
         self.driver.find_element(By.ID, "cell0").click()
         self.driver.find_element(By.ID, "cell1").click()
         self.driver.find_element(By.ID, "submit").click()
+        time.sleep(1)
         # an alert should appear (try-except block adapted from GenAI)
         try:
             alert = self.driver.switch_to.alert
