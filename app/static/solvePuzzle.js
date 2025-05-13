@@ -365,7 +365,6 @@ function submitPuzzle() {
             },
             body: JSON.stringify({puzzleSize: puzzleSize,
                 puzzleId: requestedPuzzle.puzzleid,
-                userId: 1,
                 accuracy: Math.floor(Math.random() * 100) + 1,
                 shadedCells: shadedCells
             })
