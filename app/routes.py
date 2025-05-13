@@ -118,8 +118,9 @@ def puzzleSelect():
     your_puzzles = Puzzle.query.filter_by(creator_id=current_user.id).limit(3).all()
     friend_ids = [friend.id for friend in current_user.friends.all()]
     friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friend_ids)).limit(3).all()
+    top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(3).all()
 
-    return render_template('puzzle_select.html', your_puzzles=your_puzzles, friend_puzzles=friend_puzzles)
+    return render_template('puzzle_select.html', your_puzzles=your_puzzles, friend_puzzles=friend_puzzles, top_puzzles=top_puzzles)
 
 @app.route('/puzzleselect/<int:userid>')
 @login_required
@@ -178,7 +179,8 @@ def puzzleSelectFromFriends(user_id):
 
 @app.route('/puzzleselect/toppuzzles')
 def puzzleSelectFromTopPuzzles():
-    return render_template('top_puzzles.html')
+    top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(10).all()
+    return render_template('top_puzzles.html', top_puzzles=top_puzzles)
 
 # Will not be the top_puzzles.html file, can make new files for each difficulty
 @app.route('/puzzleselect/difficulty/<difficulty>')
@@ -274,6 +276,7 @@ def registerSolvedPuzzle():
                 accuracy = new_accuracy
             )
             db.session.add(savedAttempt)
+            puzzleObj.number_players_solved += 1
             current_user.userScore += puzzleObj.difficulty * new_accuracy
             db.session.commit()
         
