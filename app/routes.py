@@ -22,7 +22,7 @@ def loginPage():
         user = Users.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('main.homePage'))
+            return redirect(url_for('main.userProfile', userid = user.id))
         # if invalid credentials
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             # 401 since this is an authentication error
@@ -62,9 +62,12 @@ def registerPage():
     
     return render_template('register.html')
 
+@main.route("/profile")
 @main.route("/profile/<int:userid>")
 @login_required
-def userProfile(userid):
+def userProfile(userid=None):
+    if userid == None:
+        userid = current_user.id
     # only allow people to view their own profile (or drop this check to let
     # users view each other’s pages)
     if userid != current_user.id:
@@ -88,7 +91,7 @@ def userProfile(userid):
                 </noscript>
             </body>
             </html>
-        """, url=url_for('userProfile', userid=current_user.id))
+        """, url=url_for('main.userProfile', userid=current_user.id))
 
     user = Users.query.get_or_404(userid)
     solved_count = SolvedPuzzle.query.filter_by(user_id=userid).count()
