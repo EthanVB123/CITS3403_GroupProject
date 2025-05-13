@@ -210,7 +210,6 @@ def registerSolvedPuzzle():
     rowClues = puzzleObj.row_clues
     colClues = puzzleObj.column_clues
     if (puzzleObj is not None and current_user is not None and verifySolution(rowClues, colClues, shadedCells)):
-        print('Solution accepted!')
         # note that score is  accuracy (out of 100) * difficulty (a small integer)
         previousBestAttempt = SolvedPuzzle.query.get((userId, puzzleId))
         if (previousBestAttempt is not None): # if user already solved this one

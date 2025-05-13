@@ -79,6 +79,7 @@ class FlaskAppTestCase(unittest.TestCase):
         user2.set_password("password")
         db.session.add_all([user1, user2])
         db.session.commit()
+        self.login_as_user_1()
         # Create two sample puzzles
         puzzle1 = Puzzle(
             num_rows = 2,
