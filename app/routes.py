@@ -108,8 +108,10 @@ def puzzleCreationLandingPage():
     return render_template('createPuzzle.html')
 
 @app.route('/friends/<username>')
+@login_required
 def displayFriendsPage(username):
-    return render_template("friends_page.html")
+    friends = current_user.friends.all()
+    return render_template("friends_page.html", friends=friends)
 
 @app.route('/puzzleselect')
 def puzzleSelect():

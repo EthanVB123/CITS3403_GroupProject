@@ -6,8 +6,8 @@ function toggleFriendDetails(card) {
 }
 
 // dummy data
-const existingUsernames = ['clashroyale', 'ryankoo', 'elizabethshibu', 'ethanvanbruchem', 'johnsmith', 'clashofclans'];
-const currentFriends = ['ryankoo', 'elizabethshibu', 'ethanvanbruchem'];
+//const existingUsernames = ['clashroyale', 'ryankoo', 'elizabethshibu', 'ethanvanbruchem', 'johnsmith', 'clashofclans'];
+//const currentFriends = ['ryankoo', 'elizabethshibu', 'ethanvanbruchem'];
 
 const friendInput = document.getElementById('friend-input');
 const message = document.getElementById('message');
