@@ -1,0 +1,27 @@
+.button {
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid;
+  cursor: pointer;
+}
+
+.btn_logio {
+  border-color: #858fbb;
+  background-color: #858fbb;
+  color: white;
+}
+
+.btn_logio:hover {
+  border-color: #5275c8;
+}
+
+.reigister_btn {
+  border-color: #8ca9ff;
+  background-color: #8ca9ff;
+  color: white;
+}
+
+.reigister_btn:hover {
+  border-color: #5275c8;
+}
