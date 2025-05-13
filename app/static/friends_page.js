@@ -14,17 +14,28 @@ const message = document.getElementById('message');
 const addFriendBtn = document.getElementById('add-friend-btn');
 let dropdown = null;
 
-function removeFriend(button) {
-    const friendCard = button.parentElement;
-    const friendUsername = friendCard.querySelector('.friend-username').textContent.trim().slice(1);
-    friendCard.remove();
-    const index = currentFriends.indexOf(friendUsername);
-    if (index !== -1) {
-        currentFriends.splice(index, 1);
-    }
-    message.style.color = '#d00';
-    message.style.fontWeight = 'normal';
-    message.textContent = `${friendUsername} has been removed.`;
+function removeFriend(button, username) {
+    fetch('/remove-friend', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: username })
+    })
+    .then(response => response.json().then(data => ({status: response.status, body: data})))
+    .then(({status, body}) => {
+        if (status === 200) {
+            const friendCard = button.parentElement;
+            friendCard.remove();
+            message.style.color = 'green';
+            message.style.fontWeight = 'bold';
+            message.textContent = `${username} has been removed.`;
+        } else {
+            message.style.color = '#d00';
+            message.style.fontWeight = 'normal';
+            message.textContent = body.error || 'Error removing friend.';
+        }
+    });
 }
 
 addFriendBtn.addEventListener('click', function() {

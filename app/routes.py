@@ -266,3 +266,20 @@ def search_users():
         ~Users.id.in_(already_friends_ids)
     ).limit(10).all()
     return jsonify([u.username for u in users])
+
+@app.route('/remove-friend', methods=['POST'])
+@login_required
+def remove_friend():
+    data = request.get_json()
+    friend_username = data.get('username')
+    friend = Users.query.filter_by(username=friend_username).first()
+    if not friend:
+        return jsonify({'error': 'User not found'}), 404
+
+    link = Friends.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+    if not link:
+        return jsonify({'error': 'Not friends'}), 400
+
+    db.session.delete(link)
+    db.session.commit()
+    return jsonify({'success': True}), 200
