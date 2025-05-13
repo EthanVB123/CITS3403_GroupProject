@@ -33,28 +33,35 @@ addFriendBtn.addEventListener('click', function() {
     message.textContent = '';
     if (friendUsername === '') {
         message.textContent = 'Please enter a username.';
+        return;
     }
-    else if (!existingUsernames.includes(friendUsername)) {
-        message.textContent = 'User not found.';
-    }
-    else if (currentFriends.includes(friendUsername)) {
-        message.textContent = 'This user is already your friend.';
-    }
-    else {
-        currentFriends.push(friendUsername);
-        const newFriendCard = document.createElement('div');
-        newFriendCard.className = 'friend-card';
-        newFriendCard.innerHTML = `
-            <h3 class="friend-name">${friendUsername}</h3>
-            <p class="friend-username">@${friendUsername}</p>
-            <p class="puzzles-built">Puzzles Built: 0</p>
-            <p class="friend-count">Friends: 0</p>
-            <button class="remove-friend-btn" onclick="removeFriend(this)">Remove Friend</button>
-        `;
-        document.getElementById('friends-section').appendChild(newFriendCard);
-        message.textContent = 'Friend added successfully!';
-        message.style.color = 'green';
-        message.style.fontWeight = 'bold';
-    }
+    fetch('/add-friend', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: friendUsername })
+    })
+    .then(response => response.json().then(data => ({status: response.status, body: data})))
+    .then(({status, body}) => {
+        if (status === 200) {
+            // Add friend card to the list
+            const newFriendCard = document.createElement('div');
+            newFriendCard.className = 'friend-card';
+            newFriendCard.innerHTML = `
+                <h3 class="friend-name">${body.username}</h3>
+                <p class="friend-username">@${body.username}</p>
+                <p class="puzzles-built">Puzzles Built: 0</p>
+                <p class="friend-count">Friends: 0</p>
+                <button class="remove-friend-btn" onclick="removeFriend(this, '${body.username}')">Remove Friend</button>
+            `;
+            document.getElementById('friends-section').appendChild(newFriendCard);
+            message.textContent = 'Friend added successfully!';
+            message.style.color = 'green';
+            message.style.fontWeight = 'bold';
+        } else {
+            message.textContent = body.error || 'Error adding friend.';
+        }
+    });
     friendInput.value = '';
 });

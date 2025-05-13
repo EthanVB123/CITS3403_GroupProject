@@ -226,3 +226,25 @@ def registerSolvedPuzzle():
         return jsonify({"redirect_url": url_for('userProfile', userid = userId)}), 200
     else:
         return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed
+
+@app.route('/add-friend', methods=['POST'])
+@login_required
+def add_friend():
+    data = request.get_json()
+    friend_username = data.get('username')
+    if not friend_username or friend_username == current_user.username:
+        return jsonify({'error': 'Invalid username'}), 400
+
+    friend = Users.query.filter_by(username=friend_username).first()
+    if not friend:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Check if already friends (one-way)
+    already_friend = Friends.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+    if already_friend:
+        return jsonify({'error': 'Already friends'}), 400
+
+    new_friend = Friends(user_id=current_user.id, friend_id=friend.id)
+    db.session.add(new_friend)
+    db.session.commit()
+    return jsonify({'success': True, 'username': friend.username}), 200
