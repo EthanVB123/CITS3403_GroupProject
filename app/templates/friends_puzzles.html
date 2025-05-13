@@ -7,73 +7,93 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='puzzle_select.css') }}">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-[#0a0f2c] to-black flex justify-center items-center text-white font-sans">
+<body class="min-h-screen bg-white text-black font-sans flex justify-center items-center" 
+style="background-color: #f9f9f9; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
   <header>
-    <h1>Friends' Puzzles</h1>
-    <button class="back-button" onclick="location.href='/puzzleselect'">Back to Puzzle Select</button>
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <div class="flex justify-between items-center mb-6 mt-4">
+    <h1 class="text-3xl font-bold">Friends' Puzzles</h1>
+    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xlg font-bold text-sm" onclick="location.href='/puzzleselect'">Back to Puzzle Select</button>
   </header>
 
   <section class="puzzle-section">
-    <div class="puzzle-grid">
-      <div class="puzzle-card" data-puzzle-id="1">
-        <strong>John's Puzzle</strong>
-        <span>5×5 Grid</span>
-        <span>Plays: 10</span>
-        <span>Created: Apr 20, 2025</span>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="1">
+        <h2 class="text-lg font-bold mb-1">John's Puzzle</h2>
+        <p class="text-blue-600 text-sm">5×5 Grid</p>
+        <p class="text-sm">Plays: 10</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="2">
-        <strong>Jack's Puzzle</strong>
-        <span>6×6 Grid</span>
-        <span>Plays: 15</span>
-        <span>Created: Apr 20, 2025</span>
+
+
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="2">
+        <h2 class="text-lg font-bold mb-1">Jack's Puzzle</h2>
+        <p class="text-blue-600 text-sm">6×6 Grid</p>
+        <p class="text-sm">Plays: 15</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="3">
-        <strong>Sarah's Puzzle</strong>
-        <span>7×7 Grid</span>
-        <span>Plays: 20</span>
-        <span>Created: Apr 20, 2025</span>
+
+
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="3">
+        <h2 class="text-lg font-bold mb-1">Sarah's Puzzle</h2>
+        <p class="text-blue-600 text-sm">7×7 Grid</p>
+        <p class="text-sm">Plays: 20</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="4">
-        <strong>Cena's Puzzle</strong>
-        <span>8×8 Grid</span>
-        <span>Plays: 25</span>
-        <span>Created: Apr 20, 2025</span>
+
+
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="4">
+        <h2 class="text-lg font-bold mb-1">Cena's Puzzle</h2>
+        <p class="text-blue-600 text-sm">8×8 Grid</p>
+        <p class="text-sm">Plays: 25</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="5">
-        <strong>Jeff's Puzzle</strong>
-        <span>9×9 Grid</span>
-        <span>Plays: 30</span>
-        <span>Created: Apr 20, 2025</span>
+
+
+    
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="5">
+        <h2 class="text-lg font-bold mb-1">Jeff's Puzzle</h2>
+        <p class="text-blue-600 text-sm">9×9 Grid</p>
+        <p class="text-sm">Plays: 30</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="6">
-        <strong>Clash's Puzzle</strong>
-        <span>10×10 Grid</span>
-        <span>Plays: 35</span>
-        <span>Created: Apr 20, 2025</span>
+
+
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="6">
+        <h2 class="text-lg font-bold mb-1">Clash's Puzzle</h2>
+        <p class="text-blue-600 text-sm">10×10 Grid</p>
+        <p class="text-sm">Plays: 35</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="7">
-        <strong>Destroyer's Puzzle</strong>
-        <span>11×11 Grid</span>
-        <span>Plays: 40</span>
-        <span>Created: Apr 20, 2025</span>
+
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="7">
+        <h2 class="text-lg font-bold mb-1">Destroyer's Puzzle</h2>
+        <p class="text-blue-600 text-sm">11×11 Grid</p>
+        <p class="text-sm">Plays: 40</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="8">
-        <strong>Hey's Puzzle</strong>
-        <span>12×12 Grid</span>
-        <span>Plays: 45</span>
-        <span>Created: Apr 20, 2025</span>
+
+     
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="8">
+        <h2 class="text-lg font-bold mb-1">Hey's Puzzle</h2>
+        <p class="text-blue-600 text-sm">12×12 Grid</p>
+        <p class="text-sm">Plays: 45</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="9">
-        <strong>Light's Puzzle</strong>
-        <span>13×13 Grid</span>
-        <span>Plays: 50</span>
-        <span>Created: Apr 20, 2025</span>
+
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="9">
+        <h2 class="text-lg font-bold mb-1">Light's Puzzle</h2>
+        <p class="text-blue-600 text-sm">13×13 Grid</p>
+        <p class="text-sm">Plays: 50</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
-      <div class="puzzle-card" data-puzzle-id="10">
-        <strong>John's Second Puzzle</strong>
-        <span>14×14 Grid</span>
-        <span>Plays: 55</span>
-        <span>Created: Apr 20, 2025</span>
+
+
+      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="10">
+        <h2 class="text-lg font-bold mb-1">John's Second Puzzle</h2>
+        <p class="text-blue-600 text-sm">14×14 Grid</p>
+        <p class="text-sm">Plays: 55</p>
+        <p class="text-sm">Created: Apr 20, 2025</p>
       </div>
     </div>
   </section>
