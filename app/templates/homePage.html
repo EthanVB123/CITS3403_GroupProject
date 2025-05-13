@@ -18,8 +18,16 @@
         <span class="text-white logo">WP logo</span>
         <span id="navbar" class="navbar">
             {% if current_user.is_authenticated %}
-                <p class="text-white">Hello, {{ current_user.username }}</p>
-                <button id="logoutBtn" onclick="location.href='/logout'" class="font-semibold border px-2 py-2 rounded" style="border-color: #858fbb; background-color: #858fbb; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#858fbb'">Logout</button>
+                <button
+                    onclick="window.location.href='{{ url_for("main.userProfile", userid=current_user.id) }}';"
+                    class="font-semibold border px-2 py-2 rounded"
+                    style="border-color: #858fbb; background-color: #858fbb; color: white;"
+                    onmouseover="this.style.borderColor='#5275c8'"
+                    onmouseout="this.style.borderColor='#858fbb'"
+                >
+                    Hello, {{ current_user.username }}
+                </button>
+                <button onclick="location.href='/logout'" class="font-semibold border px-2 py-2 rounded" style="border-color: #858fbb; background-color: #858fbb; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#858fbb'">Logout</button>
             {% else %}
                 <button id="loginBtn" onclick="location.href='/login'" class="font-semibold border px-2 py-2 rounded" style="border-color: #858fbb; background-color: #858fbb; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#858fbb'">Login</button>
                 <button id="registerBtn" onclick="location.href='/register'" class="font-semibold border px-2 py-2 rounded" style="border-color: #8ca9ff; background-color: #8ca9ff; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#8ca9ff'">Register</button>
