@@ -10,32 +10,25 @@
         <header>
             <div class="header-container">
                 <h1>Puzzle Select</h1>
-                <button class="back-button" onclick="location.href='/profile/0'">Back to Profile</button>
+                <button class="back-button" onclick="location.href='{{ url_for('userProfile', userid=current_user.id) }}'">Back to Profile</button>
             </div>
         </header>
         <!-- Your Puzzles -->
         <section class="puzzle-section">
             <h2>Your Puzzles</h2>
             <div class="puzzle-grid">
-                <div class="puzzle-card" data-puzzle-id="1">
-                    <strong>My First Puzzle</strong>
-                    <span>5x5 Grid</span>
-                    <span>Plays: 12</span>
-                    <span>Created: Apr 20, 2025</span>
-                </div>
-                <div class="puzzle-card" data-puzzle-id="2">
-                    <strong>My Second Puzzle</strong>
-                    <span>8x8 Grid</span>
-                    <span>Plays: 45</span>
-                    <span>Created: Apr 18, 2025</span>
-                </div>
-                <div class="puzzle-card" data-puzzle-id="3">
-                    <strong>My Third Puzzle</strong>
-                    <span>10x10 Grid</span>
-                    <span>Plays: 8</span>
-                    <span>Created: Apr 15, 2025</span>
-                </div>
-                <button class="see-more" onclick="location.href='/puzzleselect/0'">See More</button>
+                {% if your_puzzles %}
+                    {% for puzzle in your_puzzles %}
+                        <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
+                            <strong>{{ puzzle.puzzle_name }}</strong>
+                            <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
+                            <span>Plays: {{ puzzle.number_players_solved }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <strong>No puzzles created yet.</strong>
+                {% endif %}
+                <button class="see-more" onclick="location.href='{{ url_for('puzzleSelectFromUser', userid=current_user.id) }}'">See More</button>
             </div>
         </section>
 
@@ -43,25 +36,18 @@
         <section class="puzzle-section">
             <h2>Friends' Puzzles</h2>
             <div class="puzzle-grid">
-                <div class="puzzle-card" data-puzzle-id="4">
-                    <strong>John's Puzzle</strong>
-                    <span>3x3 Grid</span>
-                    <span>Plays: 12</span>
-                    <span>Created: Apr 20, 2025</span>
-                </div>
-                <div class="puzzle-card" data-puzzle-id="5">
-                    <strong>Sarah's Puzzle</strong>
-                    <span>8x8 Grid</span>
-                    <span>Plays: 45</span>
-                    <span>Created: Apr 18, 2025</span>
-                </div>
-                <div class="puzzle-card" data-puzzle-id="6">
-                    <strong>Pluto's Puzzle</strong>
-                    <span>10x10 Grid</span>
-                    <span>Plays: 8</span>
-                    <span>Created: Apr 15, 2025</span>
-                </div>
-                <button class="see-more" onclick="location.href='/puzzleselect/friends/0'">See More</button>
+                {% if friend_puzzles %}
+                    {% for puzzle in friend_puzzles %}
+                        <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
+                            <strong>{{ puzzle.puzzle_name }}</strong>
+                            <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
+                            <span>Plays: {{ puzzle.number_players_solved }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <strong>No puzzles created yet.</strong>
+                {% endif %}
+                <button class="see-more" onclick="location.href='{{ url_for('puzzleSelectFromFriends', user_id=current_user.id) }}'">See More</button>
             </div>
         </section>
 
