@@ -19,7 +19,7 @@
           <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
             <strong>{{ puzzle.puzzle_name }}</strong>
             <span>{{ puzzle.num_rows }}×{{ puzzle.num_columns }} Grid</span>
-            <span>Plays: {{ puzzle.number_players_solved }}</span>
+            <span>Players Solved: {{ puzzle.number_players_solved }}</span>
           </div>
         {% endfor %}
       {% else %}
