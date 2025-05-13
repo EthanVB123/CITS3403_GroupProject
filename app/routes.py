@@ -250,3 +250,19 @@ def add_friend():
     db.session.add(new_friend)
     db.session.commit()
     return jsonify({'success': True, 'username': friend.username}), 200
+
+@app.route('/search-users')
+@login_required
+def search_users():
+    query = request.args.get('q', '')
+    if not query:
+        return jsonify([])
+
+    # Exclude current user and already-friends
+    already_friends_ids = [f.id for f in current_user.friends]
+    users = Users.query.filter(
+        Users.username.ilike(f"%{query}%"),
+        Users.id != current_user.id,
+        ~Users.id.in_(already_friends_ids)
+    ).limit(10).all()
+    return jsonify([u.username for u in users])

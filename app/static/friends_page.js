@@ -12,6 +12,7 @@ function toggleFriendDetails(card) {
 const friendInput = document.getElementById('friend-input');
 const message = document.getElementById('message');
 const addFriendBtn = document.getElementById('add-friend-btn');
+let dropdown = null;
 
 function removeFriend(button) {
     const friendCard = button.parentElement;
@@ -64,4 +65,46 @@ addFriendBtn.addEventListener('click', function() {
         }
     });
     friendInput.value = '';
+});
+
+friendInput.addEventListener('input', function() {
+    const query = friendInput.value.trim();
+    if (query.length === 0) {
+        if (dropdown) dropdown.remove();
+        return;
+    }
+    fetch(`/search-users?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(usernames => {
+            if (dropdown) dropdown.remove();
+            dropdown = document.createElement('div');
+            dropdown.className = 'dropdown';
+            dropdown.style.position = 'absolute';
+            dropdown.style.background = '#fff';
+            dropdown.style.color = '#000';
+            dropdown.style.border = '1px solid #ccc';
+            dropdown.style.width = friendInput.offsetWidth + 'px';
+            dropdown.style.zIndex = 1000;
+            usernames.forEach(username => {
+                const option = document.createElement('div');
+                option.className = 'dropdown-option';
+                option.textContent = username;
+                option.style.padding = '5px 10px';
+                option.style.cursor = 'pointer';
+                option.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    friendInput.value = username;
+                    dropdown.remove();
+                });
+                dropdown.appendChild(option);
+            });
+            friendInput.parentNode.appendChild(dropdown);
+        });
+});
+
+// Hide dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    if (dropdown && !friendInput.contains(e.target)) {
+        dropdown.remove();
+    }
 });
