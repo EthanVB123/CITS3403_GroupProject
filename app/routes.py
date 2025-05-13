@@ -112,16 +112,68 @@ def displayFriendsPage(username):
     return render_template("friends_page.html")
 
 @app.route('/puzzleselect')
+@login_required
 def puzzleSelect():
-    return render_template('puzzle_select.html')
+    your_puzzles = Puzzle.query.filter_by(creator_id=current_user.id).limit(3).all()
+    friend_ids = [friend.id for friend in current_user.friends.all()]
+    friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friend_ids)).limit(3).all()
 
-@app.route('/puzzleselect/<username>')
-def puzzleSelectFromUser(username):
-    return render_template('your_puzzles.html') # adapt to make dynamic on username
+    return render_template('puzzle_select.html', your_puzzles=your_puzzles, friend_puzzles=friend_puzzles)
 
-@app.route('/puzzleselect/friends/<username>')
-def puzzleSelectFromFriends(username):
-    return render_template('friends_puzzles.html')
+@app.route('/puzzleselect/<int:userid>')
+@login_required
+def puzzleSelectFromUser(userid):
+    if userid != current_user.id:
+        return render_template_string("""
+        <!doctype html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <title>Redirecting…</title>
+        </head>
+        <body onload="
+            alert('Access denied. Redirecting you to your puzzles...');
+            window.location.href='{{ url }}';
+        ">
+            <!-- If JS is disabled, show a link instead -->
+            <noscript>
+                <p>Access denied. Redirecting you to your puzzles...
+                If you are not redirected, <a href="{{ url }}">click here</a>.
+                </p>
+            </noscript>
+        </body>
+        </html>
+    """, url=url_for('puzzleSelectFromUser', userid=current_user.id))
+    your_puzzles = Puzzle.query.filter_by(creator_id=userid).all()
+    return render_template('your_puzzles.html', your_puzzles=your_puzzles)
+
+@app.route('/puzzleselect/<int:user_id>/friends/')
+@login_required
+def puzzleSelectFromFriends(user_id):
+    if user_id != current_user.id:
+        return render_template_string("""
+        <!doctype html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <title>Redirecting…</title>
+        </head>
+        <body onload="
+            alert('Access denied. Redirecting you to your friends puzzles...');
+            window.location.href='{{ url }}';
+        ">
+            <!-- If JS is disabled, show a link instead -->
+            <noscript>
+                <p>Access denied. Redirecting you to your friends puzzles...
+                If you are not redirected, <a href="{{ url }}">click here</a>.
+                </p>
+            </noscript>
+        </body>
+        </html>
+    """, url=url_for('puzzleSelectFromFriends', user_id=current_user.id))
+    friends_ids = [friend.id for friend in current_user.friends.all()]
+    friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friends_ids)).all()
+    return render_template('friends_puzzles.html', friend_puzzles=friend_puzzles)
 
 @app.route('/puzzleselect/toppuzzles')
 def puzzleSelectFromTopPuzzles():
