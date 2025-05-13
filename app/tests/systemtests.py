@@ -60,8 +60,7 @@ class SystemTests(unittest.TestCase):
     def testViewFriends(self):
         pass
 
-    def testAddFriend(self):
-        pass
+
     def testCreatePuzzleAndSolveIt(self):
         # go to login page
         self.driver.get("http://localhost:5000")
