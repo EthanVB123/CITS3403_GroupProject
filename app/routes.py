@@ -9,11 +9,15 @@ from .forms import LoginForm, RegisterForm
 import math
 import html
 
-@app.template_filter('unescape')
+
+main = Blueprint('main', __name__)
+
+
+@main.app_template_filter('unescape')
 def unescape_filter(s):
     return html.unescape(s)
 
-main = Blueprint('main', __name__)
+
 @main.route("/")
 def homePage():
     return render_template('homePage.html')
@@ -303,7 +307,7 @@ def registerSolvedPuzzle():
     else:
         return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed
 
-@app.route('/add-friend', methods=['POST'])
+@main.route('/add-friend', methods=['POST'])
 @login_required
 def add_friend():
     data = request.get_json()
@@ -325,7 +329,7 @@ def add_friend():
     db.session.commit()
     return jsonify({'success': True, 'username': friend.username}), 200
 
-@app.route('/search-users')
+@main.route('/search-users')
 @login_required
 def search_users():
     query = request.args.get('q', '')
@@ -341,7 +345,7 @@ def search_users():
     ).limit(10).all()
     return jsonify([u.username for u in users])
 
-@app.route('/remove-friend', methods=['POST'])
+@main.route('/remove-friend', methods=['POST'])
 @login_required
 def remove_friend():
     data = request.get_json()
