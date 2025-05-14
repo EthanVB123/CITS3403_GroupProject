@@ -20,23 +20,23 @@
   </header>
 
   <div class="max-w-6xl mx-auto px-4 py-2 flex justify-between items-center w-full">
-    <h1 class="text-3xl font-bold">Friends' Puzzles</h1>
+    <h1 class="text-3xl font-bold">{% if status=="friends" %}Friends' Puzzles{% elif status=="you" %}Your Puzzles{% elif status=="top" %}Top Puzzles{% endif %}</h1>
     <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm" onclick="location.href='/puzzleselect'">Back to Puzzle Select</button>
   </div>
 
 
   <section class="puzzle-section max-w-6xl mx-auto px-4">
     <div class="puzzle-grid">
-      {% if friend_puzzles %}
-        {% for puzzle in friend_puzzles %}
+      {% if puzzles %}
+        {% for puzzle in puzzles %}
           <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
-            <strong>{{ puzzle.puzzle_name }}</strong>
+            <strong>{{ puzzle.puzzle_name | unescape }}</strong>
             <span>{{ puzzle.num_rows }}×{{ puzzle.num_columns }} Grid</span>
             <span>Players Solved: {{ puzzle.number_players_solved }}</span>
           </div>
         {% endfor %}
       {% else %}
-        <strong>No puzzles from friends yet.</strong>
+        <strong>No puzzles {% if status=="friend" %}from friends{% elif status=="you" %}created{% endif %} yet.</strong>
       {% endif %}
     </div>
   </section>

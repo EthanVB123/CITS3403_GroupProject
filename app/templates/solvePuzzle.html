@@ -40,7 +40,7 @@
 
     <div class="flex items-center gap-4 text-sm">
       {% if current_user.is_authenticated %}
-        <button onclick="location.href='{{ url_for('userProfile', userid=current_user.id) }}'" class="text-blue-600 hover:underline font-semibold">Profile</button>
+        <button onclick="location.href='{{ url_for('main.userProfile', userid=current_user.id) }}'" class="text-blue-600 hover:underline font-semibold">Profile</button>
         <button onclick="location.href='/logout'" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">Logout</button>
       {% else %}
         <button onclick="location.href='/login'" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">Sign In</button>

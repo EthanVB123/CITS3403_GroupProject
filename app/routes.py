@@ -166,9 +166,9 @@ def puzzleSelectFromUser(userid):
             </noscript>
         </body>
         </html>
-    """, url=url_for('puzzleSelectFromUser', userid=current_user.id))
+    """, url=url_for('main.puzzleSelectFromUser', userid=current_user.id))
     your_puzzles = Puzzle.query.filter_by(creator_id=userid).all()
-    return render_template('your_puzzles.html', your_puzzles=your_puzzles)
+    return render_template('puzzle_select_subset.html', puzzles=your_puzzles, status="you")
 
 @main.route('/puzzleselect/<int:user_id>/friends/')
 @login_required
@@ -196,17 +196,12 @@ def puzzleSelectFromFriends(user_id):
     """, url=url_for('puzzleSelectFromFriends', user_id=current_user.id))
     friends_ids = [friend.id for friend in current_user.friends.all()]
     friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friends_ids)).all()
-    return render_template('friends_puzzles.html', friend_puzzles=friend_puzzles)
+    return render_template('puzzle_select_subset.html', puzzles=friend_puzzles, status="friends")
 
 @main.route('/puzzleselect/toppuzzles')
 def puzzleSelectFromTopPuzzles():
     top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(10).all()
-    return render_template('top_puzzles.html', top_puzzles=top_puzzles)
-
-# Will not be the top_puzzles.html file, can make new files for each difficulty
-@main.route('/puzzleselect/difficulty/<difficulty>')
-def puzzleSelectFromDifficulty(difficulty):
-    return render_template('top_puzzles.html') # adapt to make dynamic on difficulty
+    return render_template('puzzle_select_subset.html', puzzles=top_puzzles, status="top")
 
 @main.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
