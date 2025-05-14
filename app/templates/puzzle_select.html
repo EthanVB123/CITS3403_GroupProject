@@ -20,7 +20,7 @@
                 {% if your_puzzles %}
                     {% for puzzle in your_puzzles %}
                         <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
-                            <strong>{{ puzzle.puzzle_name }}</strong>
+                            <strong>{{ puzzle.puzzle_name | unescape }}</strong>
                             <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
                             <span>Players Solved: {{ puzzle.number_players_solved }}</span>
                         </div>
@@ -39,7 +39,7 @@
                 {% if friend_puzzles %}
                     {% for puzzle in friend_puzzles %}
                         <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
-                            <strong>{{ puzzle.puzzle_name }}</strong>
+                            <strong>{{ puzzle.puzzle_name | unescape}}</strong>
                             <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
                             <span>Players Solved: {{ puzzle.number_players_solved }}</span>
                         </div>
@@ -58,7 +58,7 @@
                 {% if top_puzzles %}
                     {% for puzzle in top_puzzles %}
                         <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
-                            <strong>{{ puzzle.puzzle_name }}</strong>
+                            <strong>{{ puzzle.puzzle_name | unescape }}</strong>
                             <span>{{ puzzle.num_rows }}x{{ puzzle.num_columns }} Grid</span>
                             <span>Players Solved: {{ puzzle.number_players_solved }}</span>
                         </div>

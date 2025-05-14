@@ -7,6 +7,11 @@ from flask_login import login_user, login_required, logout_user, current_user
 from .models import Puzzle, Users, SolvedPuzzle
 from .verifySolution import verifySolution
 import math
+import html
+
+@app.template_filter('unescape')
+def unescape_filter(s):
+    return html.unescape(s)
 
 @app.route("/")
 def homePage():
@@ -202,7 +207,8 @@ def solvePuzzle(puzzleid):
                            puzzleParTime = puzzle.par_time_seconds,
                            puzzleDifficulty = puzzle.difficulty,
                            puzzleid = puzzleid,
-                           numSolved = puzzle.number_players_solved)
+                           numSolved = puzzle.number_players_solved,
+                           creatorUsername = Puzzle.query.get(puzzleid).creator.username)
 
 @app.route('/puzzle/new/<int:numRows>/<int:numCols>/')
 @app.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
@@ -218,7 +224,8 @@ def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
                            puzzleParTime = 0,
                            puzzleDifficulty = 0,
                            puzzleid = 0,
-                           numSolved = 0)
+                           numSolved = 0,
+                           creatorUsername = current_user.username)
 
 @app.route('/submit-puzzle', methods=['POST'])
 @login_required
