@@ -139,7 +139,7 @@ class SystemTests(unittest.TestCase):
         self.assertIn("Hello, 1", self.driver.page_source)
 
         # navigate to profile page
-        self.driver.get("http://127.0.0.1:5000/profile/5") # replace this with /profile/
+        self.driver.get("http://127.0.0.1:5000/profile") # replace this with /profile/
         time.sleep(1)
         createPuzzleBtn = self.driver.find_element(By.ID, "createBtn")
         createPuzzleBtn.click()
