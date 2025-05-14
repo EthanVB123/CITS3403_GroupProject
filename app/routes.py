@@ -114,8 +114,10 @@ def puzzleCreationLandingPage():
     return render_template('createPuzzle.html')
 
 @app.route('/friends/<username>')
+@login_required
 def displayFriendsPage(username):
-    return render_template("friends_page.html")
+    friends = current_user.friends.all()
+    return render_template("friends_page.html", friends=friends)
 
 @app.route('/puzzleselect')
 @login_required
@@ -291,3 +293,58 @@ def registerSolvedPuzzle():
         return jsonify({"redirect_url": url_for('userProfile', userid = userId)}), 200
     else:
         return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed
+
+@app.route('/add-friend', methods=['POST'])
+@login_required
+def add_friend():
+    data = request.get_json()
+    friend_username = data.get('username')
+    if not friend_username or friend_username == current_user.username:
+        return jsonify({'error': 'Invalid username'}), 400
+
+    friend = Users.query.filter_by(username=friend_username).first()
+    if not friend:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Check if already friends (one-way)
+    already_friend = Friends.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+    if already_friend:
+        return jsonify({'error': 'Already friends'}), 400
+
+    new_friend = Friends(user_id=current_user.id, friend_id=friend.id)
+    db.session.add(new_friend)
+    db.session.commit()
+    return jsonify({'success': True, 'username': friend.username}), 200
+
+@app.route('/search-users')
+@login_required
+def search_users():
+    query = request.args.get('q', '')
+    if not query:
+        return jsonify([])
+
+    # Exclude current user and already-friends
+    already_friends_ids = [f.id for f in current_user.friends]
+    users = Users.query.filter(
+        Users.username.ilike(f"%{query}%"),
+        Users.id != current_user.id,
+        ~Users.id.in_(already_friends_ids)
+    ).limit(10).all()
+    return jsonify([u.username for u in users])
+
+@app.route('/remove-friend', methods=['POST'])
+@login_required
+def remove_friend():
+    data = request.get_json()
+    friend_username = data.get('username')
+    friend = Users.query.filter_by(username=friend_username).first()
+    if not friend:
+        return jsonify({'error': 'User not found'}), 404
+
+    link = Friends.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+    if not link:
+        return jsonify({'error': 'Not friends'}), 400
+
+    db.session.delete(link)
+    db.session.commit()
+    return jsonify({'success': True}), 200
