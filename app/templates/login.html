@@ -11,14 +11,15 @@
   <div class="login-box">
     <h2>Player Login</h2>
     <form method="POST" action="{{ url_for('main.loginPage') }}" id="loginForm">
+      {{ form.csrf_token }}
       <div class="input-group">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" required />
+        {{ form.username.label }}
+        {{ form.username(id="username", required=True) }}
       </div>
 
       <div class="password-box">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required />
+        {{ form.password.label }}
+        {{ form.password(id="password", required=True) }}
       </div>
 
       <button id="loginBtn" type="submit" class="login-button">Login</button>
@@ -27,7 +28,12 @@
       {% if error %}
         <p id="error" class="error">{{ error }}</p>
       {% endif %}
-      <button id="registerBtn" type="button" class="register" onclick="location.href='/register'">Register</button>
+      {% for field, errors in form.errors.items() %}
+        {% for error in errors %}
+          <p class="error">{{ error }}</p>
+        {% endfor %}
+      {% endfor %}
+      <button id="registerBtn" type="button" class="register" onclick="location.href='/register'">Register</button>    
     </form>
   </div>
 

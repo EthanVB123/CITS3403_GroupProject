@@ -5,6 +5,7 @@ from .models import Puzzle, Users, Friends
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import Puzzle, Users, SolvedPuzzle
 from .verifySolution import verifySolution
+from .forms import LoginForm, RegisterForm
 import math
 import html
 
@@ -13,29 +14,36 @@ def unescape_filter(s):
     return html.unescape(s)
 
 main = Blueprint('main', __name__)
-
 @main.route("/")
 def homePage():
     return render_template('homePage.html')
 
 @main.route("/login", methods=['GET', 'POST'])
 def loginPage():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
 
         user = Users.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('main.userProfile', userid = user.id))
+
         # if invalid credentials
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             # 401 since this is an authentication error
             return jsonify({ 'error': 'Invalid username or password' }), 401
         # used as a fallback
-        return render_template('login.html', error='Invalid username or password')
+        return render_template('login.html', form=form, error='Invalid username or password')
     
-    return render_template('login.html')
+    # If there are validation errors and this is an AJAX request
+    if form.errors and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Get the first error message
+        error_msg = next(iter(form.errors.values()))[0]
+        return jsonify({'error': error_msg}), 400
+        
+    return render_template('login.html', form=form)
 
 @main.route("/logout")
 @login_required
@@ -45,27 +53,25 @@ def logoutPage():
 
 @main.route("/register", methods=['GET', 'POST'])
 def registerPage():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        # check if username already exists
-        existing_user = Users.query.filter_by(username=username).first()
-        if existing_user:
-            # if username already exists
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                # 400 since this is a client error
-                return jsonify({ 'error': 'Username already exists' }), 400
-            # used as a fallback
-            return render_template('register.html', error='Username already exists')
+    form = RegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
         
+        # Create new user
         user = Users(username=username)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('main.loginPage'))
     
-    return render_template('register.html')
+    # If there are validation errors and this is an AJAX request
+    if form.errors and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Get the first error message
+        error_msg = next(iter(form.errors.values()))[0]
+        return jsonify({'error': error_msg}), 400
+        
+    return render_template('register.html', form=form)
 
 @main.route("/profile")
 @main.route("/profile/<int:userid>")
