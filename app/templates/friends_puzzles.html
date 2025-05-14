@@ -17,84 +17,18 @@ style="background-color: #f9f9f9; background-image: linear-gradient(to right, rg
   </header>
 
   <section class="puzzle-section">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="1">
-        <h2 class="text-lg font-bold mb-1">John's Puzzle</h2>
-        <p class="text-blue-600 text-sm">5×5 Grid</p>
-        <p class="text-sm">Plays: 10</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="2">
-        <h2 class="text-lg font-bold mb-1">Jack's Puzzle</h2>
-        <p class="text-blue-600 text-sm">6×6 Grid</p>
-        <p class="text-sm">Plays: 15</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="3">
-        <h2 class="text-lg font-bold mb-1">Sarah's Puzzle</h2>
-        <p class="text-blue-600 text-sm">7×7 Grid</p>
-        <p class="text-sm">Plays: 20</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="4">
-        <h2 class="text-lg font-bold mb-1">Cena's Puzzle</h2>
-        <p class="text-blue-600 text-sm">8×8 Grid</p>
-        <p class="text-sm">Plays: 25</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-
-    
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="5">
-        <h2 class="text-lg font-bold mb-1">Jeff's Puzzle</h2>
-        <p class="text-blue-600 text-sm">9×9 Grid</p>
-        <p class="text-sm">Plays: 30</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="6">
-        <h2 class="text-lg font-bold mb-1">Clash's Puzzle</h2>
-        <p class="text-blue-600 text-sm">10×10 Grid</p>
-        <p class="text-sm">Plays: 35</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="7">
-        <h2 class="text-lg font-bold mb-1">Destroyer's Puzzle</h2>
-        <p class="text-blue-600 text-sm">11×11 Grid</p>
-        <p class="text-sm">Plays: 40</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-     
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="8">
-        <h2 class="text-lg font-bold mb-1">Hey's Puzzle</h2>
-        <p class="text-blue-600 text-sm">12×12 Grid</p>
-        <p class="text-sm">Plays: 45</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="9">
-        <h2 class="text-lg font-bold mb-1">Light's Puzzle</h2>
-        <p class="text-blue-600 text-sm">13×13 Grid</p>
-        <p class="text-sm">Plays: 50</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
-
-
-      <div class="bg-white rounded-xl shadow-md p-4 border" data-puzzle-id="10">
-        <h2 class="text-lg font-bold mb-1">John's Second Puzzle</h2>
-        <p class="text-blue-600 text-sm">14×14 Grid</p>
-        <p class="text-sm">Plays: 55</p>
-        <p class="text-sm">Created: Apr 20, 2025</p>
-      </div>
+    <div class="puzzle-grid">
+      {% if friend_puzzles %}
+        {% for puzzle in friend_puzzles %}
+          <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
+            <strong>{{ puzzle.puzzle_name }}</strong>
+            <span>{{ puzzle.num_rows }}×{{ puzzle.num_columns }} Grid</span>
+            <span>Players Solved: {{ puzzle.number_players_solved }}</span>
+          </div>
+        {% endfor %}
+      {% else %}
+        <strong>No puzzles from friends yet.</strong>
+      {% endif %}
     </div>
   </section>
   <script src="{{ url_for('static', filename='puzzle_select.js') }}"></script>

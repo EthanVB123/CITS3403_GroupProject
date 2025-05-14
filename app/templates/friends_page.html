@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Friends Page</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='friends_page.css') }}">
-        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="min-h-screen bg-white text-black font-sans flex justify-center items-center" 
     style="background-color: #f9f9f9; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
@@ -20,29 +19,16 @@
                 <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm" id="add-friend-btn">Add Friend</button>
                 <p id="message" class="message"></p>
             </div>
-            <h3 class= "text-2xl font-bold text-black mb-6 mt-4"> Your Friends</h3>
-            <div class="text-white text-lg mb-4" id="friends-section">
-                <div class="border border-gray-200 rounded-xl p-4" onclick="toggleFriendDetails(this)">
-                    <h3 class="text-lg text-black font-bold">Ryan</h3>
-                    <p class="text-sm text-black font-bold">@ryankoo</p>
-                    <p class="text-sm text-black font-bold">Puzzles Built: 0</p>
-                    <p class="text-sm text-black font-bold">Friends: 0</p>
-                    <button class="text-blue-600 font-medium hover:underline mt-2" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
+            <h3>Your Friends</h3>
+            <div id="friends-section">
+                {% for friend in friends %}
+                <div class="friend-card" onclick="toggleFriendDetails(this)">
+                    <h3 class="friend-name">{{ friend.username }}</h3>
+                    <p class="friend-username">@{{ friend.username }}</p>
+                    <p class="puzzle-score">Puzzle Score: {{ friend.userScore }}</p>
+                    <button class="remove-friend-btn" onclick="removeFriend(this, '{{ friend.username }}'); event.stopPropagation();">Remove Friend</button>
                 </div>
-                <div class="border border-gray-200 rounded-xl p-4" onclick="toggleFriendDetails(this)">
-                    <h3 class="text-lg text-black font-bold">Elizabeth</h3>
-                    <p class="text-sm text-black font-bold">@elizabethshibu</p>
-                    <p class="text-sm text-black font-bold">Puzzles Built: 0</p>
-                    <p class="text-sm text-black font-bold">Friends: 0</p>
-                    <button class="text-blue-600 font-medium hover:underline mt-2" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
-                </div>
-                <div class="border border-gray-200 rounded-xl p-4" onclick="toggleFriendDetails(this)">
-                    <h3 class="text-lg text-black font-bold">Ethan</h3>
-                    <p class="text-sm text-black font-bold">@ethanvanbruchem</p>
-                    <p class="text-sm text-black font-bold">Puzzles Built: 0</p>
-                    <p class="text-sm text-black font-bold">Friends: 0</p>
-                    <button class="text-blue-600 font-medium hover:underline mt-2" onclick="removeFriend(this); event.stopPropagation();">Remove Friend</button>
-                </div>
+                {% endfor %}
             </div>
         </div>
         <script src="{{ url_for('static', filename='friends_page.js') }}"></script>

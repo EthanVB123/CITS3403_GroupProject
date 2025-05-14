@@ -3,6 +3,11 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import CheckConstraint
 
+class Friends(db.Model):
+    __tablename__ = 'friends'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    friend_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+
 class Users(UserMixin, db.Model):
     __tablename__ = 'users'
 
@@ -11,17 +16,20 @@ class Users(UserMixin, db.Model):
     passwordHash = db.Column(db.String(256), nullable=False)
     userScore = db.Column(db.Integer, nullable=False, default=0)
 
+    friends = db.relationship(
+        'Users',
+        secondary='friends',
+        primaryjoin=(Friends.user_id == id),
+        secondaryjoin=(Friends.friend_id == id),
+        backref='friended_by',
+        lazy='dynamic'
+    )
+
     def set_password(self, password):
         self.passwordHash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.passwordHash, password)
-
-
-class Friends(db.Model):
-    __tablename__ = 'friends'
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    friend_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
 
 
 class Puzzle(db.Model):
