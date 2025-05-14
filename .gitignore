@@ -2,7 +2,6 @@
 env/
 app/__pycache__/
 .venv/
-app/config.py
 app/puzzles.db
 .DS_Store
 app/tests/__pycache__/

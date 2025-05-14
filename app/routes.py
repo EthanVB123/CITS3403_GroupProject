@@ -1,5 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify, abort, render_template_string
-from . import app
+from flask import render_template, request, redirect, url_for, jsonify, abort, Blueprint, render_template_string
 import json
 from . import db
 from .models import Puzzle, Users, Friends
@@ -14,12 +13,12 @@ import html
 def unescape_filter(s):
     return html.unescape(s)
 
-
-@app.route("/")
+main = Blueprint('main', __name__)
+@main.route("/")
 def homePage():
     return render_template('homePage.html')
 
-@app.route("/login", methods=['GET', 'POST'])
+@main.route("/login", methods=['GET', 'POST'])
 def loginPage():
     form = LoginForm()
     if form.validate_on_submit():
@@ -29,8 +28,8 @@ def loginPage():
         user = Users.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('userProfile', userid=user.id))
-        
+            return redirect(url_for('main.userProfile', userid = user.id))
+
         # if invalid credentials
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             # 401 since this is an authentication error
@@ -46,13 +45,13 @@ def loginPage():
         
     return render_template('login.html', form=form)
 
-@app.route("/logout")
+@main.route("/logout")
 @login_required
 def logoutPage():
     logout_user()
-    return redirect(url_for('loginPage'))
+    return redirect(url_for('main.loginPage'))
 
-@app.route("/register", methods=['GET', 'POST'])
+@main.route("/register", methods=['GET', 'POST'])
 def registerPage():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -64,7 +63,7 @@ def registerPage():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('loginPage'))
+        return redirect(url_for('main.loginPage'))
     
     # If there are validation errors and this is an AJAX request
     if form.errors and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -74,9 +73,12 @@ def registerPage():
         
     return render_template('register.html', form=form)
 
-@app.route("/profile/<int:userid>")
+@main.route("/profile")
+@main.route("/profile/<int:userid>")
 @login_required
-def userProfile(userid):
+def userProfile(userid=None):
+    if userid == None:
+        userid = current_user.id
     # only allow people to view their own profile (or drop this check to let
     # users view each other’s pages)
     if userid != current_user.id:
@@ -100,7 +102,7 @@ def userProfile(userid):
                 </noscript>
             </body>
             </html>
-        """, url=url_for('userProfile', userid=current_user.id))
+        """, url=url_for('main.userProfile', userid=current_user.id))
 
     user = Users.query.get_or_404(userid)
     solved_count = SolvedPuzzle.query.filter_by(user_id=userid).count()
@@ -117,27 +119,27 @@ def userProfile(userid):
         solved_count=solved_count,
         friend_ranking=friend_ranking)
 
-@app.route('/newpuzzle')
+@main.route('/newpuzzle')
 def puzzleCreationLandingPage():
     return render_template('createPuzzle.html')
 
-@app.route('/friends/<username>')
+@main.route('/friends/<username>')
 @login_required
 def displayFriendsPage(username):
     friends = current_user.friends.all()
     return render_template("friends_page.html", friends=friends)
 
-@app.route('/puzzleselect')
+
+@main.route('/puzzleselect')
 @login_required
 def puzzleSelect():
     your_puzzles = Puzzle.query.filter_by(creator_id=current_user.id).limit(3).all()
     friend_ids = [friend.id for friend in current_user.friends.all()]
     friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friend_ids)).limit(3).all()
     top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(3).all()
-
     return render_template('puzzle_select.html', your_puzzles=your_puzzles, friend_puzzles=friend_puzzles, top_puzzles=top_puzzles)
 
-@app.route('/puzzleselect/<int:userid>')
+@main.route('/puzzleselect/<int:userid>')
 @login_required
 def puzzleSelectFromUser(userid):
     if userid != current_user.id:
@@ -164,7 +166,7 @@ def puzzleSelectFromUser(userid):
     your_puzzles = Puzzle.query.filter_by(creator_id=userid).all()
     return render_template('your_puzzles.html', your_puzzles=your_puzzles)
 
-@app.route('/puzzleselect/<int:user_id>/friends/')
+@main.route('/puzzleselect/<int:user_id>/friends/')
 @login_required
 def puzzleSelectFromFriends(user_id):
     if user_id != current_user.id:
@@ -192,17 +194,17 @@ def puzzleSelectFromFriends(user_id):
     friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friends_ids)).all()
     return render_template('friends_puzzles.html', friend_puzzles=friend_puzzles)
 
-@app.route('/puzzleselect/toppuzzles')
+@main.route('/puzzleselect/toppuzzles')
 def puzzleSelectFromTopPuzzles():
     top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(10).all()
     return render_template('top_puzzles.html', top_puzzles=top_puzzles)
 
 # Will not be the top_puzzles.html file, can make new files for each difficulty
-@app.route('/puzzleselect/difficulty/<difficulty>')
+@main.route('/puzzleselect/difficulty/<difficulty>')
 def puzzleSelectFromDifficulty(difficulty):
     return render_template('top_puzzles.html') # adapt to make dynamic on difficulty
 
-@app.route('/puzzle/<int:puzzleid>')
+@main.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
     puzzle = Puzzle.query.get(puzzleid)
     print(puzzle)
@@ -220,8 +222,8 @@ def solvePuzzle(puzzleid):
                            numSolved = puzzle.number_players_solved,
                            creatorUsername = Puzzle.query.get(puzzleid).creator.username)
 
-@app.route('/puzzle/new/<int:numRows>/<int:numCols>/')
-@app.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
+@main.route('/puzzle/new/<int:numRows>/<int:numCols>/')
+@main.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
 def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
     startingRowClues = [[0] for i in range(numRows)]
     startingColClues = [[0] for i in range(numCols)]
@@ -237,7 +239,7 @@ def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
                            numSolved = 0,
                            creatorUsername = current_user.username)
 
-@app.route('/submit-puzzle', methods=['POST'])
+@main.route('/submit-puzzle', methods=['POST'])
 @login_required
 def submitPuzzle():
     data = request.get_json()
@@ -263,9 +265,9 @@ def submitPuzzle():
     print(puzzle)
     db.session.add(puzzle)
     db.session.commit()
-    return redirect(url_for('solvePuzzle', puzzleid = puzzle.puzzle_id), code=303)
+    return redirect(url_for('main.solvePuzzle', puzzleid = puzzle.puzzle_id), code=303)
 
-@app.route('/register-solved-puzzle', methods=['POST'])
+@main.route('/register-solved-puzzle', methods=['POST'])
 @login_required
 def registerSolvedPuzzle():
     data = request.get_json()
@@ -277,7 +279,6 @@ def registerSolvedPuzzle():
     rowClues = puzzleObj.row_clues
     colClues = puzzleObj.column_clues
     if (puzzleObj is not None and current_user is not None and verifySolution(rowClues, colClues, shadedCells)):
-        print('Solution accepted!')
         # note that score is  accuracy (out of 100) * difficulty (a small integer)
         previousBestAttempt = SolvedPuzzle.query.get((userId, puzzleId))
         if (previousBestAttempt is not None): # if user already solved this one
@@ -297,8 +298,8 @@ def registerSolvedPuzzle():
             current_user.userScore += puzzleObj.difficulty * new_accuracy
             db.session.commit()
         
-        print(url_for('userProfile', userid = userId))
-        return jsonify({"redirect_url": url_for('userProfile', userid = userId)}), 200
+        print(url_for('main.userProfile', userid = userId))
+        return jsonify({"redirect_url": url_for('main.userProfile', userid = userId)}), 200
     else:
         return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed
 

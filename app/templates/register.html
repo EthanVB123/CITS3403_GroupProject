@@ -10,7 +10,7 @@
 <body>
   <div class="register-page">
     <h2>Register to create an account</h2>
-    <form method="post" action="{{ url_for('registerPage') }}" id="Registerdata">
+    <form method="post" action="{{ url_for('main.registerPage') }}" id="Registerdata">
       {{ form.csrf_token }}
       <div class="rinput-group">
         {{ form.username.label }}
