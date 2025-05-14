@@ -35,8 +35,8 @@
                 <div id="stats" class="w-full h-full border-black-900 p-10 rounded-3xl grid grid-rows-[1fr_1fr]" style="background-color: rgba(255, 255, 25, 0.1);">
                     <div class="h-full w-full">
                         <div class="w-full text-center text-sm">Puzzle #{{puzzleid}}</div>
-                        <div class="w-full text-center text-2xl">{{ puzzleName }}</div>
-                        <div class="w-full text-center text-xl">Created by: Ethan VB</div>
+                        <div class="w-full text-center text-2xl">{{ puzzleName | unescape }}</div>
+                        <div class="w-full text-center text-xl">Created by: {{creatorUsername | unescape}}</div>
                         <div class="w-full text-center text-xl">{{ puzzleSize[0] }}x{{ puzzleSize[1] }} {% if puzzleDifficulty <= 3 %} Easy {% elif puzzleDifficulty <= 7 %} Medium {% else %} Hard {% endif %} ({{puzzleDifficulty}})</div>
                         <div class="w-full text-center text-xl">{{numSolved}} solved</div>
                     </div>

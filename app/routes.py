@@ -6,6 +6,11 @@ from flask_login import login_user, login_required, logout_user, current_user
 from .models import Puzzle, Users, SolvedPuzzle
 from .verifySolution import verifySolution
 import math
+import html
+
+@app.template_filter('unescape')
+def unescape_filter(s):
+    return html.unescape(s)
 
 main = Blueprint('main', __name__)
 
@@ -113,24 +118,80 @@ def puzzleCreationLandingPage():
     return render_template('createPuzzle.html')
 
 @main.route('/friends/<username>')
+@login_required
 def displayFriendsPage(username):
-    return render_template("friends_page.html")
+    friends = current_user.friends.all()
+    return render_template("friends_page.html", friends=friends)
+
 
 @main.route('/puzzleselect')
+@login_required
 def puzzleSelect():
-    return render_template('puzzle_select.html')
+    your_puzzles = Puzzle.query.filter_by(creator_id=current_user.id).limit(3).all()
+    friend_ids = [friend.id for friend in current_user.friends.all()]
+    friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friend_ids)).limit(3).all()
+    top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(3).all()
+    return render_template('puzzle_select.html', your_puzzles=your_puzzles, friend_puzzles=friend_puzzles, top_puzzles=top_puzzles)
 
-@main.route('/puzzleselect/<username>')
-def puzzleSelectFromUser(username):
-    return render_template('your_puzzles.html') # adapt to make dynamic on username
+@main.route('/puzzleselect/<int:userid>')
+@login_required
+def puzzleSelectFromUser(userid):
+    if userid != current_user.id:
+        return render_template_string("""
+        <!doctype html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <title>Redirecting…</title>
+        </head>
+        <body onload="
+            alert('Access denied. Redirecting you to your puzzles...');
+            window.location.href='{{ url }}';
+        ">
+            <!-- If JS is disabled, show a link instead -->
+            <noscript>
+                <p>Access denied. Redirecting you to your puzzles...
+                If you are not redirected, <a href="{{ url }}">click here</a>.
+                </p>
+            </noscript>
+        </body>
+        </html>
+    """, url=url_for('puzzleSelectFromUser', userid=current_user.id))
+    your_puzzles = Puzzle.query.filter_by(creator_id=userid).all()
+    return render_template('your_puzzles.html', your_puzzles=your_puzzles)
 
-@main.route('/puzzleselect/friends/<username>')
-def puzzleSelectFromFriends(username):
-    return render_template('friends_puzzles.html')
+@main.route('/puzzleselect/<int:user_id>/friends/')
+@login_required
+def puzzleSelectFromFriends(user_id):
+    if user_id != current_user.id:
+        return render_template_string("""
+        <!doctype html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <title>Redirecting…</title>
+        </head>
+        <body onload="
+            alert('Access denied. Redirecting you to your friends puzzles...');
+            window.location.href='{{ url }}';
+        ">
+            <!-- If JS is disabled, show a link instead -->
+            <noscript>
+                <p>Access denied. Redirecting you to your friends puzzles...
+                If you are not redirected, <a href="{{ url }}">click here</a>.
+                </p>
+            </noscript>
+        </body>
+        </html>
+    """, url=url_for('puzzleSelectFromFriends', user_id=current_user.id))
+    friends_ids = [friend.id for friend in current_user.friends.all()]
+    friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friends_ids)).all()
+    return render_template('friends_puzzles.html', friend_puzzles=friend_puzzles)
 
 @main.route('/puzzleselect/toppuzzles')
 def puzzleSelectFromTopPuzzles():
-    return render_template('top_puzzles.html')
+    top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(10).all()
+    return render_template('top_puzzles.html', top_puzzles=top_puzzles)
 
 # Will not be the top_puzzles.html file, can make new files for each difficulty
 @main.route('/puzzleselect/difficulty/<difficulty>')
@@ -152,7 +213,8 @@ def solvePuzzle(puzzleid):
                            puzzleParTime = puzzle.par_time_seconds,
                            puzzleDifficulty = puzzle.difficulty,
                            puzzleid = puzzleid,
-                           numSolved = puzzle.number_players_solved)
+                           numSolved = puzzle.number_players_solved,
+                           creatorUsername = Puzzle.query.get(puzzleid).creator.username)
 
 @main.route('/puzzle/new/<int:numRows>/<int:numCols>/')
 @main.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
@@ -168,7 +230,8 @@ def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
                            puzzleParTime = 0,
                            puzzleDifficulty = 0,
                            puzzleid = 0,
-                           numSolved = 0)
+                           numSolved = 0,
+                           creatorUsername = current_user.username)
 
 @main.route('/submit-puzzle', methods=['POST'])
 @login_required
@@ -225,6 +288,7 @@ def registerSolvedPuzzle():
                 accuracy = new_accuracy
             )
             db.session.add(savedAttempt)
+            puzzleObj.number_players_solved += 1
             current_user.userScore += puzzleObj.difficulty * new_accuracy
             db.session.commit()
         
@@ -232,3 +296,58 @@ def registerSolvedPuzzle():
         return jsonify({"redirect_url": url_for('main.userProfile', userid = userId)}), 200
     else:
         return jsonify({"error": "Failed to solve."}), 400 # maybe make this more detailed
+
+@app.route('/add-friend', methods=['POST'])
+@login_required
+def add_friend():
+    data = request.get_json()
+    friend_username = data.get('username')
+    if not friend_username or friend_username == current_user.username:
+        return jsonify({'error': 'Invalid username'}), 400
+
+    friend = Users.query.filter_by(username=friend_username).first()
+    if not friend:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Check if already friends (one-way)
+    already_friend = Friends.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+    if already_friend:
+        return jsonify({'error': 'Already friends'}), 400
+
+    new_friend = Friends(user_id=current_user.id, friend_id=friend.id)
+    db.session.add(new_friend)
+    db.session.commit()
+    return jsonify({'success': True, 'username': friend.username}), 200
+
+@app.route('/search-users')
+@login_required
+def search_users():
+    query = request.args.get('q', '')
+    if not query:
+        return jsonify([])
+
+    # Exclude current user and already-friends
+    already_friends_ids = [f.id for f in current_user.friends]
+    users = Users.query.filter(
+        Users.username.ilike(f"%{query}%"),
+        Users.id != current_user.id,
+        ~Users.id.in_(already_friends_ids)
+    ).limit(10).all()
+    return jsonify([u.username for u in users])
+
+@app.route('/remove-friend', methods=['POST'])
+@login_required
+def remove_friend():
+    data = request.get_json()
+    friend_username = data.get('username')
+    friend = Users.query.filter_by(username=friend_username).first()
+    if not friend:
+        return jsonify({'error': 'User not found'}), 404
+
+    link = Friends.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+    if not link:
+        return jsonify({'error': 'Not friends'}), 400
+
+    db.session.delete(link)
+    db.session.commit()
+    return jsonify({'success': True}), 200
