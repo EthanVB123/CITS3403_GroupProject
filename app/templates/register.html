@@ -11,28 +11,31 @@
   <div class="register-page">
     <h2>Register to create an account</h2>
     <form method="post" action="{{ url_for('registerPage') }}" id="Registerdata">
+      {{ form.csrf_token }}
       <div class="rinput-group">
-        <label for="username">Create a Username</label>
-        <input type="text" name="username" id="username" required />
+        {{ form.username.label }}
+        {{ form.username(id="username", required=True) }}
       </div>
 
       <div class="rpassword-box">
-        <label for="password">Create a Password</label>
-        <input type="password" name="password" id="password" required />
+        {{ form.password.label }}
+        {{ form.password(id="password", required=True) }}
       </div>
 
       <div class="email-box">
-        <label for="email">Enter your email</label>
-        <input type="email" name="email" id="email" required />
+        {{ form.email.label }}
+        {{ form.email(id="email", required=True) }}
       </div>
 
       <div id="errorRgst" class="error-Rgst" style="display:none;"></div>
 
       <button type="submit" class="register-button">Register</button>
-      <!-- used as a fallback -->
-      {% if error %}
-        <p class="error">{{ error }}</p>
-      {% endif %}
+      <!-- form validation errors -->
+      {% for field, errors in form.errors.items() %}
+        {% for error in errors %}
+          <p class="error">{{ error }}</p>
+        {% endfor %}
+      {% endfor %}
 
     </form>
 
