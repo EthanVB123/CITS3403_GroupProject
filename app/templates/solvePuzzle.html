@@ -1,68 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wild Puzzles</title>
-    <!-- <link rel="stylesheet" href="puzzleStyles.css"> don't need this anymore -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wild Puzzles</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- gets the puzzle to be solved from the server -->
-    <script>
-        // this variable will be referenced in solvePuzzle.js to generate the puzzle
-        const requestedPuzzle = {role: "{{role}}",puzzleSize: {{puzzleSize}},rowClues: {{rowClues}},
-        columnClues: {{colClues}},puzzleName: "{{puzzleName}}", parTime: {{puzzleParTime}},
-        difficulty: {{puzzleDifficulty}}, puzzleid: {{puzzleid}}, numSolved: {{numSolved}}}
-        console.log(requestedPuzzle)
-    </script>
-    <!-- runs the actual client-side code -->
-    <script src="{{ url_for('static', filename='solvePuzzle.js') }}"></script>
+  <!-- gets the puzzle to be solved from the server -->
+  <script>
+    const requestedPuzzle = {
+      role: "{{role}}",
+      puzzleSize: {{puzzleSize}},
+      rowClues: {{rowClues}},
+      columnClues: {{colClues}},
+      puzzleName: "{{puzzleName}}",
+      parTime: {{puzzleParTime}},
+      difficulty: {{puzzleDifficulty}},
+      puzzleid: {{puzzleid}},
+      numSolved: {{numSolved}}
+    }
+    console.log(requestedPuzzle)
+  </script>
+
+  <script src="{{ url_for('static', filename='solvePuzzle.js') }}"></script>
 </head>
-<body class="min-h-screen text-black font-sans"
-      style="background-color: #f9f9f9; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;"+>
-    <div id="page" class="grid grid-rows-[1fr_8fr_1fr] h-full">
-  <header class="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center">
-  <h1 class="text-xl font-bold text-gray-800">Wild Puzzles</h1>
-  <div class="text-sm">
-                {% if current_user.is_authenticated %}
-                    Hello, {{ current_user.username }} |
-                   <span class="text-gray-700 mr-4">Hello, {{ current_user.username }}</span>
-          <button onclick="location.href='/logout'" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">Logout</button>
-        {% else %}
-          <button onclick="location.href='/login'" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">Sign In</button>
-        {% endif %}
-      </div>
-    </header>
-        <main class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] w-full gap-6 p-6">
-            <aside id="sidebar" class="bg-white p-6 rounded-xl shadow-md">
-                 <div class="space-y-4">
-                    <div class="text-center">
-                        <div class="text-sm text-gray-600">Puzzle #{{puzzleid}}</div>
-                        <div class="text-2xl font-bold">{{ puzzleName | unescape }}</div>
-                        <div class="text-lg">Created by: {{creatorUsername | unescape}}</div>
-                        <div class="text-lg">{{ puzzleSize[0] }}x{{ puzzleSize[1] }} {% if puzzleDifficulty <= 3 %} Easy {% elif puzzleDifficulty <= 7 %} Medium {% else %} Hard {% endif %} ({{puzzleDifficulty}})</div>
-                        <div class="text-lg">{{numSolved}} solved</div>
-                    </div>
-                    <div class="text-center space-y-2">
-                        <div id="timer" class="text-5xl font-mono">00:00</div>
-                        <div>Par Time: {{puzzleParTime}}</div>
-                        <div>Accuracy Score: 100%</div>
-                        <div id="progress" class="text-sky-800 font-bold">Progress 0/25 (0%)</div> <!-- text-rose-500 error, emerald-500 success, sky-800 incomplete -->
-                        {% if role == "editor" %}
-                        <button id="export" onclick="exportPuzzle()" class="w-full bg-sky-400 text-white font-semibold py-2 rounded hover:bg-sky-500">Export Puzzle</button>
-                        {% else %}
-                        <button id="submit" onclick="submitPuzzle()" class="w-full bg-sky-400 text-white font-semibold py-2 rounded hover:bg-sky-500">Submit Solution</button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 bg-white rounded-xl shadow-md" id="puzzle">
-                <!-- will be filled dynamically by solvePuzzle.js on load -->
-            </div>
-        </div>
-          <footer class="text-center py-4 text-sm text-gray-500">
 
-        </div>
+<body class="min-h-screen text-black font-sans"
+      style="background-color: #f9f9f9;
+             background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+                               linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+             background-size: 40px 40px;">
+
+  <!-- ✅ New Header -->
+  <header class="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold text-gray-800">Wild Puzzles</h1>
     </div>
+
+    <div class="flex items-center gap-4 text-sm">
+      {% if current_user.is_authenticated %}
+        <button onclick="location.href='{{ url_for('userProfile', userid=current_user.id) }}'" class="text-blue-600 hover:underline font-semibold">Profile</button>
+        <button onclick="location.href='/logout'" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">Logout</button>
+      {% else %}
+        <button onclick="location.href='/login'" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">Sign In</button>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- ✅ Main Puzzle Content -->
+  <main class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] w-full gap-6 p-6">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white p-6 rounded-xl shadow-md">
+      <div class="space-y-4">
+        <div class="text-center">
+          <div class="text-sm text-gray-600">Puzzle #{{puzzleid}}</div>
+          <div class="text-2xl font-bold">{{ puzzleName | unescape }}</div>
+          <div class="text-lg">Created by: {{creatorUsername | unescape}}</div>
+          <div class="text-lg">{{ puzzleSize[0] }}x{{ puzzleSize[1] }}
+            {% if puzzleDifficulty <= 3 %} Easy
+            {% elif puzzleDifficulty <= 7 %} Medium
+            {% else %} Hard
+            {% endif %}
+            ({{puzzleDifficulty}})
+          </div>
+          <div class="text-lg">{{numSolved}} solved</div>
+        </div>
+
+        <div class="text-center space-y-2">
+          <div id="timer" class="text-5xl font-mono">00:00</div>
+          <div>Par Time: {{puzzleParTime}}</div>
+          <div>Accuracy Score: 100%</div>
+          <div id="progress" class="text-sky-800 font-bold">Progress 0/25 (0%)</div>
+
+          {% if role == "editor" %}
+            <button id="export" onclick="exportPuzzle()" class="w-full bg-sky-400 text-white font-semibold py-2 rounded hover:bg-sky-500">Export Puzzle</button>
+          {% else %}
+            <button id="submit" onclick="submitPuzzle()" class="w-full bg-sky-400 text-white font-semibold py-2 rounded hover:bg-sky-500">Submit Solution</button>
+          {% endif %}
+        </div>
+      </div>
+    </aside>
+
+    <!-- Puzzle grid display -->
+    <div class="p-4 bg-white rounded-xl shadow-md" id="puzzle">
+      <!-- Puzzle JS will populate here -->
+    </div>
+  </main>
+
+  <footer class="text-center py-4 text-sm text-gray-500">
+    <!-- Optional footer content -->
+  </footer>
+
 </body>
 </html>
+

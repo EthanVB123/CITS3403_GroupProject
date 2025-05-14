@@ -9,9 +9,15 @@
     <body class="min-h-screen bg-white text-black font-sans flex justify-center items-center" 
     style="background-color: #f9f9f9; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
         
-      <header class="absolute top-6 left-6">
+     <header class="flex justify-between items-center w-full px-6 py-4">
+  <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto" />
+  <div class="flex gap-4">
+    <button onclick="location.href='/personprofile'" class="text-sm font-semibold text-blue-600 hover:underline">Profile</button>
+    <button onclick="location.href='/logout'" class="text-sm font-semibold text-red-600 hover:underline">Logout</button>
+  </div>
+</header>
         <h1 class="text-3xl font-bold text-gray-800">Friends</h1>
-      </header>
+      
       
         <div class="bg-white p-10 text-white rounded-xl w-[90%] max-w-2xl shadow-xl" id="container">
             <div class="flex gap-2 mb-6 mt-4">
