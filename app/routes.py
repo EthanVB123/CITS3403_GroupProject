@@ -1,12 +1,14 @@
-from flask import render_template, request, redirect, url_for, jsonify, abort
+from flask import render_template, request, redirect, url_for, jsonify, abort, render_template_string
 from . import app
 import json
 from . import db
-from .models import Puzzle, Users
+from .models import Puzzle, Users, Friends
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import Puzzle, Users, SolvedPuzzle
 from .verifySolution import verifySolution
 from .forms import LoginForm, RegisterForm
+import math
+
 
 @app.route("/")
 def homePage():
@@ -73,13 +75,42 @@ def userProfile(userid):
     # only allow people to view their own profile (or drop this check to let
     # users view each other’s pages)
     if userid != current_user.id:
-        return abort(403)
+        if not current_user.friends.filter_by(id=userid).first():
+            return render_template_string("""
+            <!doctype html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <title>Redirecting…</title>
+            </head>
+            <body onload="
+                alert('You do not have access to that profile. Redirecting to your own profile.');
+                window.location.href='{{ url }}';
+            ">
+                <!-- If JS is disabled, show a link instead -->
+                <noscript>
+                    <p>You do not have access to that profile.
+                    <a href="{{ url }}">Click here</a> to go to your own profile.
+                    </p>
+                </noscript>
+            </body>
+            </html>
+        """, url=url_for('userProfile', userid=current_user.id))
 
     user = Users.query.get_or_404(userid)
     solved_count = SolvedPuzzle.query.filter_by(user_id=userid).count()
+    friends = user.friends.all()
+    total_friends = len(friends)
+    if total_friends > 0:
+        higher = sum(1 for f in friends if f.userScore > user.userScore)
+        rank = higher + 1
+        friend_ranking = f"#{rank} out of {total_friends + 1}"
+    else:
+        friend_ranking = "No friends yet"
     return render_template('personprofile.html',
         user=user,
-        solved_count=solved_count)
+        solved_count=solved_count,
+        friend_ranking=friend_ranking)
 
 @app.route('/newpuzzle')
 def puzzleCreationLandingPage():
@@ -144,6 +175,7 @@ def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
                            numSolved = 0)
 
 @app.route('/submit-puzzle', methods=['POST'])
+@login_required
 def submitPuzzle():
     data = request.get_json()
     puzzleSize = data.get('puzzleSize')
@@ -163,30 +195,31 @@ def submitPuzzle():
                     number_players_solved = 0,
                     puzzle_name = data.get('puzzleName'),
                     par_time_seconds = 60,
-                    difficulty = 1)
+                    difficulty = math.ceil(len(rowClues)*len(colClues) / 10),
+                    creator_id = current_user.id)
     print(puzzle)
     db.session.add(puzzle)
     db.session.commit()
     return redirect(url_for('solvePuzzle', puzzleid = puzzle.puzzle_id), code=303)
 
 @app.route('/register-solved-puzzle', methods=['POST'])
+@login_required
 def registerSolvedPuzzle():
     data = request.get_json()
     puzzleId = data.get('puzzleId')
-    userId = data.get('userId')
+    userId = current_user.id
     new_accuracy = data.get('accuracy')
     shadedCells = data.get('shadedCells')
     puzzleObj = Puzzle.query.get(puzzleId)
-    userObj = Users.query.get(userId)
     rowClues = puzzleObj.row_clues
     colClues = puzzleObj.column_clues
-    if (puzzleObj is not None and userObj is not None and verifySolution(rowClues, colClues, shadedCells)):
+    if (puzzleObj is not None and current_user is not None and verifySolution(rowClues, colClues, shadedCells)):
         print('Solution accepted!')
         # note that score is  accuracy (out of 100) * difficulty (a small integer)
         previousBestAttempt = SolvedPuzzle.query.get((userId, puzzleId))
         if (previousBestAttempt is not None): # if user already solved this one
             if (new_accuracy > previousBestAttempt.accuracy): # if user did better than last time
-                userObj.userScore += (new_accuracy - previousBestAttempt.accuracy) * puzzleObj.difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
+                current_user.userScore += (new_accuracy - previousBestAttempt.accuracy) * puzzleObj.difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
                 previousBestAttempt.accuracy = new_accuracy
                 db.session.commit()
             # if user didn't do as well, nothing is updated.
@@ -197,7 +230,7 @@ def registerSolvedPuzzle():
                 accuracy = new_accuracy
             )
             db.session.add(savedAttempt)
-            userObj.userScore += puzzleObj.difficulty * new_accuracy
+            current_user.userScore += puzzleObj.difficulty * new_accuracy
             db.session.commit()
         
         print(url_for('userProfile', userid = userId))
