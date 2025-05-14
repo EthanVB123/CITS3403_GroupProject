@@ -1,8 +1,9 @@
+/* General Page Styling */
 body {
   height: 100vh;
   margin: 0;
   background-color: #f4f4f4;
-  background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), 
+  background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
                     linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   display: flex;
@@ -12,7 +13,9 @@ body {
   color: #000;
 }
 
-.login-box {
+/* Login & Register Container Box */
+.login-box,
+.register-page {
   background-color: white;
   padding: 40px;
   border-radius: 15px;
@@ -20,20 +23,29 @@ body {
   width: 350px;
 }
 
-.login-box h2 {
+/* Title for both pages */
+.login-box h2,
+.register-page h2 {
   text-align: center;
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 25px;
 }
 
+/* Input Field Groups */
 .input-group,
-.password-box {
+.password-box,
+.rinput-group,
+.rpassword-box,
+.email-box {
   margin-bottom: 20px;
 }
 
 .input-group label,
-.password-box label {
+.password-box label,
+.rinput-group label,
+.rpassword-box label,
+.email-box label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
@@ -41,7 +53,10 @@ body {
 }
 
 .input-group input,
-.password-box input {
+.password-box input,
+.rinput-group input,
+.rpassword-box input,
+.email-box input {
   width: 100%;
   padding: 12px;
   border: 2px solid #007aff;
@@ -52,36 +67,18 @@ body {
 }
 
 .input-group input:focus,
-.password-box input:focus {
+.password-box input:focus,
+.rinput-group input:focus,
+.rpassword-box input:focus,
+.email-box input:focus {
   outline: none;
   border-color: #0056b3;
   box-shadow: 0 0 6px rgba(0, 122, 255, 0.5);
 }
 
-.login-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #007aff;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.login-button:hover {
-  background-color: #0056b3;
-}
-
-.error-message {
-  color: darkred;
-  text-align: center;
-  margin-top: 10px;
-  display: none;
-  font-size: 13px;
-}
-
+/* Shared Button Styling */
+.login-button,
+.register-button,
 .register {
   width: 100%;
   padding: 12px;
@@ -93,11 +90,25 @@ body {
   font-size: 16px;
   cursor: pointer;
   display: block;
-  margin-top: 15px;
-  transition: background-color 0.3s ease;
   text-align: center;
+  transition: background-color 0.3s ease;
+  margin-top: 15px;
 }
 
+/* Button Hover Effects */
+.login-button:hover,
+.register-button:hover,
 .register:hover {
-  text-decoration: underline;
+  background-color: #0056b3;
+}
+
+/* Error Messages */
+.error-message,
+.error,
+#errorRgst {
+  color: darkred;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+  display: none;
 }

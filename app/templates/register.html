@@ -6,10 +6,12 @@
   <title>Register</title>
   <link rel="stylesheet" href="{{url_for('static',filename='gamestyle.css')}}" />
   <script src="{{url_for('static', filename='script.js')}}"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="register-page">
-    <h2>Register to create an account</h2>
+<body class="min-h-screen bg-white text-black font-sans flex justify-center items-center"
+      style="background-color: #f9f9f9; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    <h2 class="text-3xl font-bold text-center mb-6">Register to create an account</h2>
     <form method="post" action="{{ url_for('main.registerPage') }}" id="Registerdata">
       {{ form.csrf_token }}
       <div class="rinput-group">
