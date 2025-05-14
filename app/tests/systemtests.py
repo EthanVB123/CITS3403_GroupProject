@@ -21,13 +21,13 @@ class SystemTests(unittest.TestCase):
 
     # makes sure the server is up and Selenium WebDriver is operational
     def testHomepageLive(self):
-        self.driver.get("http://localhost:5000")
+        self.driver.get("http://127.0.0.1:5000")
         time.sleep(1)
         self.assertIn("Welcome to Wild Puzzles!", self.driver.page_source)
     
     def testValidLogin(self):
         # go to login page
-        self.driver.get("http://localhost:5000")
+        self.driver.get("http://127.0.0.1:5000")
         homePageLoginButton = self.driver.find_element(By.ID, "loginBtn")
         homePageLoginButton.click()
         time.sleep(1) # just in case, to allow the next page to load
@@ -56,7 +56,7 @@ class SystemTests(unittest.TestCase):
     
     def testAuthorisedToUseProfile(self):
         # go to login page
-        self.driver.get("http://localhost:5000")
+        self.driver.get("http://127.0.0.1:5000")
         homePageLoginButton = self.driver.find_element(By.ID, "loginBtn")
         homePageLoginButton.click()
         time.sleep(1) # just in case, to allow the next page to load
@@ -73,11 +73,11 @@ class SystemTests(unittest.TestCase):
 
         self.driver.find_element(By.ID, "profileBtn").click()
         time.sleep(1)
-        self.assertTrue(self.driver.current_url.startswith("http://localhost:5000/profile/"))
+        self.assertTrue(self.driver.current_url.startswith("http://127.0.0.1:5000/profile/"))
 
     def testUnauthorisedToUseProfile(self):
         # go to login page
-        self.driver.get("http://localhost:5000")
+        self.driver.get("http://127.0.0.1:5000")
         homePageLoginButton = self.driver.find_element(By.ID, "loginBtn")
         homePageLoginButton.click()
         time.sleep(1) # just in case, to allow the next page to load
@@ -94,7 +94,7 @@ class SystemTests(unittest.TestCase):
 
         self.driver.find_element(By.ID, "profileBtn").click()
         time.sleep(1)
-        self.assertTrue(self.driver.current_url.startswith("http://localhost:5000/profile/"))
+        self.assertTrue(self.driver.current_url.startswith("http://127.0.0.1:5000/profile/"))
         profile = self.driver.current_url
         # redirect to an obvious nonexistent profile (or a profile that user isn't friends of)
         self.driver.get(self.driver.current_url + "000000000000") # we won't have trillions of users, if we did we probably shouldn't use flask anyway
@@ -123,7 +123,7 @@ class SystemTests(unittest.TestCase):
 
     def testCreatePuzzleAndSolveIt(self):
         # go to login page
-        self.driver.get("http://localhost:5000")
+        self.driver.get("http://127.0.0.1:5000")
         homePageLoginButton = self.driver.find_element(By.ID, "loginBtn")
         homePageLoginButton.click()
         time.sleep(1) # just in case, to allow the next page to load
@@ -139,7 +139,7 @@ class SystemTests(unittest.TestCase):
         self.assertIn("Hello, 1", self.driver.page_source)
 
         # navigate to profile page
-        self.driver.get("http://localhost:5000/profile/5") # replace this with /profile/
+        self.driver.get("http://127.0.0.1:5000/profile/5") # replace this with /profile/
         time.sleep(1)
         createPuzzleBtn = self.driver.find_element(By.ID, "createBtn")
         createPuzzleBtn.click()
@@ -155,7 +155,7 @@ class SystemTests(unittest.TestCase):
         nameInput.send_keys("Test Puzzle")
         submitBtn.click()
         time.sleep(1)
-        self.assertEqual("http://localhost:5000/puzzle/new/2/2/Test%20Puzzle", self.driver.current_url)
+        self.assertEqual("http://127.0.0.1:5000/puzzle/new/2/2/Test%20Puzzle", self.driver.current_url)
 
         # create a sample puzzle
         # the puzzle created in this case:
@@ -171,7 +171,7 @@ class SystemTests(unittest.TestCase):
 
         time.sleep(1)
         # confirm redirected
-        self.assertTrue(self.driver.current_url.startswith("http://localhost:5000/puzzle/"))
+        self.assertTrue(self.driver.current_url.startswith("http://127.0.0.1:5000/puzzle/"))
         # attempt an incorrect solution
         self.driver.find_element(By.ID, "cell0").click()
         self.driver.find_element(By.ID, "cell1").click()
@@ -194,7 +194,7 @@ class SystemTests(unittest.TestCase):
         self.driver.find_element(By.ID, "submit").click()
         time.sleep(1)
         # confirm redirect
-        self.assertTrue(self.driver.current_url.startswith("http://localhost:5000/profile/"))
+        self.assertTrue(self.driver.current_url.startswith("http://127.0.0.1:5000/profile/"))
 
 
 
