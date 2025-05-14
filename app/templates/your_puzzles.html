@@ -4,29 +4,35 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Puzzles</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='puzzle_select.css') }}">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <header>
-    <h1>Your Puzzles</h1>
-    <button class="back-button" onclick="location.href='/puzzleselect'">Back to Puzzle Select</button>
-  </header>
+<body class="min-h-screen bg-white text-black font-sans"
+      style="background-color: #f9f9f9; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
 
-  <section class="puzzle-section">
-    <div class="puzzle-grid">
-      {% if your_puzzles %}
-        {% for puzzle in your_puzzles %}
-          <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
-            <strong>{{ puzzle.puzzle_name }}</strong>
-            <span>{{ puzzle.num_rows }}×{{ puzzle.num_columns }} Grid</span>
-            <span>Players Solved: {{ puzzle.number_players_solved }}</span>
-          </div>
-        {% endfor %}
-      {% else %}
-        <strong>No puzzles created yet.</strong>
-      {% endif %}
-    </div>
-  </section>
+  <div class="w-full max-w-5xl mx-auto p-6">
+    <header class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold">Your Puzzles</h1>
+      <button class="text-blue-600 font-medium hover:underline" onclick="location.href='/puzzleselect'">Back to Puzzle Select</button>
+    </header>
+
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {% if your_puzzles %}
+          {% for puzzle in your_puzzles %}
+            <div class="p-4 rounded-xl shadow border border-gray-200 text-center bg-white hover:shadow-md transition">
+              <strong class="block text-lg font-semibold mb-1">{{ puzzle.puzzle_name }}</strong>
+              <span class="block text-sm text-gray-600">{{ puzzle.num_rows }}×{{ puzzle.num_columns }} Grid</span>
+              <span class="block text-sm text-gray-600">Players Solved: {{ puzzle.number_players_solved }}</span>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-gray-600 col-span-full text-center">No puzzles created yet.</p>
+        {% endif %}
+      </div>
+    </section>
+  </div>
+
   <script src="{{ url_for('static', filename='puzzle_select.js') }}"></script>
 </body>
 </html>
+
