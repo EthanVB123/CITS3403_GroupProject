@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,59 +12,55 @@
   <script src="{{ url_for('static', filename='createPuzzle.js') }}"></script>
 </head>
 
-<body class="min-h-screen bg-white text-black font-sans"
-      style="background-color: #f9f9f9;
+<body class="min-h-screen bg-white text-black font-sans" style="background-color: #f9f9f9;
              background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
                                linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
              background-size: 40px 40px;">
 
   <div class="w-full max-w-3xl mx-auto px-6 py-12">
-    
-   
+
+
     <header class="flex justify-between items-center mb-8">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto">
-    <div class="flex gap-4">
-      <button onclick="location.href='/profile'" class="text-sm font-semibold text-blue-600 hover:underline">Profile</button>
-      <button onclick="location.href='/logout'" class="text-sm font-semibold text-red-600 hover:underline">Logout</button>
-    </div>
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto">
       <h1 class="text-3xl font-bold">Create Puzzle</h1>
-      <div class="text-sm">
-        {% if current_user.is_authenticated %}
-          <span class="mr-4">Hello, {{ current_user.username }}</span>
-          <button onclick="location.href='/logout'" class="text-blue-600 hover:underline">Logout</button>
-        {% else %}
-          <button onclick="location.href='/login'" class="text-blue-600 hover:underline">Sign In</button>
-        {% endif %}
+      <div class="flex gap-4">
+        <button onclick="location.href='/profile'"
+          class="text-sm font-semibold text-blue-600 hover:underline">Profile</button>
+        <button onclick="location.href='/logout'"
+          class="text-sm font-semibold text-red-600 hover:underline">Logout</button>
       </div>
+
+
     </header>
 
     <!-- Form Card -->
     <div class="bg-white shadow-md rounded-xl p-8">
       <form id="form" class="space-y-6">
-        
+
         <div>
           <label for="name" class="block font-semibold mb-1">Puzzle Name:</label>
           <input type="text" id="name" name="name" required
-                 class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
         </div>
 
         <div class="flex gap-6">
           <div class="flex-1">
             <label for="rows" class="block font-semibold mb-1">Rows:</label>
             <input type="number" id="rows" name="rows" required
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
           </div>
           <div class="flex-1">
             <label for="columns" class="block font-semibold mb-1">Columns:</label>
             <input type="number" id="columns" name="columns" required
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
           </div>
         </div>
 
         <input id="submitBtn" type="submit" value="Create Puzzle"
-               class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-150 cursor-pointer" />
+          class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-150 cursor-pointer" />
       </form>
     </div>
   </div>
 </body>
+
 </html>
