@@ -46,12 +46,12 @@
         <div class="flex gap-6">
           <div class="flex-1">
             <label for="rows" class="block font-semibold mb-1">Rows:</label>
-            <input type="number" id="rows" name="rows" required
+            <input type="number" min=1 max=10 step=1 id="rows" name="rows" required
               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
           </div>
           <div class="flex-1">
             <label for="columns" class="block font-semibold mb-1">Columns:</label>
-            <input type="number" id="columns" name="columns" required
+            <input type="number" min=1 max=10 step=1 id="columns" name="columns" required
               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-400" />
           </div>
         </div>
