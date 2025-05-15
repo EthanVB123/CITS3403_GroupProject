@@ -12,7 +12,7 @@
 
   <!-- 🔽 Header with logo and logout button -->
   <header class="flex justify-between items-center w-full px-6 py-4">
-     <a href="{{ url_for('homePage') }}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto" /></a>
+     <a href="{{ url_for('main.homePage') }}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto" /></a>
     <button onclick="location.href='/logout'" class="text-sm font-semibold text-red-600 hover:underline">Logout</button>
   </header>
 
