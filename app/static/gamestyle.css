@@ -79,7 +79,8 @@ body {
 /* Shared Button Styling */
 .login-button,
 .register-button,
-.register {
+.register,
+.exit {
   width: 100%;
   padding: 12px;
   background-color: #007aff;
