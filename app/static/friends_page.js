@@ -62,11 +62,12 @@ addFriendBtn.addEventListener('click', function() {
             newFriendCard.className = 'friend-card';
             newFriendCard.innerHTML = `
                 <h3 class="friend-name">${body.username}</h3>
-                <p class="friend-username">@${body.username}</p>
-                <p class="puzzles-built">Puzzles Built: 0</p>
-                <p class="friend-count">Friends: 0</p>
-                <button class="remove-friend-btn" onclick="removeFriend(this, '${body.username}')">Remove Friend</button>
+                <p class="puzzle-score">Puzzle Score: ${body.userScore}</p>
+                <button class="remove-friend-btn absolute right-2 top-2 bg-red-400 border border-red-900 hover:bg-red-900 hover:text-white p-0.5 rounded duration-200"
+                    onclick="removeFriend(this, '${body.username}'); event.stopPropagation();">Remove
+                    Friend</button>
             `;
+            newFriendCard.classList.add("friend-card" ,"bg-zinc-100", "border", "border-black", "rounded", "hover:bg-zinc-200", "relative", "p-2", "mb-0.5")
             document.getElementById('friends-section').appendChild(newFriendCard);
             message.textContent = 'Friend added successfully!';
             message.style.color = 'green';
@@ -95,6 +96,7 @@ friendInput.addEventListener('input', function() {
             dropdown.style.color = '#000';
             dropdown.style.border = '1px solid #ccc';
             dropdown.style.width = friendInput.offsetWidth + 'px';
+            dropdown.style.top = friendInput.offsetTop + friendInput.offsetHeight + 'px';
             dropdown.style.zIndex = 1000;
             usernames.forEach(username => {
                 const option = document.createElement('div');

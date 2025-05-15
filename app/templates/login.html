@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login page</title>
   <link rel="stylesheet" href="{{url_for('static', filename='gamestyle.css')}}" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="min-h-screen bg-white text-black font-sans flex justify-center items-center"
+      style="background-color: #f4f4f4; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
 
-  <div class="login-box">
+
+  <div class="login-box" id="loginPage">
     <h2>Player Login</h2>
     <form method="POST" action="{{ url_for('main.loginPage') }}" id="loginForm">
       {{ form.csrf_token }}

@@ -17,6 +17,20 @@ main = Blueprint('main', __name__)
 def unescape_filter(s):
     return html.unescape(s)
 
+@main.context_processor
+def inject_solved_ids():
+    if current_user.is_authenticated:
+        solved = (
+            SolvedPuzzle.query
+            .with_entities(SolvedPuzzle.puzzle_id, SolvedPuzzle.accuracy)
+            .filter_by(user_id=current_user.id)
+            .all()
+        )
+        solved_puzzle_info = {pid: acc for pid, acc in solved}
+    else:
+        solved_puzzle_info = {}
+    return dict(solved_puzzle_info=solved_puzzle_info)
+
 
 @main.route("/")
 def homePage():
@@ -166,9 +180,9 @@ def puzzleSelectFromUser(userid):
             </noscript>
         </body>
         </html>
-    """, url=url_for('puzzleSelectFromUser', userid=current_user.id))
+    """, url=url_for('main.puzzleSelectFromUser', userid=current_user.id))
     your_puzzles = Puzzle.query.filter_by(creator_id=userid).all()
-    return render_template('your_puzzles.html', your_puzzles=your_puzzles)
+    return render_template('puzzle_select_subset.html', puzzles=your_puzzles, status="you")
 
 @main.route('/puzzleselect/<int:user_id>/friends/')
 @login_required
@@ -196,17 +210,12 @@ def puzzleSelectFromFriends(user_id):
     """, url=url_for('puzzleSelectFromFriends', user_id=current_user.id))
     friends_ids = [friend.id for friend in current_user.friends.all()]
     friend_puzzles = Puzzle.query.filter(Puzzle.creator_id.in_(friends_ids)).all()
-    return render_template('friends_puzzles.html', friend_puzzles=friend_puzzles)
+    return render_template('puzzle_select_subset.html', puzzles=friend_puzzles, status="friends")
 
 @main.route('/puzzleselect/toppuzzles')
 def puzzleSelectFromTopPuzzles():
     top_puzzles = Puzzle.query.order_by(Puzzle.number_players_solved.desc()).limit(10).all()
-    return render_template('top_puzzles.html', top_puzzles=top_puzzles)
-
-# Will not be the top_puzzles.html file, can make new files for each difficulty
-@main.route('/puzzleselect/difficulty/<difficulty>')
-def puzzleSelectFromDifficulty(difficulty):
-    return render_template('top_puzzles.html') # adapt to make dynamic on difficulty
+    return render_template('puzzle_select_subset.html', puzzles=top_puzzles, status="top")
 
 @main.route('/puzzle/<int:puzzleid>')
 def solvePuzzle(puzzleid):
@@ -299,11 +308,12 @@ def registerSolvedPuzzle():
     rowClues = puzzleObj.row_clues
     colClues = puzzleObj.column_clues
     if (puzzleObj is not None and current_user is not None and verifySolution(rowClues, colClues, shadedCells)):
+        difficulty = puzzleObj.difficulty if userId != puzzleObj.creator_id else 0 # difficulty is 0 for solving your own puzzle!
         # note that score is  accuracy (out of 100) * difficulty (a small integer)
         previousBestAttempt = SolvedPuzzle.query.get((userId, puzzleId))
         if (previousBestAttempt is not None): # if user already solved this one
             if (new_accuracy > previousBestAttempt.accuracy): # if user did better than last time
-                current_user.userScore += (new_accuracy - previousBestAttempt.accuracy) * puzzleObj.difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
+                current_user.userScore += (new_accuracy - previousBestAttempt.accuracy) * difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
                 previousBestAttempt.accuracy = new_accuracy
                 db.session.commit()
             # if user didn't do as well, nothing is updated.
@@ -315,7 +325,7 @@ def registerSolvedPuzzle():
             )
             db.session.add(savedAttempt)
             puzzleObj.number_players_solved += 1
-            current_user.userScore += puzzleObj.difficulty * new_accuracy
+            current_user.userScore += difficulty * new_accuracy
             db.session.commit()
         
         print(url_for('main.userProfile', userid = userId))
@@ -343,7 +353,7 @@ def add_friend():
     new_friend = Friends(user_id=current_user.id, friend_id=friend.id)
     db.session.add(new_friend)
     db.session.commit()
-    return jsonify({'success': True, 'username': friend.username}), 200
+    return jsonify({'success': True, 'username': friend.username, 'userScore': friend.userScore}), 200
 
 @main.route('/search-users')
 @login_required
