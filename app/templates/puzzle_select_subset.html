@@ -29,10 +29,22 @@
     <div class="puzzle-grid">
       {% if puzzles %}
         {% for puzzle in puzzles %}
-          <div class="puzzle-card" data-puzzle-id="{{ puzzle.puzzle_id }}">
+          <div class="puzzle-card
+          border-2 rounded-lg p-4 cursor-pointer hover:shadow-lg
+          {{ 'border-green-500' if puzzle.puzzle_id in solved_puzzle_info else 'border-gray-300' }}"
+          data-puzzle-id="{{ puzzle.puzzle_id }}">
             <strong>{{ puzzle.puzzle_name | unescape }}</strong>
             <span>{{ puzzle.num_rows }}×{{ puzzle.num_columns }} Grid</span>
             <span>Players Solved: {{ puzzle.number_players_solved }}</span>
+            {% if puzzle.puzzle_id in solved_puzzle_info %}
+              <span class="mt-2 text-sm font-medium text-green-600">
+                Solved - Accuracy: {{ solved_puzzle_info[puzzle.puzzle_id] }}%
+              </span>
+            {% else %}
+              <span class="mt-2 text-sm italic text-gray-500">
+                Unsolved
+              </span>
+            {% endif %}
           </div>
         {% endfor %}
       {% else %}
