@@ -21,7 +21,7 @@
 
 
     <header class="flex justify-between items-center mb-8">
-      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto">
+      <a href="{{ url_for('homePage') }}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto"></a>
       <h1 class="text-3xl font-bold">Create Puzzle</h1>
       <div class="flex gap-4">
         <button onclick="location.href='/profile'"
