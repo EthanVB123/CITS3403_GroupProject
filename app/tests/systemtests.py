@@ -34,7 +34,9 @@ class SystemTests(unittest.TestCase):
 
         # simulate a chrome tab (use self.driver.get(url) to go to url)
         options = webdriver.ChromeOptions()
+        # use both of these arguments to allow all versions of ChromeDriver to run in headless mode
         options.add_argument("--headless-new")
+        options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=options)
 
     def tearDown(self):
