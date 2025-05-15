@@ -17,7 +17,7 @@ A puzzle select page is available which displays the user's created puzzles, tho
 # Instructions
 To launch the site, open up the command prompt, import modules present in requirements.txt, and run:
 
-```bash
+```
 set FLASK_APP=run.py
 set FLASK_ENV=development
 flask db upgrade
@@ -26,18 +26,37 @@ py run.py
 ```
 Then go to this address in your browser: http://localhost:5000/
 
-From here you can register an account, and login.
+You should now be on the home page, and from here you can register an account, and login.
 
 ![alt text](image.png)
 
+After registering, you can access your profile.
+Your profile has links to the puzzle create, friends, and puzzle select pages.
+In the puzzle creation page, you can name a puzzle and customize its size
+
+![alt text](image-1.png)
+
+Pressing create puzzle will send you to the next step, where you can click on boxes to create the nonogram puzzle.
+
+![alt text](image-2.png)
+
+The numbers on the side giving hints to the player will update automatically when boxes are selected.
+After puzzle creation, you can complete the puzzle to test it out, and will be redirected to your profile after submitting.
+
+In the friends page, you can add friends (the friendship is one-way) and view the friends you currently have.
+Typing inside the friend add box will bring up a dropdown box of all the usernames matching what you have typed.
+You can remove friends using the remove friend button.
+
+![alt text](image-3.png)
+
+In the puzzle select page, you can view puzzles created by you and your friends, as well as other puzzles sorted by solves.
+
+![alt text](image-4.png)
+
 To run the unit and system tests, use the following commands: (Assuming requirements.txt is loaded.)
+
 ```
 python -m unittest app/tests/unittests.py
 python -m unittest app/tests/systemtests.py
 ```
 
-From your profile, you have access to the puzzle create, friends, and puzzle select pages.
-In the puzzle create page, you can name a puzzle and customize the size of a puzzle, then select boxes to create the nonogram puzzle.
-The numbers on the side giving hints to the player will update automatically when boxes are selected.
-After puzzle creation, you can complete the puzzle to test it out, and will be redirected to your profile after.
-In the friends page, you can add friends 
