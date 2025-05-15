@@ -17,6 +17,20 @@ main = Blueprint('main', __name__)
 def unescape_filter(s):
     return html.unescape(s)
 
+@main.context_processor
+def inject_solved_ids():
+    if current_user.is_authenticated:
+        solved = (
+            SolvedPuzzle.query
+            .with_entities(SolvedPuzzle.puzzle_id, SolvedPuzzle.accuracy)
+            .filter_by(user_id=current_user.id)
+            .all()
+        )
+        solved_puzzle_info = {pid: acc for pid, acc in solved}
+    else:
+        solved_puzzle_info = {}
+    return dict(solved_puzzle_info=solved_puzzle_info)
+
 
 @main.route("/")
 def homePage():
