@@ -322,7 +322,7 @@ def add_friend():
     new_friend = Friends(user_id=current_user.id, friend_id=friend.id)
     db.session.add(new_friend)
     db.session.commit()
-    return jsonify({'success': True, 'username': friend.username}), 200
+    return jsonify({'success': True, 'username': friend.username, 'userScore': friend.userScore}), 200
 
 @main.route('/search-users')
 @login_required

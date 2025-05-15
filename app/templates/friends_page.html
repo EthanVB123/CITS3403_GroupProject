@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Friends Page</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='friends_page.css') }}">
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="min-h-screen bg-white text-black font-sans flex justify-center items-center" 
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='friends_page.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-white text-black font-sans flex flex-col items-center"
     style="background-color: #f9f9f9; background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;">
-        
-     <header class="flex justify-between items-center w-full px-6 py-4">
-  <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto" />
-  <div class="flex gap-4">
-    <button onclick="location.href='/personprofile'" class="text-sm font-semibold text-blue-600 hover:underline">Profile</button>
-    <button onclick="location.href='/logout'" class="text-sm font-semibold text-red-600 hover:underline">Logout</button>
-  </div>
-</header>
-        <h1 class="text-3xl font-bold text-gray-800">Friends</h1>
-      
-      
-        <div class="bg-white p-10 text-white rounded-xl w-[90%] max-w-2xl shadow-xl" id="container">
-            <div class="flex gap-2 mb-6 mt-4">
-                <input type="text" id="friend-input" placeholder="Enter friend's username">
-                <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm" id="add-friend-btn">Add Friend</button>
-                <p id="message" class="message"></p>
-            </div>
-            <h3>Your Friends</h3>
-            <div id="friends-section">
-                {% for friend in friends %}
-                <div class="friend-card" onclick="toggleFriendDetails(this)">
-                    <h3 class="friend-name">{{ friend.username }}</h3>
-                    <p class="friend-username">@{{ friend.username }}</p>
-                    <p class="puzzle-score">Puzzle Score: {{ friend.userScore }}</p>
-                    <button class="remove-friend-btn" onclick="removeFriend(this, '{{ friend.username }}'); event.stopPropagation();">Remove Friend</button>
-                </div>
-                {% endfor %}
-            </div>
+
+    <header class="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 relative">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="h-10 w-auto" />
+        <div class="flex gap-4">
+            <button onclick="location.href='/personprofile'"
+                class="text-sm font-semibold text-blue-600 hover:underline">Profile</button>
+            <button onclick="location.href='/logout'"
+                class="text-sm font-semibold text-red-600 hover:underline">Logout</button>
         </div>
-        <script src="{{ url_for('static', filename='friends_page.js') }}"></script>
+    </header>
+    
+
+
+    <div class="bg-white p-10 text-black rounded-xl w-[90%] max-w-2xl shadow-xl" id="container">
+        <h1 class="text-3xl font-bold text-gray-800">Friends</h1>
+        <div class="flex gap-2 mb-6 mt-4">
+            <input type="text" id="friend-input" placeholder="Enter friend's username" class="w-full">
+            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm"
+                id="add-friend-btn">Add Friend</button>
+            <p id="message" class="message"></p>
+        </div>
+        <h3>Your Friends</h3>
+        <div id="friends-section">
+            {% for friend in friends %}
+            <div class="friend-card bg-zinc-100 border border-black rounded hover:bg-zinc-200 relative p-2"onclick="toggleFriendDetails(this)">
+                <h3 class="friend-name">{{ friend.username }}</h3>
+                <p class="puzzle-score">Puzzle Score: {{ friend.userScore }}</p>
+                <button class="remove-friend-btn absolute right-2 top-2 bg-red-400 border border-red-900 hover:bg-red-900 hover:text-white p-0.5 rounded duration-200"
+                    onclick="removeFriend(this, '{{ friend.username }}'); event.stopPropagation();">Remove
+                    Friend</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='friends_page.js') }}"></script>
