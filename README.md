@@ -15,7 +15,7 @@ A puzzle select page is available which displays the user's created puzzles, tho
 | Elizabeth Shibu   | 24221904       | LizzieDevelops  |
 
 # Instructions
-To launch the site, open up the command prompt and run:
+To launch the site, open up the command prompt, import modules present in requirements.txt, and run:
 
 ```bash
 set FLASK_APP=run.py
@@ -27,7 +27,14 @@ py run.py
 Then go to this address in your browser: http://localhost:5000/
 
 From here you can register an account, and login.
+
 ![alt text](image.png)
+
+To run the unit and system tests, use the following commands: (Assuming requirements.txt is loaded.)
+```
+python -m unittest app/tests/unittests.py
+python -m unittest app/tests/systemtests.py
+```
 
 From your profile, you have access to the puzzle create, friends, and puzzle select pages.
 In the puzzle create page, you can name a puzzle and customize the size of a puzzle, then select boxes to create the nonogram puzzle.
