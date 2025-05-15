@@ -21,9 +21,9 @@ class FlaskAppTestCase(unittest.TestCase):
         db.drop_all()  # Drop tables after tests
         self.app_context.pop()  # Pop app context
 
-    def login_as_user_1(self):
+    def login_as_user_n(self, n):
         with self.app.test_request_context():
-            user = Users.query.get(1)
+            user = Users.query.get(n)
             login_user(user)
 
     # Test that creation of users and setting of passwords has no issues
@@ -79,7 +79,7 @@ class FlaskAppTestCase(unittest.TestCase):
         user2.set_password("password")
         db.session.add_all([user1, user2])
         db.session.commit()
-        self.login_as_user_1()
+        self.login_as_user_n(1)
         # Create two sample puzzles
         puzzle1 = Puzzle(
             num_rows = 2,
@@ -102,7 +102,7 @@ class FlaskAppTestCase(unittest.TestCase):
             puzzle_name = "Test Puzzle 2",
             par_time_seconds = 120,
             difficulty = 2,
-            creator_id = 2
+            creator_id = 1
         )
         db.session.add_all([puzzle1, puzzle2])
         db.session.commit()
@@ -110,63 +110,66 @@ class FlaskAppTestCase(unittest.TestCase):
         # check user starts with zero points
         self.assertEqual(0, Users.query.get(1).userScore)
         self.assertEqual(0, Users.query.get(2).userScore)
-        
+
         # user 1 attempts to solve puzzle 1 correctly, obtaining 50% accuracy score
-        # this should award 50 points (50 accuracy * 1 difficulty)
+        # this should not award any points as user 1 created the puzzle
         response = self.client.post("/register-solved-puzzle", 
                                  json={'puzzleId':1,
-                                       'userId':1,
                                        'accuracy':50,
                                        'shadedCells':[[1,0],[0,1]]})
         self.assertEqual(200, response.status_code)
-        self.assertEqual(50, Users.query.get(1).userScore)
+        self.assertEqual(0, Users.query.get(1).userScore)
+        # user 1 attempts to solve puzzle 1 correctly, obtaining 50% accuracy score
+        # this should award 50 points (50 accuracy * 1 difficulty)
+        self.login_as_user_n(2)
+        response = self.client.post("/register-solved-puzzle", 
+                                 json={'puzzleId':1,
+                                       'accuracy':50,
+                                       'shadedCells':[[1,0],[0,1]]})
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(50, Users.query.get(2).userScore)
 
         # user 1 attempts to solve puzzle 1 incorrectly, then puzzle 2 incorrectly
         # these should award no points each, meaning user 1 still has 50 points
         response = self.client.post("/register-solved-puzzle", 
                                  json={'puzzleId':1,
-                                       'userId':1,
                                        'accuracy':50,
                                        'shadedCells':[[1,1],[0,1]]})
         self.assertEqual(400, response.status_code)
-        self.assertEqual(50, Users.query.get(1).userScore)
+        self.assertEqual(50, Users.query.get(2).userScore)
         response = self.client.post("/register-solved-puzzle", 
                                  json={'puzzleId':2,
-                                       'userId':1,
                                        'accuracy':50,
                                        'shadedCells':[[1,1],[0,1]]})
         self.assertEqual(400, response.status_code)
-        self.assertEqual(50, Users.query.get(1).userScore)
+        self.assertEqual(50, Users.query.get(2).userScore)
 
         # user 1 correctly solves puzzle 2, with 100% accuracy score
         # this should award 200 points (100 acc * 2 difficulty), so current score=250
         response = self.client.post("/register-solved-puzzle", 
                                  json={'puzzleId':2,
-                                       'userId':1,
                                        'accuracy':100,
                                        'shadedCells':[[1,0,0,0],[0,1,0,0],[0,0,1,0]]})
         self.assertEqual(200, response.status_code)
-        self.assertEqual(250, Users.query.get(1).userScore)
+        self.assertEqual(250, Users.query.get(2).userScore)
 
         # user 1 correctly solves puzzle 2, with a lower accuracy score
         # this shouldn't award any points (should still have 250)
         response = self.client.post("/register-solved-puzzle", 
                                  json={'puzzleId':2,
-                                       'userId':1,
                                        'accuracy':50,
                                        'shadedCells':[[1,0,0,0],[0,1,0,0],[0,0,1,0]]})
         self.assertEqual(200, response.status_code)
-        self.assertEqual(250, Users.query.get(1).userScore)
+        self.assertEqual(250, Users.query.get(2).userScore)
 
         # user 1 correctly solves puzzle 1, with a higher accuracy score of 75
         # this should award 25 points (accuracy += 25 * 1 difficulty)
         response = self.client.post("/register-solved-puzzle", 
                                  json={'puzzleId':1,
-                                       'userId':1,
                                        'accuracy':75,
                                        'shadedCells':[[1,0],[0,1]]})
         self.assertEqual(200, response.status_code)
-        self.assertEqual(275, Users.query.get(1).userScore)
+        self.assertEqual(275, Users.query.get(2).userScore)
 
 
     #Tests that the login-required condition activates
@@ -180,7 +183,7 @@ class FlaskAppTestCase(unittest.TestCase):
         db.session.commit()
         response = self.client.get("/profile/1")
         self.assertNotEqual(200, response.status_code)
-        self.login_as_user_1()
+        self.login_as_user_n(1)
         response = self.client.get("/profile/1")
         self.assertEqual(200, response.status_code)
     #Tests that users can create puzzles correctly (with validation)
@@ -193,7 +196,7 @@ class FlaskAppTestCase(unittest.TestCase):
         db.session.add_all([user1, user2])
         db.session.commit()
 
-        self.login_as_user_1()
+        self.login_as_user_n(1)
         # test user 1 making a valid puzzle
         response = self.client.post("/submit-puzzle",
                                     json={'puzzleSize': [2,2],

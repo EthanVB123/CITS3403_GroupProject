@@ -17,6 +17,20 @@ main = Blueprint('main', __name__)
 def unescape_filter(s):
     return html.unescape(s)
 
+@main.context_processor
+def inject_solved_ids():
+    if current_user.is_authenticated:
+        solved = (
+            SolvedPuzzle.query
+            .with_entities(SolvedPuzzle.puzzle_id, SolvedPuzzle.accuracy)
+            .filter_by(user_id=current_user.id)
+            .all()
+        )
+        solved_puzzle_info = {pid: acc for pid, acc in solved}
+    else:
+        solved_puzzle_info = {}
+    return dict(solved_puzzle_info=solved_puzzle_info)
+
 
 @main.route("/")
 def homePage():
@@ -278,11 +292,12 @@ def registerSolvedPuzzle():
     rowClues = puzzleObj.row_clues
     colClues = puzzleObj.column_clues
     if (puzzleObj is not None and current_user is not None and verifySolution(rowClues, colClues, shadedCells)):
+        difficulty = puzzleObj.difficulty if userId != puzzleObj.creator_id else 0 # difficulty is 0 for solving your own puzzle!
         # note that score is  accuracy (out of 100) * difficulty (a small integer)
         previousBestAttempt = SolvedPuzzle.query.get((userId, puzzleId))
         if (previousBestAttempt is not None): # if user already solved this one
             if (new_accuracy > previousBestAttempt.accuracy): # if user did better than last time
-                current_user.userScore += (new_accuracy - previousBestAttempt.accuracy) * puzzleObj.difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
+                current_user.userScore += (new_accuracy - previousBestAttempt.accuracy) * difficulty # update their score - if they got 300 pts last time, and 320 this time, they get 20 extra points on their record (not 320)
                 previousBestAttempt.accuracy = new_accuracy
                 db.session.commit()
             # if user didn't do as well, nothing is updated.
@@ -294,7 +309,7 @@ def registerSolvedPuzzle():
             )
             db.session.add(savedAttempt)
             puzzleObj.number_players_solved += 1
-            current_user.userScore += puzzleObj.difficulty * new_accuracy
+            current_user.userScore += difficulty * new_accuracy
             db.session.commit()
         
         print(url_for('main.userProfile', userid = userId))
