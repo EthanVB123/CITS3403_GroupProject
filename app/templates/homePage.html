@@ -22,7 +22,7 @@
                     onmouseover="this.style.borderColor='#5275c8'"
                     onmouseout="this.style.borderColor='#858fbb'"
                 >
-                    Hello, {{ current_user.username }}
+                    {{ current_user.username }}'s Profile
                 </button>
                 <button id="logoutBtn" onclick="location.href='/logout'" class="font-semibold border px-2 py-2 rounded" style="border-color: #858fbb; background-color: #858fbb; color: white;" onmouseover="this.style.borderColor='#5275c8'" onmouseout="this.style.borderColor='#858fbb'">Logout</button>
             {% else %}
