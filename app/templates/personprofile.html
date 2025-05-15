@@ -19,7 +19,7 @@
   {% set is_self = (current_user.id == user.id) %}
   <title>My Profile</title>
   {% if is_self %}
-  <div class="profile-box bg-white">
+  <div class="profile-box bg-white" id="profilePage">
       <h2> Hello, <span id="playerUsername">{{ user.username }}</span>!</h2>
       <h3>What do you want to do today?</h3>
       <nav>
