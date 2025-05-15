@@ -67,7 +67,7 @@ addFriendBtn.addEventListener('click', function() {
                     onclick="removeFriend(this, '${body.username}'); event.stopPropagation();">Remove
                     Friend</button>
             `;
-            newFriendCard.classList.add("friend-card" ,"bg-zinc-100", "border", "border-black", "rounded", "hover:bg-zinc-200", "relative", "p-2")
+            newFriendCard.classList.add("friend-card" ,"bg-zinc-100", "border", "border-black", "rounded", "hover:bg-zinc-200", "relative", "p-2", "mb-0.5")
             document.getElementById('friends-section').appendChild(newFriendCard);
             message.textContent = 'Friend added successfully!';
             message.style.color = 'green';
