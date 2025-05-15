@@ -5,3 +5,4 @@ app/__pycache__/
 app/puzzles.db
 .DS_Store
 app/tests/__pycache__/
+venv/
