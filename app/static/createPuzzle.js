@@ -10,6 +10,10 @@ function submitForm(event) {
     const puzzleName = document.getElementById("name").value;
     const rows = document.getElementById("rows").value;
     const columns = document.getElementById("columns").value;
+    if (parseInt(rows) > 10 || parseInt(columns) > 10) {
+        alert("Puzzle must have at most 10 rows and columns!")
+        window.location.href = "/newpuzzle"
+    }
     //console.log(`Puzzle name: ${puzzleName}, Num Rows: ${rows}, Num Columns: ${columns}`);
-    window.location.href = `/puzzle/new/${rows}/${columns}/${puzzleName}`;
+    window.location.href = `/puzzle/new/${parseInt(rows).toString()}/${parseInt(columns).toString()}/${puzzleName}`;
 }

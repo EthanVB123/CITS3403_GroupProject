@@ -229,6 +229,10 @@ def solvePuzzle(puzzleid):
 @main.route('/puzzle/new/<int:numRows>/<int:numCols>/')
 @main.route('/puzzle/new/<int:numRows>/<int:numCols>/<puzzleName>')
 def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
+    numRows = max(1, numRows) # at least 1 row
+    numRows = min(10, numRows) #at most 10 rows
+    numCols = max(1, numCols) # at least 1 col
+    numCols = min(10, numCols) # at most 10 col
     startingRowClues = [[0] for i in range(numRows)]
     startingColClues = [[0] for i in range(numCols)]
     return render_template('solvePuzzle.html',
@@ -243,6 +247,13 @@ def puzzleEditor(numRows, numCols, puzzleName='Untitled'):
                            numSolved = 0,
                            creatorUsername = current_user.username)
 
+def is_array_of_two_integers(value):
+    return (
+        isinstance(value, (list, tuple)) and
+        len(value) == 2 and
+        all(isinstance(x, int) for x in value)
+    )
+
 @main.route('/submit-puzzle', methods=['POST'])
 @login_required
 def submitPuzzle():
@@ -256,6 +267,11 @@ def submitPuzzle():
     #    for j in i:
     #        puzzleId += j
     #puzzleIdStr = str(puzzleId)+str(puzzleSize[0])+str(puzzleSize[1])
+    if ((not is_array_of_two_integers(puzzleSize)) or puzzleSize[0] > 10 or puzzleSize[1] > 10 or puzzleSize[0] < 1 or puzzleSize[1] < 1):
+        # they didn't make the puzzle legitimately
+        # there is no way to accidentally reach this, unless a serious error occurred
+        # redirect to homepage
+        return redirect(url_for('main.homePage'), code=400)
     puzzle = Puzzle(# id auto increments
                     num_rows = puzzleSize[0],
                     num_columns = puzzleSize[1],
