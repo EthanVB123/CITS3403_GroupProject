@@ -6,7 +6,7 @@
   <title>Wild Puzzles</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- gets the puzzle to be solved from the server -->
+  <!-- gets the information about the puzzle that will be solved from the server -->
   <script>
     const requestedPuzzle = {
       role: "{{role}}",
@@ -48,9 +48,7 @@
     </div>
   </header>
 
-  <!-- ✅ Main Puzzle Content -->
   <main class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] w-full gap-6 p-6">
-    <!-- Sidebar -->
     <aside id="sidebar" class="bg-white p-6 rounded-xl shadow-md">
       <div class="space-y-4">
         <div class="text-center">
@@ -82,15 +80,10 @@
       </div>
     </aside>
 
-    <!-- Puzzle grid display -->
     <div class="p-4 bg-white rounded-xl shadow-md" id="puzzle">
       <!-- Puzzle JS will populate here -->
     </div>
   </main>
-
-  <footer class="text-center py-4 text-sm text-gray-500">
-    <!-- Optional footer content -->
-  </footer>
 
 </body>
 </html>
