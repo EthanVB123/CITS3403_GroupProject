@@ -4,14 +4,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from sqlalchemy import event
-from .config import Config
+from .config import Config, DeploymentConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 login_manager.login_view = 'main.loginPage'
 
-def create_app(config_class=Config):
+def create_app(config_class=DeploymentConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
