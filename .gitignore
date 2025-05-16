@@ -7,3 +7,5 @@ app/puzzles.db
 app/tests/__pycache__/
 venv/
 migrations/versions/__pycache__/
+migrations/__pycache__/
+__pycache__/
