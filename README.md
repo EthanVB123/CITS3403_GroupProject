@@ -14,17 +14,34 @@ A puzzle select page is available which displays the user's created puzzles, tho
 | Ryan Koo          | 23916437       | ryankjy         |
 | Elizabeth Shibu   | 24221904       | LizzieDevelops  |
 
-# Instructions
-To launch the site, open up the command prompt, import modules present in requirements.txt, and run:
-
+# Instructions to Load Server and Run Tests
+First, ensure you are in a virtual environment, then import requirements.txt:
+```
+pip install -r requirements.txt
+```
+Then, to launch the site, open up the command prompt, import modules present in requirements.txt, make sure you have a database file (referred to in this document as `DBFILENAME.db`) located in the `app` directory and run:
 ```
 set FLASK_APP=run.py
 set FLASK_ENV=development
+set FLASK_SECRET_KEY=extremelysecret
+set FLASK_DATABASE_FILENAME=DBFILENAME.db (or whatever it is called)
+```
+Then, if you are creating a new database with a blank db file, run:
+```
 flask db upgrade
-
+```
+Finally, to run the server, use:
+```
 py run.py
 ```
-Then go to this address in your browser: http://localhost:5000/
+Alternatively, to run the unit tests, use:
+```
+python -m unittest app/tests/unittests.py
+python -m unittest app/tests/systemtests.py
+```
+
+# Instructions on Usage of Server
+To access the homepage, go to this address in your browser: http://127.0.0.1:5000/
 
 You should now be on the home page, and from here you can register an account, and login.
 
@@ -53,10 +70,5 @@ In the puzzle select page, you can view puzzles created by you and your friends,
 
 ![alt text](image-4.png)
 
-To run the unit and system tests, use the following commands: (Assuming requirements.txt is loaded.)
 
-```
-python -m unittest app/tests/unittests.py
-python -m unittest app/tests/systemtests.py
-```
 
