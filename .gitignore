@@ -6,3 +6,4 @@ app/puzzles.db
 .DS_Store
 app/tests/__pycache__/
 venv/
+migrations/versions/__pycache__/
