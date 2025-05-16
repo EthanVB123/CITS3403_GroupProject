@@ -19,7 +19,7 @@ First, ensure you are in a virtual environment, then import requirements.txt:
 ```
 pip install -r requirements.txt
 ```
-Then, to launch the site, open up the command prompt, import modules present in requirements.txt, make sure you have a database file (referred to in this document as `DBFILENAME.db`) located in the `app` directory and run:
+Then, to launch the site, open up the command prompt, import modules present in requirements.txt, make sure you have a database file (referred to in this document as `DBFILENAME.db`) located in the `app` directory and run: (Note these commands work in Windows Command Prompt. If using PowerShell/other terminal, there may be different commands to set environment variables.)
 ```
 set FLASK_APP=run.py
 set FLASK_ENV=development
@@ -39,6 +39,19 @@ Alternatively, to run the unit tests, use:
 python -m unittest app/tests/unittests.py
 python -m unittest app/tests/systemtests.py
 ```
+
+# Sample Database Details
+The sample database `sample.db` (not in the GitHub repository, only in the submission ZIP) is pre-filled with 6 users, 6 puzzles, and several relationships.
+To sign in as any of these users, here are their login details:
+
+| Username         | Password       |
+|------------------|----------------|
+| User1           | Password1      |
+| User2           | Password2      |
+| John            | Ilovemydog     |
+| XxPuzzle_SlayerxX | 13371337      |
+| Roberta         | RJenkins13     |
+| TheLogician     | puzzlemaster1  |
 
 # Instructions on Usage of Server
 To access the homepage, go to this address in your browser: http://127.0.0.1:5000/
