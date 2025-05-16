@@ -40,6 +40,19 @@ python -m unittest app/tests/unittests.py
 python -m unittest app/tests/systemtests.py
 ```
 
+# Sample Database Details
+The sample database `sample.db` (not in the GitHub repository, only in the submission ZIP) is pre-filled with 6 users, 6 puzzles, and several relationships.
+To sign in as any of these users, here are their login details:
+
+| Username         | Password       |
+|------------------|----------------|
+| User1           | Password1      |
+| User2           | Password2      |
+| John            | Ilovemydog     |
+| XxPuzzle_SlayerxX | 13371337      |
+| Roberta         | RJenkins13     |
+| TheLogician     | puzzlemaster1  |
+
 # Instructions on Usage of Server
 To access the homepage, go to this address in your browser: http://127.0.0.1:5000/
 
